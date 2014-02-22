@@ -32,44 +32,15 @@ public class MainActivity extends Activity {
     public TextView tv3;
     public TextView tv4;
 
+    String TAG = "MainActivity";
+
     //Check for JSON failure
-    boolean jsonE = false;
+    boolean jsonE;
 
     public ArrayList<TradePair> Pairs;
 
-
-    //current buy price:
-    public double currentBuyPrice = 0.00000;
-    //current sell price:
-    public double currentSellPrice = 0.00000;
-    //Current volume:
-    public double volume = 0.00000;
-    //Last trade price
-    public double lastTradePrice = 0.00000;
-    //current high
-    public double high;
-    //current low
-    public double low;
-    //sellOrders
-    ArrayList<OrderItem> sellOrders;
-    //buyOrders
-    ArrayList<OrderItem> buyOrders;
-    //recentTrades
-    ArrayList<OrderItem> recentTrades;
-    //visible
-    boolean visible;
-
-    ArrayList<Double> recentTradePrices;
-
-    //main coin
-    //public String mainCoin;
-    //public String baseCoin;
-
     //Exchange API URLs:
     public final String CRYPTSY_API = "http://pubapi.cryptsy.com/api.php?method=marketdatav2";
-    public final String COINEX_API = "https://coinex.pw/api/v2/trade_pairs";
-    public final String BTER_API = "http://data.bter.com/api/1/tickers";
-    public final String BTCE_API = "https://btc-e.com/api/3/ticker/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +51,10 @@ public class MainActivity extends Activity {
         Pairs = new ArrayList<TradePair>();
 
         setContentView(R.layout.fragment_main2);
-        this.setTitle("Main Page");
+        this.setTitle("Main");
 
         //**** Change this stuff
-        new Cryptsy().execute("cryptsy", CRYPTSY_API, "doge", "btc");
+        new Cryptsy().execute(CRYPTSY_API, "doge", "btc");
 
     } //End onCreate()
 
@@ -117,145 +88,93 @@ public class MainActivity extends Activity {
     /*Cryptsy Class*/
     public class Cryptsy extends AsyncTask<String, Void, Double> {
 
-        private static final String TAG = "Cryptsy";
-        String exchangeName;
+        String myMarketS; //EG "DOGE/BTC"
+        String rawData; //store raw JSON data
+
+        //For storing current data:
+        int marketId, visible;
+        Double lastTradePrice, currentBuy, currentSell, volume;
+        String baseCoin, mainCoin, baseAPI;
 
         @Override
         protected Double doInBackground(String... params){
+
+            //For tracking JSON Error
             jsonE = false;
+
             //baseAPI = API URL
-            exchangeName = params[0].toUpperCase();
-            String baseAPI = params[1];
-            String mainCoin = params[2];
-            String baseCoin = params[3];
-            if(exchangeName.toUpperCase().equals("BTC-E")){ baseAPI = baseAPI + "" + mainCoin + "_" + baseCoin;}
+            baseAPI = params[0];
+            mainCoin = params[1];
+            baseCoin = params[2];
 
             //the name of the market you want in Cryptsy's JSON style
-            String myMarketS = "" + mainCoin.toUpperCase() + "/" + baseCoin.toUpperCase();
-            //For storing the raw JSON data in String form
-            String rawData = "";
-
-
-            //execute( base_api_url , main_coin, base_coin)
-            //So for example, execute("http://pubapi.cryptsy.com/api.php?method=marketdatav2", "vtc", "btc")
+            myMarketS = "" + mainCoin.toUpperCase() + "/" + baseCoin.toUpperCase();
 
             //First, connect to the api URL:
             try{
 
-                rawData = new URLFetch().getURL(baseAPI);
+                /////***** CHANGE THIS!!! TESTING Only
+                //rawData = new URLFetch().getURL("http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=120");
+                rawData = new URLFetch().getURL(CRYPTSY_API);
 
             } catch(IOException e){
                 Log.i(TAG, "aaa Couldn't load data from api");  }
 
-            //Format the JSON to get price, volume
 
+            //Parse the JSON to get the values
             try{
 
                 //A JSON Object containing the raw data
                 JSONObject rawJ = new JSONObject(rawData);
+                JSONObject returnJ = rawJ.getJSONObject("return"); //returned data
+                JSONObject marketsJ = returnJ.getJSONObject("markets"); //markets
 
-                //CRYPTSY
-                if (exchangeName.toUpperCase().equals("CRYPTSY")){
+                //Run through the trade pairs
+                for (int i=0; i<returnJ.length(); i++){
 
-                    //Log.i(TAG, "aaa rawJ: " + rawJ.toString());
-                    JSONObject returnJ = rawJ.getJSONObject("return"); //returned data
+                    //Create iterator keys for whatever is in markets
+                    Iterator<?> keys = marketsJ.keys();
 
-                    JSONObject marketsJ = returnJ.getJSONObject("markets");
-                    //Log.i(TAG, "aaa marketsJ: " + marketsJ.toString());
-                    //Log.i(TAG, "aaa marketsJ length: " + marketsJ.length());
+                    //For all keys in markets:
+                    while (keys.hasNext()){
 
-                    //Run through the trade pairs
-                    for (int i=0; i<returnJ.length(); i++){
+                        //Get the current key
+                        String currentKey = (String)keys.next();
+                        //Log.i(TAG, "aaa key: " + currentKey);
+                        //get the market JSONObject for that key
+                        JSONObject myMarketJ = marketsJ.getJSONObject(currentKey);
 
-                        //JSONObject myMarketJ = marketsJ.getJSONObject(myMarketS);
-                        //Log.i(TAG, "aaa myMarketJ: " + myMarketJ.toString());
-                        Iterator<?> keys = marketsJ.keys();
+                        //Get the data for the given market
+                        //TradePair(int marketId, double lastTradePrice, double currentBuy, double currentSell, double volume, String baseCoin, String mainCoin, int visible)
+                        marketId = myMarketJ.getInt("marketid");
+                        lastTradePrice = myMarketJ.getDouble("lasttradeprice");
 
-                        while (keys.hasNext()){
+                        //Check if currentBuy is null
+                        try{
+                        currentBuy = myMarketJ.getJSONArray("buyorders").getJSONObject(0).getDouble("price");
+                        } catch(JSONException e){ Log.i(TAG, "aaa currentBuy is null"); currentBuy=0.00; }
 
-                            buyOrders = new ArrayList<OrderItem>();
-                            sellOrders = new ArrayList<OrderItem>();
-                            recentTrades = new ArrayList<OrderItem>();
+                        //Check if currentSell is null
+                        try{
+                            currentSell = myMarketJ.getJSONArray("sellorders").getJSONObject(0).getDouble("price");
+                        } catch(JSONException e){ Log.i(TAG, "aaa currentBuy is null"); currentSell=0.00; }
 
-                            String currentKey = (String)keys.next();
-                            Log.i(TAG, "AAAaaaAAA key: " + currentKey);
-                            JSONObject myMarketJ = marketsJ.getJSONObject(currentKey);
-                            //Get the most recent data for your market:
-                            currentSellPrice = myMarketJ.getJSONArray("sellorders").getJSONObject(0).getDouble("price");
-                            Log.i(TAG, "....aaa currentSellPrice: " + currentSellPrice);
-                            currentBuyPrice = myMarketJ.getJSONArray("buyorders").getJSONObject(0).getDouble("price");
-                            Log.i(TAG, "....aaa currentBuyPrice: " + currentBuyPrice);
-                            volume = myMarketJ.getDouble("volume");
-                            Log.i(TAG, "....aaa volume is: " + volume);
-                            lastTradePrice = myMarketJ.getDouble("lasttradeprice");
-                            Log.i(TAG, "....aaa last trade price is: " + lastTradePrice);
-                            mainCoin = myMarketJ.getString("primarycode");
-                            baseCoin = myMarketJ.getString("secondarycode");
+                        volume = myMarketJ.getDouble("volume");
+                        baseCoin = myMarketJ.getString("secondarycode");
+                        mainCoin = myMarketJ.getString("primarycode");
+                        visible = 0;
 
-                            //So we know mainCoin, baseCoin, currentSellPrice, currentBuyPrice, lastTradePrice, volume
-                            //Still need visible, sellOrders, recentTrades, buyOrders, high, and low
-                            //Just set visible to false
+                        Log.i(TAG, "aaa markedId: " + marketId + ", " + mainCoin + "/" + baseCoin + " last: " + lastTradePrice + " buy: " + currentBuy + " sell: " + currentSell + " volume: " + volume);
 
-                            //Set visible to false
-                            visible = false;
-
-                            //Fill arraylists
-                            for (int j=0; j<myMarketJ.getJSONArray("buyorders").length(); j++){
-
-                                buyOrders.add(new OrderItem(myMarketJ.getJSONArray("buyorders").getJSONObject(j).getDouble("price"), myMarketJ.getJSONArray("buyorders").getJSONObject(j).getDouble("quantity"), myMarketJ.getJSONArray("buyorders").getJSONObject(j).getDouble("total")));
-                                sellOrders.add(new OrderItem(myMarketJ.getJSONArray("sellorders").getJSONObject(j).getDouble("price"), myMarketJ.getJSONArray("sellorders").getJSONObject(j).getDouble("quantity"), myMarketJ.getJSONArray("sellorders").getJSONObject(j).getDouble("total")));
-
-                            }
-
-                            for (int j=0; j<myMarketJ.getJSONArray("recenttrades").length(); j++){
-
-                                recentTrades.add(new OrderItem(myMarketJ.getJSONArray("recenttrades").getJSONObject(j).getDouble("price"), myMarketJ.getJSONArray("recenttrades").getJSONObject(j).getDouble("quantity"), myMarketJ.getJSONArray("recenttrades").getJSONObject(j).getDouble("total")));
-
-                            }
-
-                            Collections.sort(recentTrades, new Comparator<OrderItem>() {
-
-                                public int compare(OrderItem oi1, OrderItem oi2) {
-
-                                    if (oi1.getPrice() > oi2.getPrice()) {
-                                        return 1;
-                                    }
-                                    if (oi1.getPrice() < oi2.getPrice()) {
-                                        return -1;
-                                    } else {
-                                        return 0;
-                                    }
-
-                                }
-
-
-                            }) ;
-
-                            ///CONTINUE WORKING HERE WITH HIGH AND LOW!
-                            high = recentTrades.get(recentTrades.size()-1).getPrice();
-                            low = recentTrades.get(0).getPrice();
-                            Log.i(TAG, "aaa high: " + high + " aaa low: " + low);
-
-
-                            //Here have an if statement  to set visible based on the checkbox value in settings
-                            Pairs.add( new TradePair(true, mainCoin, baseCoin, lastTradePrice, currentBuyPrice, currentSellPrice, volume, high, low, buyOrders, sellOrders, recentTrades));
-
-
-                        }
-
-
-
-
-                        //Testing only
-
-
+                        //Put the data in a SQLite database
+                        Pairs.add(new TradePair(marketId, lastTradePrice, currentBuy, currentSell, volume, baseCoin, mainCoin, visible));
 
                     }
 
+
                 }
 
-
-            } catch(JSONException e){ Log.i(TAG, "aaa JSON Exception"); jsonE = true; }
+            } catch(JSONException e){ Log.i(TAG, "aaa JSON Exception: "); e.printStackTrace(); jsonE = true; }
 
             //AAAsAAAAAAAAPairs.add(new TradePair(1, mainCoin, baseCoin, lastTradePrice, currentBuyPrice, currentSellPrice, 500.0, 200.0, 150.0));
             return lastTradePrice;
@@ -266,9 +185,9 @@ public class MainActivity extends Activity {
 
             Log.i(TAG, "aaa We're in onPostExecute()");
             Log.i(TAG, "aaa jsonE is: " + jsonE);
-            Collections.sort(Pairs, new Comparator<TradePair>(){
+            Collections.sort(Pairs, new Comparator<TradePair>() {
 
-                public int compare(TradePair tp1, TradePair tp2){
+                public int compare(TradePair tp1, TradePair tp2) {
 
                     return tp1.getMainCoin().compareTo(tp2.getMainCoin());
 
@@ -279,10 +198,7 @@ public class MainActivity extends Activity {
             //Here is where we want to store the data into MySQLite
             populateListView();
 
-
         }
-
-
 
     }
 
@@ -314,24 +230,11 @@ public class MainActivity extends Activity {
             }
 
 
-            //if JSON Error (no data collected):
-            if (jsonE) {
-
-                TextView tv1 = (TextView)itemView.findViewById(R.id.moretop_tv1);
-                Log.i("aaa", "aaa your jsonE code is being run");
-                tv1.setText("Sync Failure!");
-                tv1.setTextColor(Color.parseColor("#505050"));
-                return itemView;
-
-            }
-
-            else{
-
                 //Find the Pair
                 TradePair currentPair = Pairs.get(position);
-                double changeAbsolute = currentPair.getLastTradePrice() - ((currentPair.getHigh()+currentPair.getLow())/2);
-                double changePercent = ( (changeAbsolute)/currentPair.getLastTradePrice())*100;
-                double changePercentRound = Math.round(changePercent*1000000) / 1000000;
+                //double changeAbsolute = currentPair.getLastTradePrice() - ((currentPair.getHigh()+currentPair.getLow())/2);
+                //double changePercent = ( (changeAbsolute)/currentPair.getLastTradePrice())*100;
+                //double changePercentRound = Math.round(changePercent*1000000) / 1000000;
 
 
                 //Fill the view
@@ -344,6 +247,8 @@ public class MainActivity extends Activity {
 
                 TextView tv3 = (TextView)itemView.findViewById(R.id.top_tv2);
 
+
+                /*
                 if (changeAbsolute > 0) { tv3.setTextColor(Color.parseColor("#339c2b"));
                     tv3.setText("(+" + changePercentRound + "%)");}
                 else{tv3.setTextColor(Color.parseColor("#dc1616"));
@@ -354,11 +259,13 @@ public class MainActivity extends Activity {
 
                 TextView tv5 = (TextView)itemView.findViewById(R.id.bot_tv2);
                 tv5.setText("Sell: " + currentPair.getCurrentSellPrice());
+                */
+
 
 
                 return itemView;
 
-            }
+           // }
 
         }
 

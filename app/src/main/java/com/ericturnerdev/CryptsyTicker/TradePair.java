@@ -1,92 +1,32 @@
 package com.ericturnerdev.CryptsyTicker;
 
-import java.util.ArrayList;
-
 /**
- *  TradePair datatype
+ * TradePair Data Type
  */
+
 public class TradePair {
 
-    int marketId;
-    boolean visible;
-    String mainCoin;
-    String baseCoin;
-    double lastTradePrice;
-    double currentBuyPrice;
-    double currentSellPrice;
-    double volume;
-    double high;
-    double low;
-    ArrayList<OrderItem> buyOrders;
-    ArrayList<OrderItem> sellOrders;
-    ArrayList<OrderItem> recentTrades;
+    private int marketId;
+    private double lastTradePrice;
+    private double currentBuy;
+    private double currentSell;
+    private double volume;
+    private String baseCoin;
+    private String mainCoin;
+    private int visible;
 
-    public TradePair(boolean visible, String mainCoin, String baseCoin, double lastTradePrice, double currentBuyPrice, double currentSellPrice, double volume, double high, double low, ArrayList<OrderItem> buyOrders, ArrayList<OrderItem> sellOrders, ArrayList<OrderItem> recentTrades) {
-        this.visible = visible;
-        this.mainCoin = mainCoin;
-        this.baseCoin = baseCoin;
+    public TradePair(int marketId, double lastTradePrice, double currentBuy, double currentSell, double volume, String baseCoin, String mainCoin, int visible) {
+        this.marketId = marketId;
         this.lastTradePrice = lastTradePrice;
-        this.currentBuyPrice = currentBuyPrice;
-        this.currentSellPrice = currentSellPrice;
+        this.currentBuy = currentBuy;
+        this.currentSell = currentSell;
         this.volume = volume;
-        this.high = high;
-        this.low = low;
-        this.buyOrders = buyOrders;
-        this.sellOrders = sellOrders;
-        this.recentTrades = recentTrades;
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
+        this.baseCoin = baseCoin;
+        this.mainCoin = mainCoin;
         this.visible = visible;
     }
 
-    public String getMainCoin() {
-        return mainCoin;
-    }
-
-    public int getMarketId(){
-
-        return marketId;
-    }
-
-    public void setMainCoin(String mainCoin) {
-        this.mainCoin = mainCoin;
-    }
-
-    public String getBaseCoin() {
-        return baseCoin;
-    }
-
-    public void setBaseCoin(String baseCoin) {
-        this.baseCoin = baseCoin;
-    }
-
-    public double getLastTradePrice() {
-        return lastTradePrice;
-    }
-
-    public void setLastTradePrice(double lastTradePrice) {
-        this.lastTradePrice = lastTradePrice;
-    }
-
-    public double getCurrentBuyPrice() {
-        return currentBuyPrice;
-    }
-
-    public void setCurrentBuyPrice(double currentBuyPrice) {
-        this.currentBuyPrice = currentBuyPrice;
-    }
-
-    public double getCurrentSellPrice() {
-        return currentSellPrice;
-    }
-
-    public void setCurrentSellPrice(double currentSellPrice) {
-        this.currentSellPrice = currentSellPrice;
+    public TradePair() {
     }
 
     public double getVolume() {
@@ -97,43 +37,65 @@ public class TradePair {
         this.volume = volume;
     }
 
-    public double getHigh() {
-        return high;
+    public int getMarketId() {
+        return marketId;
     }
 
-    public void setHigh(double high) {
-        this.high = high;
+    public void setMarketId(int marketId) {
+        this.marketId = marketId;
     }
 
-    public double getLow() {
-        return low;
+    public double getLastTradePrice() {
+        return lastTradePrice;
     }
 
-    public void setLow(double low) {
-        this.low = low;
+    public void setLastTradePrice(double lastTradePrice) {
+        this.lastTradePrice = lastTradePrice;
     }
 
-    public ArrayList<OrderItem> getBuyOrders() {
-        return buyOrders;
+    public double getCurrentBuy() {
+        return currentBuy;
     }
 
-    public void setBuyOrders(ArrayList<OrderItem> buyOrders) {
-        this.buyOrders = buyOrders;
+    public void setCurrentBuy(double currentBuy) {
+        this.currentBuy = currentBuy;
     }
 
-    public ArrayList<OrderItem> getSellOrders() {
-        return sellOrders;
+    public double getCurrentSell() {
+        return currentSell;
     }
 
-    public void setSellOrders(ArrayList<OrderItem> sellOrders) {
-        this.sellOrders = sellOrders;
+    public void setCurrentSell(double currentSell) {
+        this.currentSell = currentSell;
     }
 
-    public ArrayList<OrderItem> getRecentTrades() {
-        return recentTrades;
+    public String getBaseCoin() {
+        return baseCoin;
     }
 
-    public void setRecentTrades(ArrayList<OrderItem> recentTrades) {
-        this.recentTrades = recentTrades;
+    public void setBaseCoin(String baseCoin) {
+        this.baseCoin = baseCoin;
+    }
+
+    public String getMainCoin() {
+        return mainCoin;
+    }
+
+    public void setMainCoin(String mainCoin) {
+        this.mainCoin = mainCoin;
+    }
+
+    public String toString(){
+
+        return "" + this.getBaseCoin() + "_" + this.getMainCoin() + ": " + this.getLastTradePrice() + " ," + this.getVolume() + " ," + this.getVisible();
+
+    }
+
+    public int getVisible() {
+        return visible;
+    }
+
+    public void setVisible(int visible) {
+        this.visible = visible;
     }
 }

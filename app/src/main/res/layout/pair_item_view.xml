@@ -1,0 +1,103 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/item_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.ericturner.cryptoticker.MainActivity"
+                tools:ignore="MergeRootFrame"
+                android:background="#eaeaea">
+
+    <LinearLayout
+        android:id="@+id/item_linear_moretop"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:background="#FFF"
+        android:layout_alignParentTop="true"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/moretop_tv1"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:text="COIN NAME"
+            android:padding="5dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_linear_top"
+        android:layout_height="35dp"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:background="#FFF"
+        android:layout_below="@id/item_linear_moretop"
+
+        >
+
+        <TextView
+            android:id="@+id/top_tv1"
+            android:text="Is it up or down?"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:paddingLeft="20dp"
+
+
+            />
+        <TextView
+            android:id="@+id/top_tv2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Percentage"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:gravity="right"
+            android:paddingRight="20dp"
+
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_linear_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_below="@id/item_linear_top"
+        android:background="#FFF"
+        android:paddingBottom="5dp"
+
+
+        >
+        <TextView
+            android:id="@+id/bot_tv1"
+            android:text="high"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:paddingLeft="20dp"
+
+            />
+        <TextView
+            android:id="@+id/bot_tv2"
+            android:text="low"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:textSize="16sp"
+            android:gravity="right"
+            android:paddingRight="20dp"
+
+            />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,22 +1,17 @@
 package com.ericturnerdev.CryptsyTicker;
 
-import android.app.Activity;
-import android.os.Bundle;
+import android.app.Fragment;
 
 /**
- * Settings page allowing users to choose what coins they want displayed
+ * Code for Settings Activity (check marks)
  */
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends SingleFragmentActivity{
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected Fragment createFragment(){
 
-        super.onCreate(savedInstanceState);
-        setTitle("Filter Coins");
-        setContentView(R.layout.activity_settings);
-
-        //setContentView(R.layout.activity_settings);
-
+        Fragment fragment = new SettingsFragment();
+        setTitle("Settings");
+        return fragment;
 
     }
 

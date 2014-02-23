@@ -1,6 +1,7 @@
 package com.ericturnerdev.CryptsyTicker;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +39,9 @@ public class MainActivity extends Activity {
     //Check for JSON failure
     boolean jsonE;
 
-    public ArrayList<TradePair> Pairs;
+    Context mContext;
+
+    public ArrayList<TradePair> pairs;
 
     //Exchange API URLs:
     public final String CRYPTSY_API = "http://pubapi.cryptsy.com/api.php?method=marketdatav2";
@@ -45,16 +49,17 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
+        mContext = this;
 
+        //Here we want to check to see if the database exists, and if it does, get
         //Initialize Pairs
-        Pairs = new ArrayList<TradePair>();
+        pairs = new ArrayList<TradePair>();
 
         setContentView(R.layout.fragment_main2);
         this.setTitle("Main");
 
         //**** Change this stuff
-        new Cryptsy().execute(CRYPTSY_API, "doge", "btc");
+        new Cryptsy(this).execute(CRYPTSY_API, "doge", "btc");
 
     } //End onCreate()
 
@@ -65,9 +70,14 @@ public class MainActivity extends Activity {
         inflater.inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
 
-
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+
+        super.onSaveInstanceState(savedInstanceState);
+
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
 
@@ -78,7 +88,6 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
 
-
         }
 
         return true;
@@ -88,6 +97,7 @@ public class MainActivity extends Activity {
     /*Cryptsy Class*/
     public class Cryptsy extends AsyncTask<String, Void, Double> {
 
+        Context mContext;
         String myMarketS; //EG "DOGE/BTC"
         String rawData; //store raw JSON data
 
@@ -95,6 +105,12 @@ public class MainActivity extends Activity {
         int marketId, visible;
         Double lastTradePrice, currentBuy, currentSell, volume;
         String baseCoin, mainCoin, baseAPI;
+
+        public Cryptsy (Context context){
+
+            mContext = context;
+
+        }
 
         @Override
         protected Double doInBackground(String... params){
@@ -111,15 +127,17 @@ public class MainActivity extends Activity {
             myMarketS = "" + mainCoin.toUpperCase() + "/" + baseCoin.toUpperCase();
 
             //First, connect to the api URL:
+            int i=0;
+            while (rawData == null && i<20){
             try{
 
                 /////***** CHANGE THIS!!! TESTING Only
                 //rawData = new URLFetch().getURL("http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=120");
                 rawData = new URLFetch().getURL(CRYPTSY_API);
 
-            } catch(IOException e){
-                Log.i(TAG, "aaa Couldn't load data from api");  }
+            } catch(IOException e){ Log.i(TAG, "aaa Couldn't load data from api.  Retrying.  This is attempt " + i + "."); i++; }
 
+            }
 
             //Parse the JSON to get the values
             try{
@@ -130,7 +148,7 @@ public class MainActivity extends Activity {
                 JSONObject marketsJ = returnJ.getJSONObject("markets"); //markets
 
                 //Run through the trade pairs
-                for (int i=0; i<returnJ.length(); i++){
+                for ( i=0; i<returnJ.length(); i++){
 
                     //Create iterator keys for whatever is in markets
                     Iterator<?> keys = marketsJ.keys();
@@ -143,6 +161,9 @@ public class MainActivity extends Activity {
                         //Log.i(TAG, "aaa key: " + currentKey);
                         //get the market JSONObject for that key
                         JSONObject myMarketJ = marketsJ.getJSONObject(currentKey);
+
+                        //Store recenttrades
+                        JSONArray recentTradesJ = myMarketJ.getJSONArray("recenttrades");
 
                         //Get the data for the given market
                         //TradePair(int marketId, double lastTradePrice, double currentBuy, double currentSell, double volume, String baseCoin, String mainCoin, int visible)
@@ -164,10 +185,41 @@ public class MainActivity extends Activity {
                         mainCoin = myMarketJ.getString("primarycode");
                         visible = 0;
 
+                        //Recreate recenttrades as arraylist
+                        ArrayList<TradePair> recentTrades = new ArrayList<TradePair>();
+                        double tempPrice = 0.0;
+                        for(i=0; i< recentTradesJ.length(); i++){
+
+                            tempPrice += recentTradesJ.getJSONObject(i).getDouble("price");
+
+                        }
+
+                        tempPrice = tempPrice / recentTradesJ.length();
+
+                        Log.i(TAG, "aaabbb final price: " + tempPrice);
+                        double absoluteDifference = lastTradePrice - tempPrice;
+                        double percentDifference = ((absoluteDifference)/lastTradePrice)*100;
+                        percentDifference = Math.round(percentDifference*100.0)/100.0;
+
+
+
                         Log.i(TAG, "aaa markedId: " + marketId + ", " + mainCoin + "/" + baseCoin + " last: " + lastTradePrice + " buy: " + currentBuy + " sell: " + currentSell + " volume: " + volume);
 
-                        //Put the data in a SQLite database
-                        Pairs.add(new TradePair(marketId, lastTradePrice, currentBuy, currentSell, volume, baseCoin, mainCoin, visible));
+                        pairs.add(new TradePair(marketId, lastTradePrice, currentBuy, currentSell, volume, baseCoin, mainCoin, visible, percentDifference, absoluteDifference));
+
+
+                        DatabaseHandler db = new DatabaseHandler(mContext);
+
+                        //If the current TradePair isn't in the table, add it
+                        if (db.getTradePair(marketId) != null){
+                          db.updatePair(new TradePair(marketId, lastTradePrice, currentBuy, currentSell, volume, baseCoin, mainCoin, visible));
+                            Log.i(TAG, "aaa pair " + baseCoin + "_" + mainCoin + " UPDATED");
+                        }
+                        //Otherwise update the current row with the new values
+                        else{
+                           db.addTradePair(new TradePair(marketId, lastTradePrice, currentBuy, currentSell, volume, mainCoin, baseCoin, visible));
+                            Log.i(TAG, "aaa pair " + baseCoin + "_" + mainCoin + " ADDED");
+                        }
 
                     }
 
@@ -178,6 +230,7 @@ public class MainActivity extends Activity {
 
             //AAAsAAAAAAAAPairs.add(new TradePair(1, mainCoin, baseCoin, lastTradePrice, currentBuyPrice, currentSellPrice, 500.0, 200.0, 150.0));
             return lastTradePrice;
+
         }
 
         protected void onPostExecute(Double d ){
@@ -185,7 +238,7 @@ public class MainActivity extends Activity {
 
             Log.i(TAG, "aaa We're in onPostExecute()");
             Log.i(TAG, "aaa jsonE is: " + jsonE);
-            Collections.sort(Pairs, new Comparator<TradePair>() {
+            Collections.sort(pairs, new Comparator<TradePair>() {
 
                 public int compare(TradePair tp1, TradePair tp2) {
 
@@ -214,7 +267,7 @@ public class MainActivity extends Activity {
 
         public MyListAdapter(){
 
-            super(MainActivity.this, R.layout.pair_item_view, Pairs);
+            super(MainActivity.this, R.layout.pair_item_view, pairs);
 
         }
 
@@ -229,9 +282,8 @@ public class MainActivity extends Activity {
 
             }
 
-
                 //Find the Pair
-                TradePair currentPair = Pairs.get(position);
+                TradePair currentPair = pairs.get(position);
                 //double changeAbsolute = currentPair.getLastTradePrice() - ((currentPair.getHigh()+currentPair.getLow())/2);
                 //double changePercent = ( (changeAbsolute)/currentPair.getLastTradePrice())*100;
                 //double changePercentRound = Math.round(changePercent*1000000) / 1000000;
@@ -247,19 +299,16 @@ public class MainActivity extends Activity {
 
                 TextView tv3 = (TextView)itemView.findViewById(R.id.top_tv2);
 
-
-                /*
-                if (changeAbsolute > 0) { tv3.setTextColor(Color.parseColor("#339c2b"));
-                    tv3.setText("(+" + changePercentRound + "%)");}
+                if (currentPair.getAbsoluteChange() > 0) { tv3.setTextColor(Color.parseColor("#339c2b"));
+                    tv3.setText("(+" + currentPair.getPercentChange() + "%)");}
                 else{tv3.setTextColor(Color.parseColor("#dc1616"));
-                    tv3.setText("(" + changePercentRound + "%)"); }
+                    tv3.setText("(" + currentPair.getPercentChange() + "%)"); }
 
                 TextView tv4 = (TextView)itemView.findViewById(R.id.bot_tv1);
-                tv4.setText("Buy: " + currentPair.getCurrentBuyPrice());
+                tv4.setText("Buy: " + currentPair.getCurrentBuy());
 
                 TextView tv5 = (TextView)itemView.findViewById(R.id.bot_tv2);
-                tv5.setText("Sell: " + currentPair.getCurrentSellPrice());
-                */
+                tv5.setText("Sell: " + currentPair.getCurrentSell());
 
 
 

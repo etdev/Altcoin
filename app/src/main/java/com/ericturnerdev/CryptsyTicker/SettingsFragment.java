@@ -1,38 +1,37 @@
 package com.ericturnerdev.CryptsyTicker;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
+
 /**
- * Fragment for Settings Activity
+ * Created by ericturner on 2/21/14.
  */
 public class SettingsFragment extends Fragment {
 
-    private ArrayList<String> dummy;
     GridView mGridView;
+    TextView mTextView;
+    ArrayList<TradePair> pairs;
+    Context mContext;
 
+    /*Code for checkmarks and whatnot here*/
     @Override
     public void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.settings_title);
         setRetainInstance(true);
 
-        //Fill with dummy data
-        dummy = new ArrayList<String>();
-
-        for (int i=0; i<100; i++){
-
-            dummy.add("Square " + i + " " + "\n" + " " + i + " " + i);
-
-        }
 
     }
 
@@ -40,21 +39,121 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        mGridView = (GridView)v.findViewById(R.id.gridView);
-        setupAdapter();
+        mGridView = (GridView)v.findViewById(R.id.settingsGrid);
+        mTextView = (TextView)v.findViewById(R.id.settingsHeading);
+
+        //Setup dummy SQLite Database
+        DatabaseHandler db = new DatabaseHandler(getActivity());
+
+        pairs = (ArrayList<TradePair>)db.getAllPairs();
+        Log.i("aaa", "Pairs from SQLite DB: " + pairs);
+        //Log.i("aaa", "pairs count after: " + db.getPairsCount());
+
+        //mGridView.setAdapter(new ArrayAdapter<TradePair>(getActivity(), android.R.layout.simple_list_item_1, pairs));
+        mGridView.setAdapter(new SettingsGridAdapter(pairs));
         return v;
-    }
-
-    void setupAdapter(){
-
-        if (getActivity() == null || mGridView == null) return;
-        if (dummy != null){
-
-            mGridView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_gallery_item, dummy)); }
-        else{ mGridView.setAdapter(null); }
 
     }
 
+    public class SettingsGridAdapter extends BaseAdapter {
 
+        ArrayList<TradePair> pairs;
+
+        public SettingsGridAdapter(ArrayList<TradePair> _pairs){
+
+            pairs = _pairs;
+
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent){
+
+            View v;
+            TextView tv;
+            TextView tv2;
+            CheckBox ch;
+
+            if ((convertView==null)){
+
+                    v = LayoutInflater.from(getActivity()).inflate(R.layout.settings_item, null);
+                    tv = (TextView)v.findViewById(R.id.settingsItemTV);
+                    tv.setText("" + pairs.get(position).getBaseCoin().toUpperCase() + "/");
+                    tv2 = (TextView)v.findViewById(R.id.settingsItemTV2);
+                    tv2.setText(pairs.get(position).getMainCoin().toUpperCase());
+                    ch = (CheckBox)v.findViewById(R.id.settingsItemCheckBox);
+                    if (pairs.get(position).getVisible() == 1){
+                        ch.setChecked(true);
+                    }
+
+
+                //Attach your custom CheckBoxClickListener to the checkbox
+                ch.setOnClickListener(new CheckBoxClickListener(position, pairs));
+
+            }
+
+
+            else {v = convertView; }
+            Log.i("aaa", "Visible: " + pairs.get(position).getVisible());
+
+            return v;
+        }
+
+        public final int getCount(){
+            return pairs.size();
+
+        }
+
+        public final long getItemId(int position){
+            return position;
+        }
+
+        public final String getItem(int position){
+            return "" + pairs.get(position).getBaseCoin().toUpperCase() + "/" + pairs.get(position).getMainCoin().toUpperCase();
+
+        }
+    }
+
+    //Custom OnClickListener for the checkboxes in settings
+    public class CheckBoxClickListener implements View.OnClickListener{
+
+        int position;
+        ArrayList<TradePair> pairs;
+
+        public CheckBoxClickListener(int _position, ArrayList<TradePair> _pairs){
+
+            this.position = _position;
+            this.pairs = _pairs;
+
+
+        }
+
+        @Override
+        public void onClick(View v){
+
+            if( ((CheckBox) v).isChecked() ) {
+
+                //Run this when the CheckBox goes from unchecked to checked:
+                Log.i("aaa", "CheckBox " + pairs.get(position).getBaseCoin().toUpperCase() + "/" + pairs.get(position).getMainCoin().toUpperCase() + " is checked");
+                //I think I actually want to do SQLite database stuff here
+                pairs.get(position).setVisible(1);
+                DatabaseHandler db = new DatabaseHandler(getActivity());
+                int upSuccess = db.updatePair(pairs.get(position));
+                Log.i("aaa", "success for " + pairs.get(position).getBaseCoin().toUpperCase() + "/" + pairs.get(position).getMainCoin().toUpperCase() + " is" + upSuccess );
+                Log.i("aaa", "Pairs from SQLite DB: " + db.getAllPairs());
+
+            }
+                //Run this when the CheckBox goes from checked to unchecked:
+            else{
+                Log.i("aaa", "CheckBox " + pairs.get(position).getBaseCoin().toUpperCase() + "/" + pairs.get(position).getMainCoin().toUpperCase() + " is UNchecked");
+                pairs.get(position).setVisible(0);
+                DatabaseHandler db = new DatabaseHandler(getActivity());
+                int upSuccess = db.updatePair(pairs.get(position));
+                Log.i("aaa", "success for " + pairs.get(position).getBaseCoin().toUpperCase() + "/" + pairs.get(position).getMainCoin().toUpperCase() + " is" + upSuccess );
+                Log.i("aaa", "Pairs from SQLite DB: " + db.getAllPairs());
+
+            }
+
+        }
+
+    }
 
 }

@@ -14,6 +14,25 @@ public class TradePair {
     private String baseCoin;
     private String mainCoin;
     private int visible;
+    private double absoluteChange;
+
+    public double getAbsoluteChange() {
+        return absoluteChange;
+    }
+
+    public void setAbsoluteChange(double absoluteChange) {
+        this.absoluteChange = absoluteChange;
+    }
+
+    public double getPercentChange() {
+        return percentChange;
+    }
+
+    public void setPercentChange(double percentChange) {
+        this.percentChange = percentChange;
+    }
+
+    private double percentChange;
 
     public TradePair(int marketId, double lastTradePrice, double currentBuy, double currentSell, double volume, String baseCoin, String mainCoin, int visible) {
         this.marketId = marketId;
@@ -24,6 +43,19 @@ public class TradePair {
         this.baseCoin = baseCoin;
         this.mainCoin = mainCoin;
         this.visible = visible;
+    }
+
+    public TradePair(int marketId, double lastTradePrice, double currentBuy, double currentSell, double volume, String baseCoin, String mainCoin, int visible, double percentChange, double absoluteChange) {
+        this.marketId = marketId;
+        this.lastTradePrice = lastTradePrice;
+        this.currentBuy = currentBuy;
+        this.currentSell = currentSell;
+        this.volume = volume;
+        this.baseCoin = baseCoin;
+        this.mainCoin = mainCoin;
+        this.visible = visible;
+        this.percentChange = percentChange;
+        this.absoluteChange = absoluteChange;
     }
 
     public TradePair() {

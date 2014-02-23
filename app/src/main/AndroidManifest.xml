@@ -19,10 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name="com.ericturnerdev.CryptsyTicker.SettingsActivity"
-                  android:label="SettingsActivity"
-                  >
-
-        </activity>
+                  android:label="Settings"
+                  android:parentActivityName="com.ericturnerdev.CryptsyTicker.MainActivity"
+                  />
     </application>
 
 </manifest>

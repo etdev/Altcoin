@@ -78,6 +78,7 @@ public class MainActivity extends Activity {
         super.onSaveInstanceState(savedInstanceState);
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
 
@@ -196,30 +197,16 @@ public class MainActivity extends Activity {
 
                         tempPrice = tempPrice / recentTradesJ.length();
 
-                        Log.i(TAG, "aaabbb final price: " + tempPrice);
+                        //Log.i(TAG, "aaabbb final price: " + tempPrice);
                         double absoluteDifference = lastTradePrice - tempPrice;
                         double percentDifference = ((absoluteDifference)/lastTradePrice)*100;
                         percentDifference = Math.round(percentDifference*100.0)/100.0;
 
 
 
-                        Log.i(TAG, "aaa markedId: " + marketId + ", " + mainCoin + "/" + baseCoin + " last: " + lastTradePrice + " buy: " + currentBuy + " sell: " + currentSell + " volume: " + volume);
+                        //Log.i(TAG, "aaa markedId: " + marketId + ", " + mainCoin + "/" + baseCoin + " last: " + lastTradePrice + " buy: " + currentBuy + " sell: " + currentSell + " volume: " + volume);
 
                         pairs.add(new TradePair(marketId, lastTradePrice, currentBuy, currentSell, volume, baseCoin, mainCoin, visible, percentDifference, absoluteDifference));
-
-
-                        DatabaseHandler db = new DatabaseHandler(mContext);
-
-                        //If the current TradePair isn't in the table, add it
-                        if (db.getTradePair(marketId) != null){
-                          db.updatePair(new TradePair(marketId, lastTradePrice, currentBuy, currentSell, volume, baseCoin, mainCoin, visible));
-                            Log.i(TAG, "aaa pair " + baseCoin + "_" + mainCoin + " UPDATED");
-                        }
-                        //Otherwise update the current row with the new values
-                        else{
-                           db.addTradePair(new TradePair(marketId, lastTradePrice, currentBuy, currentSell, volume, mainCoin, baseCoin, visible));
-                            Log.i(TAG, "aaa pair " + baseCoin + "_" + mainCoin + " ADDED");
-                        }
 
                     }
 
@@ -249,8 +236,28 @@ public class MainActivity extends Activity {
             }) ;
 
             //Here is where we want to store the data into MySQLite
-            populateListView();
+            DatabaseHandler db = new DatabaseHandler(mContext);
 
+            //If the current TradePair isn't in the table, add it
+            for (TradePair tp : pairs){
+
+                if (db.getTradePair(tp.getMarketId()) != null){
+                    db.updatePair(new TradePair(tp.getMarketId(), tp.getLastTradePrice(), tp.getCurrentBuy(), tp.getCurrentSell(), tp.getVolume(), tp.getBaseCoin(), tp.getMainCoin(), tp.getVisible()));
+                    //Log.i(TAG, "aaa pair " + tp.getMainCoin() + "_" + tp.getBaseCoin() + " UPDATED");
+                }
+                //Otherwise update the current row with the new values
+                else{
+                    db.addTradePair(new TradePair(tp.getMarketId(), tp.getLastTradePrice(), tp.getCurrentBuy(), tp.getCurrentSell(), tp.getVolume(), tp.getBaseCoin(), tp.getMainCoin(), tp.getVisible()));
+                    //Log.i(TAG, "aaa pair " + tp.getMainCoin() + "_" + tp.getBaseCoin() + " ADDED");
+                }
+
+            }
+
+            //Print contents of SQLite db
+            ArrayList<TradePair> dbPairs = (ArrayList<TradePair>)db.getAllPairs();
+            //Log.i(TAG, "aaa dbPairs: " + dbPairs);
+
+            populateListView();
         }
 
     }
@@ -284,14 +291,11 @@ public class MainActivity extends Activity {
 
                 //Find the Pair
                 TradePair currentPair = pairs.get(position);
-                //double changeAbsolute = currentPair.getLastTradePrice() - ((currentPair.getHigh()+currentPair.getLow())/2);
-                //double changePercent = ( (changeAbsolute)/currentPair.getLastTradePrice())*100;
-                //double changePercentRound = Math.round(changePercent*1000000) / 1000000;
-
+                Log.i(TAG, "aaaccc getView position: " + position);
 
                 //Fill the view
                 TextView tv1 = (TextView)itemView.findViewById(R.id.moretop_tv1);
-                tv1.setText(""+ currentPair.getMainCoin() + "/" + currentPair.getBaseCoin());
+                tv1.setText(""+ currentPair.getBaseCoin() + "/" + currentPair.getMainCoin());
                 tv1.setTextColor(Color.parseColor("#3b3b3b"));
 
                 TextView tv2 = (TextView)itemView.findViewById(R.id.top_tv1);
@@ -309,8 +313,6 @@ public class MainActivity extends Activity {
 
                 TextView tv5 = (TextView)itemView.findViewById(R.id.bot_tv2);
                 tv5.setText("Sell: " + currentPair.getCurrentSell());
-
-
 
                 return itemView;
 

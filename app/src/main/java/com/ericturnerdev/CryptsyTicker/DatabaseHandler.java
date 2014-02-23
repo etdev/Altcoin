@@ -101,10 +101,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if (cursor != null && cursor.moveToFirst()){
             TradePair tp = new TradePair(cursor.getInt(0), cursor.getDouble(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getDouble(4), cursor.getString(5), cursor.getString(6), Integer.parseInt(cursor.getString(7)));
-            Log.i("DatabaseHandler", "aaa: I know cursor is NOT null");
+            //Log.i("DatabaseHandler", "aaa: I know cursor is NOT null");
             return tp;
         }
-        else{ Log.i("DatabaseHandler", "aaa: I know cursor is null"); return null; }
+        else{ //Log.i("DatabaseHandler", "aaa: I know cursor is null");
+            return null; }
 
 
         //return null;

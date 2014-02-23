@@ -24,6 +24,7 @@ public class SettingsFragment extends Fragment {
     TextView mTextView;
     ArrayList<TradePair> pairs;
     Context mContext;
+    String TAG = "SettingsFragment";
 
     /*Code for checkmarks and whatnot here*/
     @Override
@@ -46,10 +47,11 @@ public class SettingsFragment extends Fragment {
         DatabaseHandler db = new DatabaseHandler(getActivity());
 
         pairs = (ArrayList<TradePair>)db.getAllPairs();
-        Log.i("aaa", "Pairs from SQLite DB: " + pairs);
+        Log.i("aaaeee onCreateView", "Pairs from SQLite DB: " + pairs);
         //Log.i("aaa", "pairs count after: " + db.getPairsCount());
 
         //mGridView.setAdapter(new ArrayAdapter<TradePair>(getActivity(), android.R.layout.simple_list_item_1, pairs));
+
         mGridView.setAdapter(new SettingsGridAdapter(pairs));
         return v;
 
@@ -57,6 +59,7 @@ public class SettingsFragment extends Fragment {
 
     public class SettingsGridAdapter extends BaseAdapter {
 
+        //Makes an arraylist of TradePairs
         ArrayList<TradePair> pairs;
 
         public SettingsGridAdapter(ArrayList<TradePair> _pairs){
@@ -71,27 +74,34 @@ public class SettingsFragment extends Fragment {
             TextView tv;
             TextView tv2;
             CheckBox ch;
+            Log.i("aaaddd", "Populating Settings Grid.  pairs: " + pairs);
 
-            if ((convertView==null)){
+            if (convertView==null){
 
-                    v = LayoutInflater.from(getActivity()).inflate(R.layout.settings_item, null);
-                    tv = (TextView)v.findViewById(R.id.settingsItemTV);
-                    tv.setText("" + pairs.get(position).getBaseCoin().toUpperCase() + "/");
-                    tv2 = (TextView)v.findViewById(R.id.settingsItemTV2);
-                    tv2.setText(pairs.get(position).getMainCoin().toUpperCase());
-                    ch = (CheckBox)v.findViewById(R.id.settingsItemCheckBox);
-                    if (pairs.get(position).getVisible() == 1){
-                        ch.setChecked(true);
-                    }
+                v = LayoutInflater.from(getActivity()).inflate(R.layout.settings_item, null);
 
+            } else{ v = convertView; }
 
-                //Attach your custom CheckBoxClickListener to the checkbox
-                ch.setOnClickListener(new CheckBoxClickListener(position, pairs));
+            //v = LayoutInflater.from(getActivity()).inflate(R.layout.settings_item, null);
+            tv = (TextView)v.findViewById(R.id.settingsItemTV);
+            tv2 = (TextView)v.findViewById(R.id.settingsItemTV2);
+            ch = (CheckBox)v.findViewById(R.id.settingsItemCheckBox);
 
+            tv.setText("" + pairs.get(position).getMainCoin().toUpperCase() + "/");
+            tv2.setText(pairs.get(position).getBaseCoin().toUpperCase());
+            if (pairs.get(position).getVisible() == 1){
+                ch.setChecked(true);
             }
 
+            Log.i("aaafff", "" + pairs.get(position).getMainCoin().toUpperCase() + "/" + pairs.get(position).getBaseCoin().toUpperCase() + " added to gridview");
 
-            else {v = convertView; }
+
+            //Attach your custom CheckBoxClickListener to the checkbox
+            ch.setOnClickListener(new CheckBoxClickListener(position, pairs));
+
+            //}
+
+            //else {v = convertView; }
             Log.i("aaa", "Visible: " + pairs.get(position).getVisible());
 
             return v;

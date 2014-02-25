@@ -18,10 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--
         <activity android:name="com.ericturnerdev.CryptsyTicker.SettingsActivity"
                   android:label="Settings"
                   android:parentActivityName="com.ericturnerdev.CryptsyTicker.MainActivity"
                   />
+                  -->
     </application>
 
 </manifest>

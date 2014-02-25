@@ -1,18 +1,6 @@
 package com.ericturnerdev.CryptsyTicker;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.GridView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
 
 
 /**
@@ -20,13 +8,14 @@ import java.util.ArrayList;
  */
 public class SettingsFragment extends Fragment {
 
+    /*
     GridView mGridView;
     TextView mTextView;
     ArrayList<TradePair> pairs;
     Context mContext;
     String TAG = "SettingsFragment";
 
-    /*Code for checkmarks and whatnot here*/
+    //Code for checkmarks and whatnot here
     @Override
     public void onCreate(Bundle savedInstanceState){
 
@@ -165,5 +154,5 @@ public class SettingsFragment extends Fragment {
         }
 
     }
-
+*/
 }

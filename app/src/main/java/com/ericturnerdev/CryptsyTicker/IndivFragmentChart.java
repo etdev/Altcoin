@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Fragment for top part of Individual trade pair activity
+ * Fragment for top part of Individual trade pair activity (trade pairs)
  */
 
 public class IndivFragmentChart extends Fragment {

@@ -24,11 +24,11 @@ public abstract class SingleFragmentActivity extends Activity {
         //Create the code representation of the fragment
         //that will fill this activity, and assign fragmentContainer to it
         //(the layout in activity_fragment)
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
-        if (fragment == null){
+        Fragment f = fm.findFragmentById(R.id.fragmentContainer);
+        if (f == null) {
 
-            fragment = createFragment();
-            fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
+            f = createFragment();
+            fm.beginTransaction().add(R.id.fragmentContainer, f).commit();
 
         }
 

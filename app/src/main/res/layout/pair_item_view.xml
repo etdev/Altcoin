@@ -5,7 +5,8 @@
                 android:layout_height="match_parent"
                 tools:context="com.ericturner.cryptoticker.MainActivity"
                 tools:ignore="MergeRootFrame"
-                android:background="#eaeaea">
+                android:background="#eaeaea"
+    >
 
     <LinearLayout
         android:id="@+id/item_linear_moretop"
@@ -51,6 +52,7 @@
 
 
             />
+
         <TextView
             android:id="@+id/top_tv2"
             android:layout_width="0dp"
@@ -76,6 +78,7 @@
 
 
         >
+
         <TextView
             android:id="@+id/bot_tv1"
             android:text="high"
@@ -86,6 +89,7 @@
             android:paddingLeft="20dp"
 
             />
+
         <TextView
             android:id="@+id/bot_tv2"
             android:text="low"

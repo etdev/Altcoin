@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/indivActivLL"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <!--
+        <fragment android:name="com.ericturnerdev.CryptsyTicker.IndivFragmentChart"
+                  android:id="@+id/indiv_fragment_chart"
+                  android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:layout_weight="1"
+                  />
+
+
+        <fragment android:name="com.ericturnerdev.CryptsyTicker.IndivFragmentBot"
+                  android:id="@+id/indiv_fragment_bot"
+                  android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:layout_weight="1"
+            />
+    -->
+
+</LinearLayout>

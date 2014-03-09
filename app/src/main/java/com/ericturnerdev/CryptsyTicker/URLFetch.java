@@ -9,7 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by ericturner on 2/5/14.
+ * Created by ericturner on 2/5/14.  Get string from URL
  */
 public class URLFetch {
 
@@ -18,6 +18,7 @@ public class URLFetch {
     public String getURL(String urlIn) throws IOException {
 
 
+        //Log.i(TAG, "In URLFetch");
         URL url = new URL(urlIn);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 

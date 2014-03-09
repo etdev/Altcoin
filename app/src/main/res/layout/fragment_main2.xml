@@ -6,6 +6,9 @@
           android:layout_height="match_parent"
           android:background="#eaeaea"
           android:divider="@android:color/transparent"
-          android:dividerHeight="10dp">
+          android:dividerHeight="10dp"
+          android:scrollbarStyle="outsideOverlay"
+          android:clickable="true"
+    >
 
 </ListView>

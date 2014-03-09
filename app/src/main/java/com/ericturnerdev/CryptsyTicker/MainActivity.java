@@ -3,12 +3,17 @@ package com.ericturnerdev.CryptsyTicker;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,8 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 
 public class MainActivity extends Activity {
@@ -27,50 +30,103 @@ public class MainActivity extends Activity {
 
     Context mContext;
 
-    //I want to do all this via SQLite:
-    //public ArrayList<TradePair> pairs;
-
     //Exchange API URLs:
-    public final String CRYPTSY_API = "http://pubapi.cryptsy.com/api.php?method=marketdatav2";
+    public final String CRYPTSY_API = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        new Pairs();
+
+
+        //Check for SQLite Database
+        DatabaseHandler db = new DatabaseHandler(this);
+        //db.clearTable("visibility");
+        int marketsCount = db.getMarketsCount();
+        if (marketsCount == 0) Log.i(TAG, "Vis table is empty yo!");
+        else Log.i(TAG, "Vis table has " + marketsCount + " rows yo!");
+
+        Cursor cur = db.printMarkets();
+
+        Log.i(TAG, "onCreate CALLED");
+
+        //Set Pairs visibility from SQLite database
+        cur = db.printMarkets();
+        if (cur.getCount() > 0) {
+            while (cur.moveToNext()) {
+
+                if (cur.getInt(1) == 1) {
+                    Pairs.getMarket(cur.getInt(0)).setVisible(true);
+                } else {
+                    Pairs.getMarket(cur.getInt(0)).setVisible(false);
+                }
+
+            }
+        }
+
+        //Display Visible Pairs
+
         mContext = this;
-
         setContentView(R.layout.fragment_main2);
-        this.setTitle("Main");
-
-        //**** Change this stuff
-        new Cryptsy(this).execute(CRYPTSY_API);
+        this.setTitle("Your Coins");
 
     } //End onCreate()
 
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+        DatabaseHandler db = new DatabaseHandler(this);
+        //db.clearTable("visibility");
+        //db.addVis(Pairs.getMarket(132), 1);
+        //db.dropTable("visibility");
+        Log.i(TAG, "onStop CALLED");
+        db.close();
+
+    }
+
+    @Override
+    protected void onResume() {
+
+        Log.i(TAG, "onResume CALLED");
+        super.onResume();
+        new Cryptsy(this).execute(CRYPTSY_API);
+
+
+    }
+
     //Place items on the action bar
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         //inflate the menu items
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.refresh, menu);
+
         return super.onCreateOptionsMenu(menu);
 
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
+    public void onSaveInstanceState(Bundle savedInstanceState) {
 
         super.onSaveInstanceState(savedInstanceState);
 
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         //Handle presses on the action bar items
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
+
+            case R.id.menu_refresh:
+                new Cryptsy(this).execute(CRYPTSY_API);
+
 
         }
 
@@ -81,117 +137,115 @@ public class MainActivity extends Activity {
     /*Cryptsy Class*/
     public class Cryptsy extends AsyncTask<String, Void, Double> {
 
+        Market currentMarket;
 
         //Basically this fetches data from the API and puts it in the SQLite Database
-        public Cryptsy (Context context){
+        public Cryptsy(Context context) {
 
             mContext = context;
 
         }
 
-        @Override
-        protected Double doInBackground(String... params){
+        protected Market getData(int _marketId) {
 
             String rawData = ""; //String representation of raw JSON Data
-            JSONObject rawJ;
             JSONObject marketsJ;
-            ArrayList<Market> tradePairs = new ArrayList<Market>();
             Gson gson = new GsonBuilder().serializeNulls().create();
 
             int i = 0;
             boolean apiSuccess = false;
 
             //Get the data from Cryptsy API
-            while (!apiSuccess && i<10){
-                try{
-                apiSuccess=true;
+            while (!apiSuccess && i < 20) {
+                apiSuccess = true;
+                try {
 
-                //rawData = string response from the API
-                rawData = new URLFetch().getURL(CRYPTSY_API);
+                    //rawData = string response from the API
+                    rawData = new URLFetch().getURL(CRYPTSY_API + _marketId);
+                    Log.i(TAG, "rawData: " + rawData);
 
-                } catch (IOException e){ Log.e(TAG, "aaa Couldn't load data from api.  i is: " + i);
+                } catch (IOException e) {
+                    Log.e(TAG, "aaa Couldn't load data from api.  i is: " + i);
                     i++;
-                    apiSuccess = false;}
+                    apiSuccess = false;
+                }
+
+
+                try {
+
+                    marketsJ = (new JSONObject(rawData)).getJSONObject("return").getJSONObject("markets").getJSONObject(Pairs.getMarket(_marketId).getSecondarycode());
+                    currentMarket = gson.fromJson(marketsJ.toString(), Market.class);
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "JSON Exception! i is: " + i);
+                    //e.printStackTrace();
+                    //Log.i(TAG, "Primarycode: " + Pairs.getMarket(_marketId).getPrimarycode());
+                    i++;
+                    apiSuccess = false;
+                }
+
+                //Log.i(TAG, "currentMarket: " + currentMarket);
+                //Log.i(TAG, "marketsJ: " + marketsJ.toString());
+
+                //Fill in info in Pairs
+                Pairs.getMarket(_marketId).setLasttradeprice(currentMarket.getLasttradeprice());
+                Pairs.getMarket(_marketId).setVolume(currentMarket.getVolume());
+                Pairs.getMarket(_marketId).setRecenttrades(currentMarket.getRecenttrades());
+                Pairs.getMarket(_marketId).setSellorders(currentMarket.getSellorders());
+                Pairs.getMarket(_marketId).setBuyorders(currentMarket.getBuyorders());
+
             }
 
-            //Store rawData in JSONObject
-            try{
+            return currentMarket;
 
-                rawJ = new JSONObject(rawData);
-                marketsJ = rawJ.getJSONObject("return").getJSONObject("markets");
-                //DEBUG
-               //Log.i(TAG, "rawJ: " + rawJ);
-               Log.i(TAG, "marketsJ: " + marketsJ);
-               //Log.i(TAG, "marketsJ length: " + marketsJ.length());
-
-                //Make an ArrayList of Market Objects
-                Iterator<String> iter = marketsJ.keys();
-                while (iter.hasNext()){
-
-                    try{
-                        Market currentMarket = gson.fromJson(marketsJ.getJSONObject(iter.next()).toString(), Market.class);
-                        tradePairs.add(currentMarket);
-                    } catch(RuntimeException e){ Log.i(TAG, "RuntimeException: "); e.printStackTrace(); }
-                    //Log.i(TAG, "currentMarket: " + currentMarket);
-
-                }
-                 //DEBUG
-                //Log.i(TAG, "tradePairs: " + tradePairs);
-
-            } catch (JSONException e){ Log.i(TAG, "JSON Error: "); e.printStackTrace(); }
-
-            //Add your markets to SQLite:
-            DatabaseHandler db = new DatabaseHandler(mContext);
-
-            for (Market m : tradePairs){
-
-                Log.i(TAG, "Adding pairs to SQLite");
-                db.addPair(m);
-                for (Market.TradeItem ti : m.getRecenttrades()){
-
-                    db.addTrade(m, ti);
-
-                }
-                for (Market.OrderItem oi : m.getSellorders()){
-
-                    db.addSell(m, oi);
-
-                }
-                for (Market.OrderItem oi : m.getBuyorders()){
-
-                    db.addBuy(m, oi);
-
-                }
-                //db.addVis(m, 0); //Set to invisible initially
-
-            }
-            return null;
 
         }
 
-        protected void onPostExecute(Double d ){
+        @Override
+        protected Double doInBackground(String... params) {
 
-            DatabaseHandler db = new DatabaseHandler(mContext);
-            String tempPairs = db.printPairs();
-            Log.i(TAG, "In onPostExecute.  Pairs: " + tempPairs);
-            //Log.i(TAG, "tradePairs: " + tradePairs);
-            Log.i(TAG, "d is " + d);
 
+            for (Market m : Pairs.getVisibleMarkets()) {
+
+                getData(m.getMarketid());
+
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(Double d) {
+
+            //CONTINUE WORKING HERE!
+
+            populateListView();
         }
 
     }
 
-    private void populateListView(){
+    private void populateListView() {
 
-        /* OLD CODE
-        ArrayAdapter<TradePair> adapter = new MyListAdapter();
-        ListView list = (ListView)findViewById(R.id.fragment_list_view);
-        list.setAdapter(adapter);
-        */
+
+        ListView list = (ListView) findViewById(R.id.fragment_list_view);
+        list.setAdapter(new PairAdapter(mContext, R.layout.pair_item_view, Pairs.getVisibleMarkets()));
+        list.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.i(TAG, "List item clicked");
+
+
+            }
+
+        });
+
 
     }
 
 
 }
+
+
 
 

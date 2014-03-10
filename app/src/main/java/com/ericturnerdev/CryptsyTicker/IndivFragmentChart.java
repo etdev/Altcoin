@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -50,20 +52,23 @@ public class IndivFragmentChart extends Fragment {
 
         mCurrentSeries = new XYSeries("Sample Data");
         mRenderer.setApplyBackgroundColor(true);
-        mRenderer.setBackgroundColor(Color.parseColor("#666666"));
+        mRenderer.setBackgroundColor(Color.parseColor("#555555"));
         mDataset.addSeries(mCurrentSeries);
-        mRenderer.setShowAxes(false);
+        mRenderer.setShowAxes(false); //change back
         mRenderer.clearXTextLabels();
         mRenderer.clearYTextLabels();
         mRenderer.setShowAxes(false);
         mRenderer.setXLabels(0);
         mCurrentRenderer = new XYSeriesRenderer();
-        mCurrentRenderer.setLineWidth(8);
+        mCurrentRenderer.setLineWidth(6);
         mCurrentRenderer.setShowLegendItem(false);
         mCurrentRenderer.setFillPoints(true);
-        mCurrentRenderer.setColor(Color.parseColor("#EEEEEE"));
+        mCurrentRenderer.setColor(Color.parseColor("#FFFFFF"));
         mCurrentSeries.setTitle("");
         mRenderer.addSeriesRenderer(mCurrentRenderer);
+        mRenderer.setMargins(new int[]{0, 0, 0, 0});
+        mRenderer.setShowLegend(false);
+        mRenderer.setMarginsColor(Color.parseColor("#555555"));
 
     }
 
@@ -87,13 +92,16 @@ public class IndivFragmentChart extends Fragment {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_indiv_chart, container, false);
+        Log.i(TAG, "ResultAL: " + resultAL);
+
+        //View v = inflater.inflate(R.layout.fragment_indiv_chart, container, false);
 
         LinearLayout ll = (LinearLayout) inflater.inflate(R.layout.fragment_indiv_chart, container, false);
+        FrameLayout fl = (FrameLayout) ll.findViewById(R.id.fragment_indiv_chart_FF);
+        TextView tv = (TextView) ll.findViewById(R.id.fragment_indiv_chart_TV);
 
         marketId = IndivActivity.marketId;
         // marketId = getArguments().getInt("marketId");
@@ -101,13 +109,17 @@ public class IndivFragmentChart extends Fragment {
 
         if (mChart == null) {
 
-            initChart();
-            //ddSampleData();
-            mChart = ChartFactory.getCubeLineChartView(getActivity(), mDataset, mRenderer, 0.6f);
+            Log.i(TAG, "mChart detected as null");
 
-            ll.addView(mChart);
+            initChart();
+            mChart = ChartFactory.getCubeLineChartView(getActivity(), mDataset, mRenderer, 0.2f);
+            fl.addView(mChart);
+            fl.setBackgroundColor(Color.parseColor("#222222"));
+            tv.setText("Price (1 wk.)");
+            tv.setTextColor(Color.WHITE);
 
         } else {
+            Log.i(TAG, "mChart detected as existing already");
             mChart.repaint();
         }
 
@@ -115,7 +127,7 @@ public class IndivFragmentChart extends Fragment {
         //return ll;
         new JSONGet(getActivity(), marketId).execute(JSON_API);
 
-        return v;
+        return ll;
 
 
     }

@@ -6,12 +6,518 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#FFFF55">
+              android:background="@color/backgrounddark">
 
-    <TextView
-        android:id="@+id/IndivBotTV"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:padding="5dp"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:id="@+id/priceTV"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Price: xxxx"
+            android:textColor="#FFFFFF"
+            android:background="@color/backgrounddark"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:id="@+id/volumeTV"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:background="@color/backgrounddark"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:text="Volume: yyyy"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="17"
+        android:orientation="horizontal"
+        android:background="#888888"
+        >
+
+        <!--Buy table-->
+        <TableLayout
+            android:id="@+id/btbl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="40"
+            >
+
+            <TableRow
+                android:id="@+id/btblr0"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/btblr0c0"
+                    style="@style/text_style3"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/btblr0c1"
+                    style="@style/text_style4"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/btblr1"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/btblr1c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/btblr1c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/btblr2"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/btblr2c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/btblr2c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/btblr3"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/btblr3c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/btblr3c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/btblr4"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/btblr4c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/btblr4c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/btblr5"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/btblr5c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/btblr5c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/btblr6"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/btblr6c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/btblr6c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/btblr7"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/btblr7c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/btblr7c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/btblr8"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/btblr8c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/btblr8c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/btblr9"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/btblr9c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/btblr9c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/btblr10"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/btblr10c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/btblr10c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+
+        </TableLayout>
+
+        <View
+            style="@style/divider_style"
+            android:layout_weight="1"
+            android:background="@color/backgrounddark"/>
+
+
+        <!--Sell table-->
+        <TableLayout
+            android:id="@+id/stbl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="40"
+            >
+
+            <TableRow
+                android:id="@+id/stblr0"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/stblr0c0"
+                    style="@style/text_style3"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/stblr0c1"
+                    style="@style/text_style4"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/stblr1"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/stblr1c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/stblr1c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/stblr2"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/stblr2c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/stblr2c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/stblr3"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/stblr3c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/stblr3c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/stblr4"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/stblr4c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/stblr4c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/stblr5"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/stblr5c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/stblr5c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/stblr6"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/stblr6c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/stblr6c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/stblr7"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/stblr7c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/stblr7c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/stblr8"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/stblr8c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/stblr8c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/stblr9"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/stblr9c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/stblr9c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/stblr10"
+                style="@style/row_style"
+                >
+
+                <TextView
+                    android:id="@+id/stblr10c0"
+                    style="@style/text_style1"/>
+
+                <View
+                    style="@style/divider_style"
+                    />
+
+                <TextView
+                    android:id="@+id/stblr10c1"
+                    style="@style/text_style2"/>
+
+
+            </TableRow>
+
+
+        </TableLayout>
+
+
+    </LinearLayout>
 
 </LinearLayout>

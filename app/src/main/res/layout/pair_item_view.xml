@@ -5,7 +5,7 @@
                 android:layout_height="match_parent"
                 tools:context="com.ericturner.cryptoticker.MainActivity"
                 tools:ignore="MergeRootFrame"
-                android:background="#eaeaea"
+                android:background="@drawable/pair_shape"
     >
 
     <LinearLayout
@@ -13,19 +13,30 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:orientation="horizontal"
-        android:background="#FFF"
         android:layout_alignParentTop="true"
         >
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/moretop_tv2"
+            android:layout_width="0dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:layout_height="match_parent"
-            android:id="@+id/moretop_tv1"
+            android:layout_weight="3"
             android:textStyle="bold"
-            android:textSize="25sp"
-            android:gravity="center"
+            android:gravity="right"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:id="@+id/moretop_tv1"
+            android:textSize="22sp"
+            android:gravity="left"
             android:text="COIN NAME"
-            android:padding="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             />
 
     </LinearLayout>
@@ -35,7 +46,6 @@
         android:layout_height="35dp"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:background="#FFF"
         android:layout_below="@id/item_linear_moretop"
 
         >
@@ -73,7 +83,6 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_below="@id/item_linear_top"
-        android:background="#FFF"
         android:paddingBottom="5dp"
 
 

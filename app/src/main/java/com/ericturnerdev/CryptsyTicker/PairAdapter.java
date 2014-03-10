@@ -39,7 +39,7 @@ public class PairAdapter extends ArrayAdapter<Market> {
         //convertView is the view that will be recycled to create the new View
         //parent is the ListView holding the rows (I THINK)
         View v = convertView; //The current view
-        TextView topTV1, topTV2, botTV1, botTV2, moreTopTV;
+        TextView topTV1, topTV2, botTV1, botTV2, moreTopTV, moreTopTV2;
         final int currentPosition = position;
         //If there's no view to recycle
         if (convertView == null) {
@@ -52,6 +52,7 @@ public class PairAdapter extends ArrayAdapter<Market> {
         }
 
         moreTopTV = (TextView) v.findViewById(R.id.moretop_tv1);
+        moreTopTV2 = (TextView) v.findViewById(R.id.moretop_tv2);
         topTV1 = (TextView) v.findViewById(R.id.top_tv1);
         topTV2 = (TextView) v.findViewById(R.id.top_tv2);
         botTV1 = (TextView) v.findViewById(R.id.bot_tv1);
@@ -81,7 +82,12 @@ public class PairAdapter extends ArrayAdapter<Market> {
         percentChange = (double) Math.round((percentChange * 1000)) / 1000;
 
 
-        moreTopTV.setText("" + pairs.get(position).getSecondarycode() + "/" + pairs.get(position).getPrimarycode());
+        moreTopTV.setText("/" + pairs.get(position).getPrimarycode());
+        moreTopTV.setTextColor(Color.parseColor("#333333"));
+        moreTopTV.setTextSize(26);
+        moreTopTV2.setText(pairs.get(position).getPrimaryname());
+        moreTopTV2.setTextColor(Color.parseColor("#000000"));
+        moreTopTV2.setTextSize(26);
         topTV1.setText("" + pairs.get(position).getLasttradeprice());
         if (absoluteChange > 0) {
             topTV2.setTextColor(Color.parseColor("green"));
@@ -103,6 +109,7 @@ public class PairAdapter extends ArrayAdapter<Market> {
                 Log.i(TAG, "CLICKED: " + pairs.get(currentPosition).getPrimarycode() + "/" + pairs.get(currentPosition).getSecondarycode());
                 Intent intent = new Intent(getContext(), IndivActivity.class);
                 intent.putExtra("marketId", pairs.get(currentPosition).getMarketid());
+                intent.putExtra("volume", pairs.get(currentPosition).getVolume());
                 getContext().startActivity(intent);
 
             }

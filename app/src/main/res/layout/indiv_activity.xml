@@ -4,23 +4,24 @@
               android:id="@+id/indivActivLL"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@color/backgrounddark"
+              android:padding="5dp">
 
-    <!--
-        <fragment android:name="com.ericturnerdev.CryptsyTicker.IndivFragmentChart"
-                  android:id="@+id/indiv_fragment_chart"
-                  android:layout_width="match_parent"
-                  android:layout_height="0dp"
-                  android:layout_weight="1"
-                  />
+    <FrameLayout
+        android:id="@+id/indivChart"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="4"
 
+        />
 
-        <fragment android:name="com.ericturnerdev.CryptsyTicker.IndivFragmentBot"
-                  android:id="@+id/indiv_fragment_bot"
-                  android:layout_width="match_parent"
-                  android:layout_height="0dp"
-                  android:layout_weight="1"
-            />
-    -->
+    <FrameLayout
+        android:id="@+id/indivBot"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="12"
+        android:background="@color/backgrounddark"
+        />
 
 </LinearLayout>

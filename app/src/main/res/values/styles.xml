@@ -3,6 +3,64 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+
+    </style>
+
+    <style name="row_style">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">2dp</item>
+
+    </style>
+
+    <style name="text_style1">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">40</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:text">test1</item>
+
+    </style>
+
+    <style name="text_style2">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">20</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:text">test2</item>
+    </style>
+
+    <style name="text_style3">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">40</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:text">test1</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+
+    </style>
+
+    <style name="text_style4">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">20</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:text">test2</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+
+    </style>
+
+    <style name="divider_style">
+
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">#888888</item>
+
     </style>
 
 </resources>

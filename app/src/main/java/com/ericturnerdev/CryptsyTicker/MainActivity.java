@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
         if (marketsCount == 0) Log.i(TAG, "Vis table is empty yo!");
         else Log.i(TAG, "Vis table has " + marketsCount + " rows yo!");
 
-        Cursor cur = db.printMarkets();
+        Cursor cur;
 
         Log.i(TAG, "onCreate CALLED");
 
@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 
         mContext = this;
         setContentView(R.layout.fragment_main2);
-        this.setTitle("Your Coins");
+        this.setTitle("Cryptsy Ticker");
 
     } //End onCreate()
 
@@ -184,7 +184,9 @@ public class MainActivity extends Activity {
                     apiSuccess = false;
                 }
 
-                //Log.i(TAG, "currentMarket: " + currentMarket);
+                Log.i(TAG, "currentMarket: " + currentMarket);
+                Log.i(TAG, "ccc Volume for currentMarket: " + currentMarket.getVolume());
+
                 //Log.i(TAG, "marketsJ: " + marketsJ.toString());
 
                 //Fill in info in Pairs

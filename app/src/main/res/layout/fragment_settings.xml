@@ -5,32 +5,35 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#EEEEEE">
+              android:background="#888888">
 
-        <TextView
-            android:id="@+id/settingsHeading"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textSize="35sp"
-            android:gravity="center"
-            android:text="@string/settings_heading"
-            />
+    <TextView
+        android:id="@+id/settingsHeading"
+        android:layout_width="match_parent"
+        android:paddingTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="center"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textSize="34sp"
+        android:text="@string/settings_heading"
+        android:background="#FFFFFF"
+        />
 
-        <GridView
-            android:id="@+id/settingsGrid"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="8"
-            android:numColumns="3"
-            android:columnWidth="120dp"
-            android:stretchMode="columnWidth"
-            android:padding="6dp"
-            android:verticalSpacing="6dp"
-            android:horizontalSpacing="6dp"
-            android:background="#EEE"
-            >
+    <GridView
+        android:id="@+id/settingsGrid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:numColumns="3"
+        android:columnWidth="120dp"
+        android:paddingTop="8dp"
+        android:verticalSpacing="8dp"
+        android:horizontalSpacing="8dp"
+        android:background="#888888"
+        >
 
-        </GridView>
+    </GridView>
 
 </LinearLayout>

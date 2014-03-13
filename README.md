@@ -4,10 +4,15 @@ CryptsyTicker
 Altcoin Ticker Android Application using data from online cryptocurrency exchange Cryptsy.com
 
 Features:
+
 -Fetches current price data for various cryptocurrencies and displays it
--Price graphs with data from the last week (in progress)
+
+-Price graphs with data from the last week
+
 -Quickly add multiple coins at once via checkboxes
+
 -Price fetched via JSON, automatically persisted in SQLite Database on device
+
 
 Files:
 

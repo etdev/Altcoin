@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 
         mContext = this;
         setContentView(R.layout.fragment_main2);
-        this.setTitle("Cryptsy Ticker");
+        this.setTitle("Altcoin Ticker");
 
     } //End onCreate()
 

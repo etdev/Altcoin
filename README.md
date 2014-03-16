@@ -1,4 +1,4 @@
-CryptsyTicker
+Altcoin Ticker
 =============
 
 Altcoin Ticker Android Application using data from online cryptocurrency exchange Cryptsy.com

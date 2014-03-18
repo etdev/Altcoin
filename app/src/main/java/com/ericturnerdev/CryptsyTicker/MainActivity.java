@@ -40,16 +40,36 @@ public class MainActivity extends Activity {
         new Pairs();
 
 
+    } //End onCreate()
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+        DatabaseHandler db = new DatabaseHandler(this);
+        //db.clearTable("visibility");
+        //db.addVis(Pairs.getMarket(132), 1);
+        //db.dropTable("visibility");
+        Log.i(TAG, "onStop CALLED");
+        db.close();
+
+    }
+
+    @Override
+    protected void onResume() {
+
+        Log.i(TAG, "onResume CALLED");
+        super.onResume();
+
+
         //Check for SQLite Database
         DatabaseHandler db = new DatabaseHandler(this);
         //db.clearTable("visibility");
         int marketsCount = db.getMarketsCount();
-        if (marketsCount == 0) Log.i(TAG, "Vis table is empty yo!");
-        else Log.i(TAG, "Vis table has " + marketsCount + " rows yo!");
+        if (marketsCount == 0) Log.i(TAG, "Vis table is empty");
+        else Log.i(TAG, "Vis table has " + marketsCount + " rows");
 
         Cursor cur;
-
-        Log.i(TAG, "onCreate CALLED");
 
         //Set Pairs visibility from SQLite database
         cur = db.printMarkets();
@@ -71,26 +91,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.fragment_main2);
         this.setTitle("Altcoin Ticker");
 
-    } //End onCreate()
-
-    @Override
-    protected void onStop() {
-
-        super.onStop();
-        DatabaseHandler db = new DatabaseHandler(this);
-        //db.clearTable("visibility");
-        //db.addVis(Pairs.getMarket(132), 1);
-        //db.dropTable("visibility");
-        Log.i(TAG, "onStop CALLED");
-        db.close();
-
-    }
-
-    @Override
-    protected void onResume() {
-
-        Log.i(TAG, "onResume CALLED");
-        super.onResume();
         new Cryptsy(this).execute(CRYPTSY_API);
 
 
@@ -162,7 +162,7 @@ public class MainActivity extends Activity {
 
                     //rawData = string response from the API
                     rawData = new URLFetch().getURL(CRYPTSY_API + _marketId);
-                    Log.i(TAG, "rawData: " + rawData);
+                    //Log.i(TAG, "rawData: " + rawData);
 
                 } catch (IOException e) {
                     Log.e(TAG, "aaa Couldn't load data from api.  i is: " + i);
@@ -184,8 +184,8 @@ public class MainActivity extends Activity {
                     apiSuccess = false;
                 }
 
-                Log.i(TAG, "currentMarket: " + currentMarket);
-                Log.i(TAG, "ccc Volume for currentMarket: " + currentMarket.getVolume());
+                //Log.i(TAG, "currentMarket: " + currentMarket);
+                //Log.i(TAG, "ccc Volume for currentMarket: " + currentMarket.getVolume());
 
                 //Log.i(TAG, "marketsJ: " + marketsJ.toString());
 

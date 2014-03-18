@@ -56,7 +56,9 @@ public class IndivFragmentChart extends Fragment {
         mDataset.addSeries(mCurrentSeries);
         mRenderer.setShowAxes(false); //change back
         mRenderer.clearXTextLabels();
-        mRenderer.clearYTextLabels();
+        //mRenderer.clearYTextLabels();
+        mRenderer.setLabelsTextSize(16f);
+        mRenderer.setYLabels(5);
         mRenderer.setShowAxes(false);
         mRenderer.setXLabels(0);
         mCurrentRenderer = new XYSeriesRenderer();
@@ -66,7 +68,7 @@ public class IndivFragmentChart extends Fragment {
         mCurrentRenderer.setColor(Color.parseColor("#FFFFFF"));
         mCurrentSeries.setTitle("");
         mRenderer.addSeriesRenderer(mCurrentRenderer);
-        mRenderer.setMargins(new int[]{0, 0, 0, 0});
+        mRenderer.setMargins(new int[]{0, 12, 0, 0});
         mRenderer.setShowLegend(false);
         mRenderer.setMarginsColor(Color.parseColor("#555555"));
 
@@ -78,6 +80,7 @@ public class IndivFragmentChart extends Fragment {
         Collections.sort(resultAL);
         for (i = 0; i < resultAL.size(); i++) {
 
+            /*
             if (i == 0) {
                 mCurrentSeries.add((double) i, getPoint(resultAL.get(i).getPrice(), resultAL.get(i + 1).getPrice(), resultAL.get(i + 2).getPrice()));
             } else if (i == resultAL.size() - 1) {
@@ -85,6 +88,9 @@ public class IndivFragmentChart extends Fragment {
             } else {
                 mCurrentSeries.add((double) i, getPoint(resultAL.get(i).getPrice(), resultAL.get(i - 1).getPrice(), resultAL.get(i + 1).getPrice()));
             }
+            */
+
+            mCurrentSeries.add((double) i, Double.parseDouble(Format.formatNum(resultAL.get(i).getPrice(), Pairs.getMarket(marketId).getPrimarycode())));
 
         }
 
@@ -210,7 +216,6 @@ public class IndivFragmentChart extends Fragment {
 
 
             getData();
-
             return null;
         }
 
@@ -219,6 +224,8 @@ public class IndivFragmentChart extends Fragment {
             //CONTINUE WORKING HERE!
 
             Log.i(TAG, "From onPostExecute, here is resultAL: " + resultAL);
+            Log.i(TAG, "fff " + Pairs.getMarket(marketId).getLasttradeprice());
+            Log.i(TAG, "fff " + Format.formatLong(Pairs.getMarket(marketId).getLasttradeprice(), Pairs.getMarket(marketId).getPrimarycode()));
 
             //populateListView();
             addData();
@@ -270,10 +277,14 @@ public class IndivFragmentChart extends Fragment {
 
     public double getPoint(double a, double b, double c) {
 
+        /*
         double avg = (b + c) / 2;
         if (((avg / a) > (1.5 * avg)) || ((avg / a) < (0.75 * avg))) {
             return avg;
         } else return a;
+        */
+
+        return a;
 
     }
 

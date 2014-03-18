@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,7 @@ public class PairAdapter extends ArrayAdapter<Market> {
         //convertView is the view that will be recycled to create the new View
         //parent is the ListView holding the rows (I THINK)
         View v = convertView; //The current view
-        TextView topTV1, topTV2, botTV1, botTV2, moreTopTV, moreTopTV2;
+        TextView topTV1, topTV2, topTV3, botTV1, botTV2, moreTopTV, moreTopTV2;
         final int currentPosition = position;
         //If there's no view to recycle
         if (convertView == null) {
@@ -55,6 +56,7 @@ public class PairAdapter extends ArrayAdapter<Market> {
         moreTopTV2 = (TextView) v.findViewById(R.id.moretop_tv2);
         topTV1 = (TextView) v.findViewById(R.id.top_tv1);
         topTV2 = (TextView) v.findViewById(R.id.top_tv2);
+        //topTV3 = (TextView) v.findViewById(R.id.top_tv3);
         botTV1 = (TextView) v.findViewById(R.id.bot_tv1);
         botTV2 = (TextView) v.findViewById(R.id.bot_tv2);
 
@@ -79,7 +81,9 @@ public class PairAdapter extends ArrayAdapter<Market> {
         percentChange = (absoluteChange / (pairs.get(position).getLasttradeprice())) * 100;
         //Log.i(TAG, "percentChange: " + percentChange);
 
-        percentChange = (double) Math.round((percentChange * 1000)) / 1000;
+        percentChange = (double) Math.round((percentChange * 100)) / 100;
+
+        //topTV3.setText("" + Format.checkFormat(pairs.get(position).getLasttradeprice(), pairs.get(position).getPrimarycode()));
 
 
         moreTopTV.setText("/" + pairs.get(position).getPrimarycode());
@@ -88,9 +92,9 @@ public class PairAdapter extends ArrayAdapter<Market> {
         moreTopTV2.setText(pairs.get(position).getPrimaryname());
         moreTopTV2.setTextColor(Color.parseColor("#000000"));
         moreTopTV2.setTextSize(26);
-        topTV1.setText("" + pairs.get(position).getLasttradeprice());
+        topTV1.setText(Html.fromHtml("<b>" + Format.formatNum(pairs.get(position).getLasttradeprice(), pairs.get(position).getPrimarycode()) + "</b>" + " (" + Format.checkFormat(pairs.get(position).getLasttradeprice(), pairs.get(position).getPrimarycode()) + ")"));
         if (absoluteChange > 0) {
-            topTV2.setTextColor(Color.parseColor("green"));
+            topTV2.setTextColor(Color.parseColor("#33CC33"));
             topTV2.setText("+" + percentChange + "%");
         } else if (absoluteChange < 0) {
             topTV2.setTextColor(Color.parseColor("red"));
@@ -99,8 +103,16 @@ public class PairAdapter extends ArrayAdapter<Market> {
             topTV2.setText("" + percentChange + "%");
         }
 
-        botTV1.setText("Buy: " + pairs.get(position).getBuyorders().get(0).getPrice());
-        botTV2.setText("Sell: " + pairs.get(position).getSellorders().get(0).getPrice());
+        if (pairs.get(position).getBuyorders().size() > 0) {
+            botTV1.setText("Buy: " + Format.formatNum(pairs.get(position).getBuyorders().get(0).getPrice(), pairs.get(position).getPrimarycode()));
+        } else {
+            botTV1.setText("Buy: no data");
+        }
+        if (pairs.get(position).getSellorders().size() > 0) {
+            botTV2.setText("Sell: " + Format.formatNum(pairs.get(position).getSellorders().get(0).getPrice(), pairs.get(position).getPrimarycode()));
+        } else {
+            botTV2.setText("Sell: no data");
+        }
 
         v.setOnClickListener(new View.OnClickListener() {
 

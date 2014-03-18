@@ -21,7 +21,7 @@
             android:id="@+id/priceTV"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:gravity="center"
             android:textStyle="bold"
             android:text="Price: xxxx"
@@ -35,10 +35,11 @@
             android:layout_weight="1"
             android:textStyle="bold"
             android:background="@color/backgrounddark"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textColor="#FFFFFF"
             android:gravity="center"
             android:text="Volume: yyyy"/>
+
     </LinearLayout>
 
     <LinearLayout

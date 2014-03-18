@@ -9,6 +9,7 @@
           android:dividerHeight="10dp"
           android:scrollbarStyle="outsideOverlay"
           android:clickable="true"
+          android:listSelector="@drawable/item_pressed"
     >
 
 </ListView>

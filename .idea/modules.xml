@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Altcoin Ticker.iml" filepath="$PROJECT_DIR$/Altcoin Ticker.iml" />
       <module fileurl="file://$PROJECT_DIR$/CryptsyTicker.iml" filepath="$PROJECT_DIR$/CryptsyTicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class MainActivity extends Activity {
@@ -37,8 +38,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        //If Pairs doesn't exist
         new Pairs();
-
+        Log.i(TAG, "aaa onCreate CALLED");
 
     } //End onCreate()
 
@@ -50,49 +52,23 @@ public class MainActivity extends Activity {
         //db.clearTable("visibility");
         //db.addVis(Pairs.getMarket(132), 1);
         //db.dropTable("visibility");
-        Log.i(TAG, "onStop CALLED");
+        Log.i(TAG, "aaa onStop CALLED");
         db.close();
+
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        Log.i(TAG, "aaa onRestart CALLED");
 
     }
 
     @Override
     protected void onResume() {
 
-        Log.i(TAG, "onResume CALLED");
+        Log.i(TAG, " aaa onResume CALLED");
         super.onResume();
-
-
-        //Check for SQLite Database
-        DatabaseHandler db = new DatabaseHandler(this);
-        //db.clearTable("visibility");
-        int marketsCount = db.getMarketsCount();
-        if (marketsCount == 0) Log.i(TAG, "Vis table is empty");
-        else Log.i(TAG, "Vis table has " + marketsCount + " rows");
-
-        Cursor cur;
-
-        //Set Pairs visibility from SQLite database
-        cur = db.printMarkets();
-        if (cur.getCount() > 0) {
-            while (cur.moveToNext()) {
-
-                if (cur.getInt(1) == 1) {
-                    Pairs.getMarket(cur.getInt(0)).setVisible(true);
-                } else {
-                    Pairs.getMarket(cur.getInt(0)).setVisible(false);
-                }
-
-            }
-        }
-
-        //Display Visible Pairs
-
-        mContext = this;
-        setContentView(R.layout.fragment_main2);
-        this.setTitle("Altcoin Ticker");
-
-        new Cryptsy(this).execute(CRYPTSY_API);
-
 
     }
 
@@ -125,7 +101,9 @@ public class MainActivity extends Activity {
                 startActivity(intent);
 
             case R.id.menu_refresh:
-                new Cryptsy(this).execute(CRYPTSY_API);
+                //new Pairs();
+                this.onResume();
+                //new Cryptsy(this).execute(CRYPTSY_API);
 
 
         }
@@ -147,6 +125,8 @@ public class MainActivity extends Activity {
         }
 
         protected Market getData(int _marketId) {
+
+            currentMarket = Pairs.getMarket(_marketId);
 
             String rawData = ""; //String representation of raw JSON Data
             JSONObject marketsJ;
@@ -184,10 +164,6 @@ public class MainActivity extends Activity {
                     apiSuccess = false;
                 }
 
-                //Log.i(TAG, "currentMarket: " + currentMarket);
-                //Log.i(TAG, "ccc Volume for currentMarket: " + currentMarket.getVolume());
-
-                //Log.i(TAG, "marketsJ: " + marketsJ.toString());
 
                 //Fill in info in Pairs
                 Pairs.getMarket(_marketId).setLasttradeprice(currentMarket.getLasttradeprice());
@@ -209,9 +185,19 @@ public class MainActivity extends Activity {
 
             for (Market m : Pairs.getVisibleMarkets()) {
 
+                //Market m = currentMarket;
                 getData(m.getMarketid());
 
             }
+
+            ArrayList<String> testList = new ArrayList<String>();
+            testList.add("doge_btc"); testList.add("ltc_usd");
+            String testData = "";
+            try {
+                testData = new URLFetch().postURL("http://www.cryptocoincharts.info/v2/api/tradingPairs", testList);
+            } catch(IOException e){e.printStackTrace(); }
+
+            Log.i(TAG, "bbb testData: " + testData);
 
             return null;
         }
@@ -225,6 +211,47 @@ public class MainActivity extends Activity {
 
     }
 
+    @Override
+    protected void onStart(){
+
+        super.onStart();
+        //new Pairs();
+        Log.i(TAG, "aaa onStart() CALLED");
+
+
+        //Check for SQLite Database
+        DatabaseHandler db = new DatabaseHandler(this);
+        //db.clearTable("visibility");
+        int marketsCount = db.getMarketsCount();
+        if (marketsCount == 0) Log.i(TAG, "Vis table is empty");
+        else Log.i(TAG, "Vis table has " + marketsCount + " rows");
+
+        Cursor cur;
+
+        //Set Pairs visibility from SQLite database
+        cur = db.printMarkets();
+        if (cur.getCount() > 0) {
+            while (cur.moveToNext()) {
+
+                if (cur.getInt(1) == 1) {
+                    Pairs.getMarket(cur.getInt(0)).setVisible(true);
+                } else {
+                    Pairs.getMarket(cur.getInt(0)).setVisible(false);
+                }
+
+            }
+        }
+
+        //Display Visible Pairs
+
+        mContext = this;
+        setContentView(R.layout.fragment_main2);
+        this.setTitle("Altcoin Ticker");
+        populateListView();
+
+        new Cryptsy(this).execute(CRYPTSY_API);
+
+    }
     private void populateListView() {
 
 
@@ -244,6 +271,7 @@ public class MainActivity extends Activity {
 
 
     }
+
 
 
 }

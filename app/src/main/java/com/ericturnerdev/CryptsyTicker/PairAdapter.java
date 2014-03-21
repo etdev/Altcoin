@@ -92,7 +92,8 @@ public class PairAdapter extends ArrayAdapter<Market> {
         moreTopTV2.setText(pairs.get(position).getPrimaryname());
         moreTopTV2.setTextColor(Color.parseColor("#000000"));
         moreTopTV2.setTextSize(26);
-        topTV1.setText(Html.fromHtml("<b>" + Format.formatNum(pairs.get(position).getLasttradeprice(), pairs.get(position).getPrimarycode()) + "</b>" + " (" + Format.checkFormat(pairs.get(position).getLasttradeprice(), pairs.get(position).getPrimarycode()) + ")"));
+        if (pairs.get(position).getLasttradeprice() == 0.0){ topTV1.setText("fetching data..."); topTV2.setTextColor(Color.BLACK);}
+        else { topTV1.setText(Html.fromHtml("<b>" + Format.formatNum(pairs.get(position).getLasttradeprice(), pairs.get(position).getPrimarycode()) + "</b>" + " (" + Format.checkFormat(pairs.get(position).getLasttradeprice(), pairs.get(position).getPrimarycode()) + ")")); }
         if (absoluteChange > 0) {
             topTV2.setTextColor(Color.parseColor("#33CC33"));
             topTV2.setText("+" + percentChange + "%");

@@ -200,6 +200,7 @@ public class MainActivity extends Activity {
             Log.i(TAG, "bbb testData: " + testData);
 
             return null;
+            //
         }
 
         protected void onPostExecute(Double d) {

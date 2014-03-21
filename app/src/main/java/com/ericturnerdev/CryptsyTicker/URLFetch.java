@@ -2,9 +2,15 @@ package com.ericturnerdev.CryptsyTicker;
 
 import android.util.Log;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,7 +28,7 @@ public class URLFetch {
     public String getURL(String urlIn) throws IOException {
 
 
-        //Log.i(TAG, "In URLFetch");
+        Log.i(TAG, "urlIn: " + urlIn);
         URL url = new URL(urlIn);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
@@ -32,7 +38,7 @@ public class URLFetch {
         while ((line = r.readLine()) != null){
 
             total.append(line);
-            // Log.i(TAG, "aaa line: " + line);
+            Log.i(TAG, "aaa line: " + line);
 
         }
 
@@ -43,37 +49,11 @@ public class URLFetch {
     public String postURL(String urlIn, ArrayList<String> params) throws IOException {
 
 
-        //Log.i(TAG, "In URLFetch");
-        URL url = new URL(urlIn);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setDoInput(true);
-        urlConnection.setDoOutput(true);
-        urlConnection.setInstanceFollowRedirects(false);
-        urlConnection.setRequestMethod("POST");
-        urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        urlConnection.setRequestProperty("charset", "utf-8");
-        //content-length?
-        urlConnection.setUseCaches(false);
-
-        DataOutputStream out = new DataOutputStream(urlConnection.getOutputStream());
-        for(String s: params){ out.writeBytes(s); }
-        out.flush();
-        out.close();
-
-        InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-        BufferedReader r = new BufferedReader(new InputStreamReader(in));
-        StringBuilder total = new StringBuilder();
-        String line;
-
-        while ((line = r.readLine()) != null){
-
-            total.append(line);
-            Log.i(TAG, "aaa line: " + line);
-
-        }
-
-        urlConnection.disconnect();
-        return total.toString();
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(urlIn);
+        post.setEntity(new StringEntity(params.get(0)));
+        HttpResponse response = client.execute(post);
+        return EntityUtils.toString(response.getEntity());
     }
 
 

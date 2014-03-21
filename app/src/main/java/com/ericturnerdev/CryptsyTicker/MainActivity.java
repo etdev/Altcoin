@@ -18,6 +18,8 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,6 +43,14 @@ public class MainActivity extends Activity {
         //If Pairs doesn't exist
         new Pairs();
         Log.i(TAG, "aaa onCreate CALLED");
+        ArrayList<String> testList = new ArrayList<String>();
+        testList.add("doge_btc");
+
+        new APIData(this, "http://www.cryptocoincharts.info/v2/api/tradingPairs", true, testList).execute();
+        ArrayList<NameValuePair> testList2 = new ArrayList<NameValuePair>();
+        testList2.add(new BasicNameValuePair("method", "singleorderdata"));
+        testList2.add(new BasicNameValuePair("marketid", "132"));
+        new APIData(this, "http://pubapi.cryptsy.com/api.php", false, testList).execute();
 
     } //End onCreate()
 
@@ -189,15 +199,6 @@ public class MainActivity extends Activity {
                 getData(m.getMarketid());
 
             }
-
-            ArrayList<String> testList = new ArrayList<String>();
-            testList.add("doge_btc"); testList.add("ltc_usd");
-            String testData = "";
-            try {
-                testData = new URLFetch().postURL("http://www.cryptocoincharts.info/v2/api/tradingPairs", testList);
-            } catch(IOException e){e.printStackTrace(); }
-
-            Log.i(TAG, "bbb testData: " + testData);
 
             return null;
             ////

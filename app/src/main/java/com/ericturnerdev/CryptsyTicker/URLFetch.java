@@ -1,44 +1,37 @@
 package com.ericturnerdev.CryptsyTicker;
 
-import android.util.Log;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 /**
  * Created by ericturner on 2/5/14.  Get string from URL
  */
 public class URLFetch {
 
-    private  final String TAG = "URLFetch";
+    private final String TAG = "URLFetch";
 
     public String getURL(String urlIn) throws IOException {
 
 
-        Log.i(TAG, "urlIn: " + urlIn);
+        //Log.i(TAG, "urlIn: " + urlIn);
         URL url = new URL(urlIn);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
         BufferedReader r = new BufferedReader(new InputStreamReader(in));
         StringBuilder total = new StringBuilder();
         String line;
-        while ((line = r.readLine()) != null){
+        while ((line = r.readLine()) != null) {
 
             total.append(line);
-            Log.i(TAG, "aaa line: " + line);
+            //Log.i(TAG, "aaa line: " + line);
 
         }
 
@@ -46,14 +39,47 @@ public class URLFetch {
     }
 
 
-    public String postURL(String urlIn, ArrayList<String> params) throws IOException {
+    public String postURL(String urlIn, BasicNameValuePair n) throws IOException {
+
+        URL url = new URL(urlIn);
+        String stringParam = "";
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+
+        stringParam += "" + n.getName() + "=" + n.getValue();
+
+        //stringParam = stringParam.substring(0, stringParam.length()-1);
+
+        con.setDoOutput(true);
+        DataOutputStream out = new DataOutputStream(con.getOutputStream());
+        out.writeBytes(stringParam);
+        out.flush();
+        out.close();
+
+        int responseCode = con.getResponseCode();
+
+        //Log.i(TAG, "POST request to URL: " + urlIn);
+        //Log.i(TAG, "Post parameters: " + stringParam);
+        //Log.i(TAG, "Response Code: " + responseCode);
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream())
+        );
+
+        String line;
+        StringBuffer response = new StringBuffer();
+        while ((line = in.readLine()) != null) {
+
+            response.append(line);
+
+        }
+
+        in.close();
+
+        // Log.i(TAG, "rawData: " + response.toString());
+        return response.toString();
 
 
-        HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost(urlIn);
-        post.setEntity(new StringEntity(params.get(0)));
-        HttpResponse response = client.execute(post);
-        return EntityUtils.toString(response.getEntity());
     }
 
 

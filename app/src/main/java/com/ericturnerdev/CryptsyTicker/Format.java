@@ -1,5 +1,7 @@
 package com.ericturnerdev.CryptsyTicker;
 
+import android.util.Log;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
@@ -183,12 +185,14 @@ public class Format {
         //If USD
         else if (secondary.toUpperCase().equals("USD")) {
 
+            Log.i("Format", "USD, d is: " + d);
             if (d < 1) {
                 fd = removeZeros(String.format("%.2f", (d * 100)));
             } else {
-                fd = "$" + String.format("%.2f", (d));
+                fd = String.format("%.2f", (d));
             }
 
+            Log.i("Format", "USD, fd is: " + fd);
             return fd;
 
         } else {

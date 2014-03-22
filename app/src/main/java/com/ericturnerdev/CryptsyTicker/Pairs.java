@@ -17,6 +17,8 @@ public class Pairs extends Application {
 
         pairs = new Hashtable<Integer, Market>();
 
+        pairs.put(0, new Market(0, "BTC", "USD", "Bitcoin"));
+
         pairs.put(112, new Market(112, "ASC", "XPM", "AsicCoin"));
 
         pairs.put(110, new Market(110, "COL", "XPM", "ColossusCoin"));
@@ -296,6 +298,20 @@ public class Pairs extends Application {
     public static Market getMarket(Integer id) {
 
         return pairs.get(id);
+
+    }
+
+    public static Market getMarket(String primary, String secondary) {
+
+        Market tempMarket = new Market();
+
+        for (Market m : getAllMarkets()) {
+            if ((m.getPrimarycode().toUpperCase().equals(primary.toUpperCase())) && (m.getSecondarycode().toUpperCase().equals(secondary.toUpperCase()))) {
+                tempMarket = m;
+            }
+        }
+
+        return getMarket(tempMarket.getMarketid());
 
     }
 

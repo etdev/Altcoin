@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#555555">
+
+    <TextView
+        android:id="@+id/splash_tv"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:text="@string/welcome"
+        android:textSize="72sp"
+        android:gravity="center"
+        android:textColor="#00ccff"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/splash_tv2"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="2"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
+        android:paddingBottom="22dp"
+        android:text="@string/guide"
+        android:textSize="26sp"
+        android:textColor="#FFF"
+        android:gravity="center_horizontal"
+
+        />
+
+    <TextView
+        android:id="@+id/splash_tv3"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:textSize="42sp"
+
+        />
+
+
+</LinearLayout>

@@ -11,6 +11,7 @@
         android:id="@+id/settingsHeading"
         android:layout_width="match_parent"
         android:paddingTop="5dp"
+        android:textStyle="bold"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:gravity="center"

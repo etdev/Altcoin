@@ -40,8 +40,10 @@ public class SettingsFragment extends Fragment {
         mTextView = (TextView) v.findViewById(R.id.settingsHeading);
 
         mGridView.setAdapter(new SettingsGridAdapter());
-        return v;
 
+        Log.i(TAG, "Dogecoin price: " + Pairs.getMarket(132).getPrice());
+
+        return v;
     }
 
 

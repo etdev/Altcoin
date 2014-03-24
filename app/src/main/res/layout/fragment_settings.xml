@@ -5,7 +5,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#888888">
+              android:background="#555555">
 
     <TextView
         android:id="@+id/settingsHeading"
@@ -18,8 +18,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:textSize="34sp"
+        android:textColor="#FFFFFF"
         android:text="@string/settings_heading"
-        android:background="#FFFFFF"
+        android:background="#555555"
         />
 
     <GridView
@@ -32,7 +33,7 @@
         android:paddingTop="8dp"
         android:verticalSpacing="8dp"
         android:horizontalSpacing="8dp"
-        android:background="#888888"
+        android:background="#555555"
         >
 
     </GridView>

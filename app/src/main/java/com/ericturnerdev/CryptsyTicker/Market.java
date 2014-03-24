@@ -1,7 +1,5 @@
 package com.ericturnerdev.CryptsyTicker;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +7,7 @@ import java.util.List;
  * Market data type to match Cryptsy JSON Return
  */
 
-public class Market {
+public class Market implements Comparable<Market> {
 
     private int marketid = 0;
     private String label = "";
@@ -44,7 +42,7 @@ public class Market {
         this.visible = false;
         this.label = secondarycode + "/" + primarycode;
         this.id = this.label;
-        Log.i("fromMarket", "Label: " + this.label);
+        //Log.i("fromMarket", "Label: " + this.label);
 
     }
 
@@ -302,6 +300,18 @@ public class Market {
 
             return "      price:" + getPrice() + " quantity: " + getQuantity() + " total; " + getTotal() + "\n";
 
+        }
+
+    }
+
+    public int compareTo(Market m) {
+
+        if (this.getSecondarycode().compareTo(m.getSecondarycode()) > 0) {
+            return 1;
+        } else if (this.getSecondarycode().compareTo(m.getSecondarycode()) < 0) {
+            return -1;
+        } else {
+            return 0;
         }
 
     }

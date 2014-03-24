@@ -37,8 +37,22 @@
         android:id="@+id/splash_tv3"
         android:layout_height="0dp"
         android:layout_width="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
         android:textSize="42sp"
+
+        />
+
+    <TextView
+        android:id="@+id/splash_tv4"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="0.5"
+        android:textColor="#BBB"
+        android:text="@string/disclaimer"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
 
         />
 

@@ -35,6 +35,7 @@ public class URLFetch {
 
         }
 
+        urlConnection.disconnect();
         return total.toString();
     }
 
@@ -77,6 +78,7 @@ public class URLFetch {
         in.close();
 
         // Log.i(TAG, "rawData: " + response.toString());
+        con.disconnect();
         return response.toString();
 
 

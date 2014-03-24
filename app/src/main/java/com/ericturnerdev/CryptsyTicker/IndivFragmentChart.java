@@ -71,6 +71,8 @@ public class IndivFragmentChart extends Fragment {
         mRenderer.setMargins(new int[]{0, 12, 0, 0});
         mRenderer.setShowLegend(false);
         mRenderer.setMarginsColor(Color.parseColor("#555555"));
+        mRenderer.setPanEnabled(false, false);
+        mRenderer.setZoomEnabled(false, false);
 
     }
 
@@ -78,7 +80,7 @@ public class IndivFragmentChart extends Fragment {
 
         int i;
         Collections.sort(resultAL);
-        for (i = 0; i < resultAL.size(); i++) {
+        for (i = 0; i < resultAL.size() - 1; i += 2) {
 
             /*
             if (i == 0) {
@@ -90,18 +92,18 @@ public class IndivFragmentChart extends Fragment {
             }
             */
 
-            mCurrentSeries.add((double) i, Double.parseDouble(Format.formatNum(resultAL.get(i).getPrice(), Pairs.getMarket(marketId).getPrimarycode())));
+            mCurrentSeries.add((double) i, (resultAL.get(i).getPrice() + resultAL.get(i + 1).getPrice()) / 2);
 
         }
 
-        Log.i(TAG, "initChart run");
+        //Log.i(TAG, "initChart run");
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Log.i(TAG, "ResultAL: " + resultAL);
+        //Log.i(TAG, "ResultAL: " + resultAL);
 
         //View v = inflater.inflate(R.layout.fragment_indiv_chart, container, false);
 
@@ -111,11 +113,11 @@ public class IndivFragmentChart extends Fragment {
 
         marketId = IndivActivity.marketId;
         // marketId = getArguments().getInt("marketId");
-        Log.i(TAG, "marketId is: " + marketId);
+        //Log.i(TAG, "marketId is: " + marketId);
 
         if (mChart == null) {
 
-            Log.i(TAG, "mChart detected as null");
+            //Log.i(TAG, "mChart detected as null");
 
             initChart();
             mChart = ChartFactory.getCubeLineChartView(getActivity(), mDataset, mRenderer, 0.2f);
@@ -125,7 +127,7 @@ public class IndivFragmentChart extends Fragment {
             tv.setTextColor(Color.WHITE);
 
         } else {
-            Log.i(TAG, "mChart detected as existing already");
+            // Log.i(TAG, "mChart detected as existing already");
             mChart.repaint();
         }
 
@@ -158,7 +160,7 @@ public class IndivFragmentChart extends Fragment {
 
             String rawData = ""; //String representation of raw JSON Data
 
-            Log.i(TAG, "marketId is: " + marketId);
+            //Log.i(TAG, "marketId is: " + marketId);
 
             resultAL = new ArrayList<IndivTradeItem>();
 
@@ -170,13 +172,13 @@ public class IndivFragmentChart extends Fragment {
                 apiSuccess = true;
                 try {
 
-                    Log.i(TAG, "marketId: " + marketId);
+                    //Log.i(TAG, "marketId: " + marketId);
 
                     //rawData = string response from the API
-                    Log.i(TAG, "JSONGet URL: " + JSON_API + "?" + "marketid=" + marketId + "&primary=" + Pairs.getMarket(marketId).getSecondarycode() + "&secondary=" + Pairs.getMarket(marketId).getPrimarycode());
+                    // Log.i(TAG, "JSONGet URL: " + JSON_API + "?" + "marketid=" + marketId + "&primary=" + Pairs.getMarket(marketId).getSecondarycode() + "&secondary=" + Pairs.getMarket(marketId).getPrimarycode());
 
                     rawData = new URLFetch().getURL(JSON_API + "?" + "marketid=" + marketId + "&primary=" + Pairs.getMarket(marketId).getSecondarycode() + "&secondary=" + Pairs.getMarket(marketId).getPrimarycode());
-                    Log.i(TAG, "JSONGet rawData: " + rawData);
+                    //Log.i(TAG, "JSONGet rawData: " + rawData);
 
                     try {
 
@@ -188,7 +190,7 @@ public class IndivFragmentChart extends Fragment {
                             JSONObject temp = resultArray.getJSONObject(i);
                             String tempTime = temp.getString("time");
                             double tempPrice = temp.getDouble("price");
-                            Log.i(TAG, "JSON Object: " + tempTime + ", " + tempPrice);
+                            //Log.i(TAG, "JSON Object: " + tempTime + ", " + tempPrice);
                             resultAL.add(new IndivTradeItem(tempPrice, tempTime));
 
                         }
@@ -223,9 +225,9 @@ public class IndivFragmentChart extends Fragment {
 
             //CONTINUE WORKING HERE!
 
-            Log.i(TAG, "From onPostExecute, here is resultAL: " + resultAL);
-            Log.i(TAG, "fff " + Pairs.getMarket(marketId).getLasttradeprice());
-            Log.i(TAG, "fff " + Format.formatLong(Pairs.getMarket(marketId).getLasttradeprice(), Pairs.getMarket(marketId).getPrimarycode()));
+            //Log.i(TAG, "From onPostExecute, here is resultAL: " + resultAL);
+            //Log.i(TAG, "fff " + Pairs.getMarket(marketId).getLasttradeprice());
+            //Log.i(TAG, "fff " + Format.formatLong(Pairs.getMarket(marketId).getLasttradeprice(), Pairs.getMarket(marketId).getPrimarycode()));
 
             //populateListView();
             addData();

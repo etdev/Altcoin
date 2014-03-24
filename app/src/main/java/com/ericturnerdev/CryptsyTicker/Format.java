@@ -1,7 +1,5 @@
 package com.ericturnerdev.CryptsyTicker;
 
-import android.util.Log;
-
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
@@ -63,6 +61,32 @@ public class Format {
                 fd = removeZeros(String.format("%.2f", (d * 100))) + " " + "cents";
             } else {
                 fd = removeZeros(String.format("%.2f", (d))) + " " + "USD";
+            }
+
+            return fd;
+
+        }
+
+        //If EUR
+        else if (secondary.toUpperCase().equals("EUR")) {
+
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100))) + " " + "cents";
+            } else {
+                fd = removeZeros(String.format("%.2f", (d))) + " " + "EUR";
+            }
+
+            return fd;
+
+        }
+
+        //If CNY
+        else if (secondary.toUpperCase().equals("CNY")) {
+
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100))) + " " + "cents";
+            } else {
+                fd = removeZeros(String.format("%.2f", (d))) + " " + "CNY";
             }
 
             return fd;
@@ -130,6 +154,32 @@ public class Format {
 
             return fd;
 
+        }
+
+        //If EUR
+        else if (secondary.toUpperCase().equals("EUR")) {
+
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100))) + " " + "¢";
+            } else {
+                fd = "€" + String.format("%.2f", (d));
+            }
+
+            return fd;
+
+        }
+
+        //If CNY
+        else if (secondary.toUpperCase().equals("CNY")) {
+
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100))) + " " + "¢";
+            } else {
+                fd = "¥" + String.format("%.2f", (d));
+            }
+
+            return fd;
+
         } else {
             return "formatting error";
         }
@@ -185,19 +235,50 @@ public class Format {
         //If USD
         else if (secondary.toUpperCase().equals("USD")) {
 
-            Log.i("Format", "USD, d is: " + d);
+            //Log.i("Format", "USD, d is: " + d);
             if (d < 1) {
                 fd = removeZeros(String.format("%.2f", (d * 100)));
             } else {
                 fd = String.format("%.2f", (d));
             }
 
-            Log.i("Format", "USD, fd is: " + fd);
+            //Log.i("Format", "USD, fd is: " + fd);
+            return fd;
+
+        }
+
+        //If EUR
+        else if (secondary.toUpperCase().equals("EUR")) {
+
+            //Log.i("Format", "USD, d is: " + d);
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100)));
+            } else {
+                fd = String.format("%.2f", (d));
+            }
+
+            //Log.i("Format", "USD, fd is: " + fd);
+            return fd;
+
+        }
+
+        //If CNY
+        else if (secondary.toUpperCase().equals("CNY")) {
+
+            //Log.i("Format", "USD, d is: " + d);
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100)));
+            } else {
+                fd = String.format("%.2f", (d));
+            }
+
+            //Log.i("Format", "USD, fd is: " + fd);
             return fd;
 
         } else {
             return "formatting error";
         }
+
 
     }
 
@@ -255,6 +336,32 @@ public class Format {
                 fd = "cents";
             } else {
                 fd = "USD";
+            }
+
+            return fd;
+
+        }
+
+        //If EUR
+        else if (secondary.toUpperCase().equals("EUR")) {
+
+            if (d < 1) {
+                fd = "cents";
+            } else {
+                fd = "EUR";
+            }
+
+            return fd;
+
+        }
+
+        //If CNY
+        else if (secondary.toUpperCase().equals("CNY")) {
+
+            if (d < 1) {
+                fd = "cents";
+            } else {
+                fd = "CNY";
             }
 
             return fd;

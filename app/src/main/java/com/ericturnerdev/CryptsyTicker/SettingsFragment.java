@@ -120,16 +120,17 @@ public class SettingsFragment extends Fragment {
             if (((CheckBox) v).isChecked()) {
 
                 //Run this when the CheckBox goes from unchecked to checked:
-                Log.i("aaa", "CheckBox " + Pairs.getAllMarkets().get(position).getSecondarycode().toUpperCase() + "/" + Pairs.getAllMarkets().get(position).getPrimarycode().toUpperCase() + " is checked");
+                //Log.i("aaa", "CheckBox " + Pairs.getAllMarkets().get(position).getSecondarycode().toUpperCase() + "/" + Pairs.getAllMarkets().get(position).getPrimarycode().toUpperCase() + " is checked");
                 //Set the Pairs entry to true
                 Pairs.getAllMarkets().get(position).setVisible(true);
                 DatabaseHandler db = new DatabaseHandler(getActivity());
                 db.setVis(Pairs.getAllMarkets().get(position), 1);
                 db.close();
             }
+
             //Run this when the CheckBox goes from checked to unchecked:
             else {
-                Log.i("aaa", "CheckBox " + Pairs.getAllMarkets().get(position).getSecondarycode().toUpperCase() + "/" + Pairs.getAllMarkets().get(position).getPrimarycode().toUpperCase() + " is UNchecked");
+                //Log.i("aaa", "CheckBox " + Pairs.getAllMarkets().get(position).getSecondarycode().toUpperCase() + "/" + Pairs.getAllMarkets().get(position).getPrimarycode().toUpperCase() + " is UNchecked");
                 Pairs.getAllMarkets().get(position).setVisible(false);
                 DatabaseHandler db = new DatabaseHandler(getActivity());
                 db.setVis(Pairs.getAllMarkets().get(position), 0);

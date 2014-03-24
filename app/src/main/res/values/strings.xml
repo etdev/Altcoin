@@ -10,6 +10,7 @@
     <string name="sell_table_heading1">Price:</string>
     <string name="sell_table_heading2">BTC:</string>
     <string name="welcome">Welcome</string>
+    <string name="disclaimer">Altcoin is powered by data from Cryptocoincharts.info and Cryptsy.com.</string>
     <string name="guide">Please click the settings button to add some coins!</string>
     <color name="backgroundlight">#888888</color>
     <color name="backgrounddark">#222222</color>

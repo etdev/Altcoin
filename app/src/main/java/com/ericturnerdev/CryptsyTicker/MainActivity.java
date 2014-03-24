@@ -128,6 +128,7 @@ public class MainActivity extends Activity {
             populateListView();
             Log.i(TAG, "getvisible is greater than 0!");
             new CryptoCoin(marketLabel).execute();
+
         } else {
             setContentView(R.layout.init_splash);
             Log.i(TAG, "getvisible is not greater than 0!");
@@ -194,7 +195,8 @@ public class MainActivity extends Activity {
 
             case R.id.menu_refresh:
                 //new Pairs();
-                this.onResume();
+
+                this.onStart();
                 //new Cryptsy(this).execute(CRYPTSY_API);
 
 
@@ -224,175 +226,9 @@ public class MainActivity extends Activity {
 
     }
 
-    /*
-        public class APIData extends AsyncTask<String, Void, Double> {
-
-            public String TAG = "APIData";
-            public String API_URL;
-            public boolean isPost;
-            public ArrayList<NameValuePair> mParams;
-            String primaryCode;
-            String secondaryCode;
-            boolean Cryptsy;
-
-            public APIData(String api_url, boolean p, BasicNameValuePair n) {
-
-
-                API_URL = api_url;
-                isPost = p;
-                mParams = params;
-                if (api_url.equals(CRYPTSY_API)) {
-                    Cryptsy = true;
-                } else {
-                    Cryptsy = false;
-                }
-                //Log.i(TAG, "CRYPTSY IS " + Cryptsy);
-                primaryCode = primary;
-                secondaryCode = secondary;
-
-            }
-
-            //Get raw data from URL
-            protected String getData() {
-
-
-                String rawData = null;
-                String fullURL;
-                int i = 0;
-                boolean apiSuccess = false;
-                Market currentMarket = new Market();
-
-
-                //Get the data from the API
-                while (!apiSuccess && i < 20) {
-                    apiSuccess = true;
-                    try {
-                        //If GET
-                        if (!isPost) {
-
-                            fullURL = API_URL + mParams.get(0).getValue();
-                            //Log.i(TAG, "GET FULLURL: " + fullURL);
-                            for (int j = 1; j < mParams.size(); j++) {
-                                fullURL = fullURL + "&" + mParams.get(j);
-                                //Log.i(TAG, "GET fullURL: " + fullURL);
-                            }
-                            rawData = new URLFetch().getURL(fullURL);
-                            //Log.i(TAG, "GET rawData: " + rawData);
-                        }
-                        //if post
-                        else {
-                            rawData = new URLFetch().postURL(API_URL, mParams);
-                            //Log.i(TAG, "POST rawData: " + rawData);
-
-                        }
-
-                    } catch (IOException e) {
-                        //Log.e(TAG, "aaa Couldn't load data from api.  i is: " + i);
-                        i++;
-                        apiSuccess = false;
-                    }
-                }
-
-                try {
-
-                    //Here split up Cryptsy and CryptoCoin
-                    if (!Cryptsy) {
-
-
-                        Gson gson = new GsonBuilder().serializeNulls().create();
-                        JSONArray resultsJ = new JSONArray(rawData);
-                        //Log.i(TAG, "resultsJ is: " + resultsJ);
-                        //Log.i(TAG, "CRYPTSY IS " + Cryptsy);
-
-
-                        for (i = 0; i < resultsJ.length(); i++) {
-
-                            JSONObject marketJ = resultsJ.getJSONObject(i);
-                            //Log.i(TAG, "  marketJ is: " + marketJ);
-                            currentMarket = gson.fromJson(marketJ.toString(), Market.class);
-                            currentMarket.setSecondarycode(currentMarket.getId().substring(0, currentMarket.getId().indexOf("/")));
-                            currentMarket.setPrimarycode(currentMarket.getId().substring(currentMarket.getId().indexOf("/") + 1, currentMarket.getId().length()));
-                            //Log.i(TAG, "  currentMarket price: " + currentMarket.getPrice());
-                            //Log.i(TAG, "  currentMarket label: " + currentMarket.getId());
-                            //Log.i(TAG, "  currentMarket 24hr : " + currentMarket.getPrice_before_24h());
-                            Log.i(TAG, " currentMarket volume: " + currentMarket.getVolume_btc());
-                            //Log.i(TAG, " primaryCode: " + currentMarket.getPrimarycode() + " secondaryCode: " + currentMarket.getSecondarycode());
-
-                            Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setPrice(currentMarket.getPrice());
-                            Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setVolume_btc(currentMarket.getVolume_btc());
-                            Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setPrice_before_24h(currentMarket.getPrice_before_24h());
-
-                        }
-                    } else {
-
-                        //Log.i(TAG, "AAAAAA");
-
-                        Gson gson = new GsonBuilder().serializeNulls().create();
-                        JSONObject returnJ = new JSONObject(rawData).getJSONObject("return");
-                        JSONObject marketsJ2 = returnJ.getJSONObject("markets");
-                        JSONObject singleMarketJ = marketsJ2.getJSONObject((Pairs.getMarket(secondaryCode.toUpperCase(), primaryCode.toUpperCase()).getSecondarycode().toUpperCase()));
-                        //JSONObject singleMarketJ = marketsJ2.getJSONObject("DOGE");
-                        //Log.i(TAG, "singleMarketJ " + singleMarketJ);
-
-                        //JSONObject marketsJ = new JSONObject(rawData).getJSONObject("return").getJSONObject("markets").getJSONObject(Pairs.getMarket(secondaryCode, primaryCode).getPrimarycode().toUpperCase());
-                        //Log.i(TAG, "resultsJ is: " + marketsJ);
-                        // Log.i(TAG, "CRYPTSY IS " + Cryptsy);
-
-
-                        currentMarket = gson.fromJson(singleMarketJ.toString(), Market.class);
-
-                        //Log.i(TAG, "currentMarket lastTradePrice: " + currentMarket.getLasttradeprice());
-                        // Log.i(TAG, "currentMarket primarycode: " + currentMarket.getPrimarycode());
-                        //Log.i(TAG, "currentMarket secondarycode: " + currentMarket.getSecondarycode());
-                        Pairs.getMarket(currentMarket.getSecondarycode(), currentMarket.getPrimarycode()).setBuyorders(currentMarket.getBuyorders());
-                        Pairs.getMarket(currentMarket.getSecondarycode(), currentMarket.getPrimarycode()).setSellorders(currentMarket.getSellorders());
-
-
-                    }
-
-
-                } catch (JSONException e) {
-                    Log.e(TAG, "JSON Exception! i is: " + i);
-                    e.printStackTrace();
-                    //Log.i(TAG, "Primarycode: " + Pairs.getMarket(_marketId).getPrimarycode());
-                    i++;
-                    apiSuccess = false;
-                }
-
-
-                return rawData;
-            }
-
-            @Override
-            protected Double doInBackground(String... params) {
-
-
-                getData();
-                return null;
-
-
-            }
-
-            protected void onPostExecute(Double d) {
-
-                //Log.i(TAG, "from onPostExecute, dogecoin price: " + Pairs.getMarket(132).getPrice());
-                populateListView();
-
-            }
-
-            //Cryptsy
-            //Just take a string for a single marketId and get it using getURL
-            //where the URL is CRYPTSY_API + marketId
-
-            //CryptoCoin
-            //Get data in form "doge_btc,vtc_btc,doge_btc ..."
-            //Create a namevaluepair ("pairs", <the above string>)
-            //Fetch all the data at once and store it into Pairs
-        }
-
-     */
     public class CryptoCoin extends AsyncTask<String, Void, Double> {
 
+        public String TAG = "CryptoCoin";
         BasicNameValuePair nvp;
         String pairsS;
         String API_URL = CRYPTOCOIN_API;
@@ -445,7 +281,7 @@ public class MainActivity extends Activity {
                     //Log.i(TAG, "  currentMarket price: " + currentMarket.getPrice());
                     //Log.i(TAG, "  currentMarket label: " + currentMarket.getId());
                     //Log.i(TAG, "  currentMarket 24hr : " + currentMarket.getPrice_before_24h());
-                    Log.i(TAG, " currentMarket volume: " + currentMarket.getVolume_btc());
+                    //Log.i(TAG, " currentMarket volume: " + currentMarket.getVolume_btc());
                     //Log.i(TAG, " primaryCode: " + currentMarket.getPrimarycode() + " secondaryCode: " + currentMarket.getSecondarycode());
 
                     Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setPrice(currentMarket.getPrice());

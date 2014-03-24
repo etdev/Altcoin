@@ -99,6 +99,8 @@ public class PairAdapter extends ArrayAdapter<Market> {
             topTV2.setTextColor(Color.BLACK);
         } else {
             topTV1.setText(Html.fromHtml("<b>" + Format.formatNum(pairs.get(position).getPrice(), pairs.get(position).getPrimarycode()) + "</b>" + " " + Format.checkFormat(pairs.get(position).getPrice(), pairs.get(position).getPrimarycode()) + ""));
+            //Log.i(TAG, "primary: " + pairs.get(position).getPrimarycode());
+            //Log.i(TAG, "secondary: " + pairs.get(position).getSecondarycode());
         }
         if (absoluteChange > 0) {
             topTV2.setTextColor(Color.parseColor("#33CC33"));
@@ -117,10 +119,10 @@ public class PairAdapter extends ArrayAdapter<Market> {
         }
         if (absoluteChange != 0) {
             if (absoluteChange > 0) {
-                botTV2.setText(" +" + Format.formatNum(Math.abs(absoluteChange), pairs.get(position).getPrimarycode()) + " ");
+                botTV2.setText(" +" + Format.formatShort(Math.abs(absoluteChange), pairs.get(position).getPrimarycode()) + " ");
                 botTV2.setTextColor(Color.parseColor("#33CC33"));
             } else {
-                botTV2.setText(" -" + Format.formatNum(Math.abs(absoluteChange), pairs.get(position).getPrimarycode()) + " ");
+                botTV2.setText(" -" + Format.formatShort(Math.abs(absoluteChange), pairs.get(position).getPrimarycode()) + " ");
                 //Log.i(TAG, "Setting botTV2 to " + Format.formatShort(absoluteChange, pairs.get(position).getPrimarycode()) + "because primarycode is " + pairs.get(position).getPrimarycode());
                 botTV2.setTextColor(Color.parseColor("red"));
             }
@@ -131,12 +133,16 @@ public class PairAdapter extends ArrayAdapter<Market> {
 
         v.setOnClickListener(new View.OnClickListener() {
 
+            @Override
             public void onClick(View v) {
 
+                //Log.i(TAG, "pairs.get(currentPosition).getSecondarycode(): " + pairs.get(currentPosition).getSecondarycode());
+                //Log.i(TAG, "pairs.get(currentPosition).getPrimarycode(): " + pairs.get(currentPosition).getPrimarycode());
+                //Log.i(TAG, "Pairs.getMarket(pairs.get(currentPosition).getSecondarycode(), pairs.get(currentPosition).getPrimarycode()).getMarketid(): " + Pairs.getMarket(pairs.get(currentPosition).getPrimarycode(), pairs.get(currentPosition).getSecondarycode()).getMarketid());
                 // Log.i(TAG, "CLICKED: " + pairs.get(currentPosition).getPrimarycode() + "/" + pairs.get(currentPosition).getSecondarycode());
                 Intent intent = new Intent(getContext(), IndivActivity.class);
-                intent.putExtra("marketId", pairs.get(currentPosition).getMarketid());
-                intent.putExtra("volume", pairs.get(currentPosition).getVolume());
+                intent.putExtra("marketId", Pairs.getMarket(pairs.get(currentPosition).getPrimarycode(), pairs.get(currentPosition).getSecondarycode()).getMarketid());
+                intent.putExtra("volume", pairs.get(currentPosition).getVolume_btc());
                 getContext().startActivity(intent);
 
             }

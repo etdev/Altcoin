@@ -9,7 +9,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -33,7 +32,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        Log.i(TAG, "DatabaseHandler onCreate CALLED");
+        //Log.i(TAG, "DatabaseHandler onCreate CALLED");
 
         //Create Visibility Table
         String CREATE_VIS_TABLE = "CREATE TABLE " + TABLE_VISIBILITY + "("

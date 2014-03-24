@@ -149,11 +149,11 @@ public class IndivFragmentBot extends Fragment {
             try{
             priceTV = (TextView) v.findViewById(R.id.priceTV);
             }catch (NullPointerException e){ }
-            priceTV.setText("Price: " + Format.formatLong(Pairs.getMarket(marketId).getPrice(), Pairs.getMarket(marketId).getPrimarycode()));
+            priceTV.setText("Price: " + Format.formatLong(Pairs.getMarket(marketId).getPrice(), Pairs.getMarket(marketId).getSecondarycode()));
 
             //Set volume
             TextView volTV = (TextView) v.findViewById(R.id.volumeTV);
-            volTV.setText("Volume: " + Format.formatLong(Pairs.getMarket(marketId).getVolume_btc(), Pairs.getMarket(marketId).getPrimarycode()));
+            volTV.setText("Volume: " + Format.formatLong(Pairs.getMarket(marketId).getVolume_btc(), Pairs.getMarket(marketId).getSecondarycode()));
 
             //Write Table labels
             TextView label1A = (TextView) v.findViewById(R.id.btblr0c0);

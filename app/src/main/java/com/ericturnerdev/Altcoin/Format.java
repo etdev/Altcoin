@@ -147,7 +147,7 @@ public class Format {
         else if (secondary.toUpperCase().equals("USD")) {
 
             if (d < 1) {
-                fd = removeZeros(String.format("%.2f", (d * 100))) + " " + "¢";
+                fd = removeZeros(String.format("%.2f", (d * 100))) + "" + "¢";
             } else {
                 fd = "$" + String.format("%.2f", (d));
             }
@@ -160,7 +160,7 @@ public class Format {
         else if (secondary.toUpperCase().equals("EUR")) {
 
             if (d < 1) {
-                fd = removeZeros(String.format("%.2f", (d * 100))) + " " + "¢";
+                fd = removeZeros(String.format("%.2f", (d * 100))) + "" + "¢";
             } else {
                 fd = "€" + String.format("%.2f", (d));
             }
@@ -173,7 +173,7 @@ public class Format {
         else if (secondary.toUpperCase().equals("CNY")) {
 
             if (d < 1) {
-                fd = removeZeros(String.format("%.2f", (d * 100))) + " " + "¢";
+                fd = removeZeros(String.format("%.2f", (d * 100))) + "" + "¢";
             } else {
                 fd = "¥" + String.format("%.2f", (d));
             }

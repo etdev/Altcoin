@@ -128,7 +128,7 @@ public class PairAdapter extends ArrayAdapter<Market> {
             }
 
         } else {
-            botTV2.setText("(no data)");
+            botTV2.setText("(0.0)"); botTV2.setTextColor(Color.BLACK);
         }
 
         v.setOnClickListener(new View.OnClickListener() {

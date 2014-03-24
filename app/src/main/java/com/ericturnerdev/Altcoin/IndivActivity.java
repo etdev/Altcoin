@@ -1,4 +1,4 @@
-package com.ericturnerdev.CryptsyTicker;
+package com.ericturnerdev.Altcoin;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -23,6 +23,7 @@ public class IndivActivity extends Activity {
     public String CRYPTSY_API = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=";
     public static int marketId;
     public static double volume;
+
 
     //public String TAG = "IndivActivity";
 

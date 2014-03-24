@@ -1,4 +1,4 @@
-package com.ericturnerdev.CryptsyTicker;
+package com.ericturnerdev.Altcoin;
 
 import java.util.ArrayList;
 import java.util.List;

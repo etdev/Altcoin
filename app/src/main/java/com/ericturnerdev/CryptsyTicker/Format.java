@@ -1,4 +1,4 @@
-package com.ericturnerdev.Altcoin;
+package com.ericturnerdev.CryptsyTicker;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

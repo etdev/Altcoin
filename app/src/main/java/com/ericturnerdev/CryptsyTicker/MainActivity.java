@@ -1,4 +1,4 @@
-package com.ericturnerdev.Altcoin;
+package com.ericturnerdev.CryptsyTicker;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,7 +27,7 @@ import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    String TAG = "MainActivity";
+    //String TAG = "MainActivity";
 
     BasicNameValuePair nvp;
 
@@ -45,7 +44,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         //If Pairs doesn't exist
         new Pairs();
-        Log.i(TAG, "aaa onCreate CALLED");
+        //Log.i(TAG, "aaa onCreate CALLED");
 
 
         /*
@@ -71,7 +70,7 @@ public class MainActivity extends Activity {
         super.onStart();
         mContext = this;
         //new Pairs();
-        Log.i(TAG, "aaa onStart() CALLED");
+        //Log.i(TAG, "aaa onStart() CALLED");
 
 
         //Check for SQLite Database
@@ -95,8 +94,6 @@ public class MainActivity extends Activity {
 
             }
         }
-
-        cur.close();
 
         //new CryptoCoin(Pairs.getVisibleMarkets()).execute();
 
@@ -127,7 +124,7 @@ public class MainActivity extends Activity {
         if (Pairs.getVisibleMarkets().size() > 0) {
             setContentView(R.layout.fragment_main2);
             populateListView();
-            Log.i(TAG, "getvisible is greater than 0!");
+            //Log.i(TAG, "getvisible is greater than 0!");
             new CryptoCoin(marketLabel).execute();
 
         } else {
@@ -146,7 +143,7 @@ public class MainActivity extends Activity {
         //db.clearTable("visibility");
         //db.addVis(Pairs.getMarket(132), 1);
         //db.dropTable("visibility");
-        Log.i(TAG, "aaa onStop CALLED");
+        //Log.i(TAG, "aaa onStop CALLED");
         db.close();
 
     }
@@ -252,7 +249,7 @@ public class MainActivity extends Activity {
                     try {
 
                         rawData = new URLFetch().postURL(API_URL, nvp);
-                        Log.i(TAG, "POST rawData: " + rawData);
+                        //Log.i(TAG, "POST rawData: " + rawData);
 
                     } catch (IOException e) {
                         //Log.e(TAG, "aaa Couldn't load data from api.  i is: " + i);

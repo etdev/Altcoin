@@ -1,11 +1,9 @@
-package com.ericturnerdev.Altcoin;
+package com.ericturnerdev.CryptsyTicker;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-
-import com.ericturnerdev.Altcoin.R;
 
 /**
  * Generic Activity code to display a single Fragment

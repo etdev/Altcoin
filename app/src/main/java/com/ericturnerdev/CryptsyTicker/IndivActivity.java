@@ -1,4 +1,4 @@
-package com.ericturnerdev.Altcoin;
+package com.ericturnerdev.CryptsyTicker;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -93,7 +93,7 @@ public class IndivActivity extends Activity {
                 }
             }
 
-            if (apiSuccess && marketId<500){
+            if (apiSuccess){
 
                 try {
 

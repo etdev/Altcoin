@@ -1,4 +1,4 @@
-package com.ericturnerdev.CryptsyTicker;
+package com.ericturnerdev.Altcoin;
 
 /**
  * Class for handling database operations
@@ -43,6 +43,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_VIS_TABLE);
 
+        db.close();
+
     }
 
     @Override
@@ -53,6 +55,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         //Create tables again
         onCreate(db);
+
+        db.close();
 
     }
 
@@ -85,24 +89,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
-    //getMarketsCount
-    /*
-    public int getMarketsCount() {
-
-        int temp;
-        String countQuery = "SELECT * FROM " + TABLE_VISIBILITY;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery, null);
-        temp = cursor.getCount();
-        cursor.close();
-
-        //return count
-        return temp;
-
-    }
-    */
-
-    //NOTE: STILL NEED TO ADD UPDATING AND DELETING
 
     public Cursor printMarkets() {
 
@@ -110,6 +96,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = null;
         try {
             cursor = db.rawQuery("SELECT * FROM " + TABLE_VISIBILITY, null);
+            db.close();
 
         }catch (NullPointerException e){ }
 
@@ -117,6 +104,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
+    /*
     //Clear table
     public void clearTable(String tblName) {
 
@@ -135,6 +123,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }catch (NullPointerException e){ }
 
     }
+    */
 
 
 }

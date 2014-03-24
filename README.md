@@ -4,6 +4,7 @@ Altcoin
 Altcoin is a cryptocoin ticker app that tells you the price and other information for almost any cryptocurrency in existence (Bitcoin, Litecoin, Dogecoin...)
 
 Features:
+
 -View information including price, volume, and 24hr percent change for any cryptocurrency pair available on Cryptsy. 
 
 -Real-time charts showing price data for the past week

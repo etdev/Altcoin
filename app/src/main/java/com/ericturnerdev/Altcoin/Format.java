@@ -1,4 +1,4 @@
-package com.ericturnerdev.CryptsyTicker;
+package com.ericturnerdev.Altcoin;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -10,7 +10,7 @@ public class Format {
 
     public static String formatLong(double d, String secondary) {
 
-        String fd = "0.0";
+        String fd;
 
         //If BTC
         if (secondary.toUpperCase().equals("BTC")) {
@@ -65,6 +65,32 @@ public class Format {
 
             return fd;
 
+        }
+
+        //If EUR
+        else if (secondary.toUpperCase().equals("EUR")) {
+
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100))) + " " + "cents";
+            } else {
+                fd = removeZeros(String.format("%.2f", (d))) + " " + "EUR";
+            }
+
+            return fd;
+
+        }
+
+        //If CNY
+        else if (secondary.toUpperCase().equals("CNY")) {
+
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100))) + " " + "cents";
+            } else {
+                fd = removeZeros(String.format("%.2f", (d))) + " " + "CNY";
+            }
+
+            return fd;
+
         } else {
             return "formatting error";
         }
@@ -73,7 +99,7 @@ public class Format {
 
     public static String formatShort(double d, String secondary) {
 
-        String fd = "0.0";
+        String fd;
 
         //If BTC
         if (secondary.toUpperCase().equals("BTC")) {
@@ -121,9 +147,35 @@ public class Format {
         else if (secondary.toUpperCase().equals("USD")) {
 
             if (d < 1) {
-                fd = removeZeros(String.format("%.2f", (d * 100))) + " " + "¢";
+                fd = removeZeros(String.format("%.2f", (d * 100))) + "" + "¢";
             } else {
                 fd = "$" + String.format("%.2f", (d));
+            }
+
+            return fd;
+
+        }
+
+        //If EUR
+        else if (secondary.toUpperCase().equals("EUR")) {
+
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100))) + "" + "¢";
+            } else {
+                fd = "€" + String.format("%.2f", (d));
+            }
+
+            return fd;
+
+        }
+
+        //If CNY
+        else if (secondary.toUpperCase().equals("CNY")) {
+
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100))) + "" + "¢";
+            } else {
+                fd = "¥" + String.format("%.2f", (d));
             }
 
             return fd;
@@ -136,7 +188,7 @@ public class Format {
 
     public static String formatNum(double d, String secondary) {
 
-        String fd = "0.0";
+        String fd;
 
         //If BTC
         if (secondary.toUpperCase().equals("BTC")) {
@@ -183,24 +235,57 @@ public class Format {
         //If USD
         else if (secondary.toUpperCase().equals("USD")) {
 
+            //Log.i("Format", "USD, d is: " + d);
             if (d < 1) {
                 fd = removeZeros(String.format("%.2f", (d * 100)));
             } else {
-                fd = "$" + String.format("%.2f", (d));
+                fd = String.format("%.2f", (d));
             }
 
+            //Log.i("Format", "USD, fd is: " + fd);
+            return fd;
+
+        }
+
+        //If EUR
+        else if (secondary.toUpperCase().equals("EUR")) {
+
+            //Log.i("Format", "USD, d is: " + d);
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100)));
+            } else {
+                fd = String.format("%.2f", (d));
+            }
+
+            //Log.i("Format", "USD, fd is: " + fd);
+            return fd;
+
+        }
+
+        //If CNY
+        else if (secondary.toUpperCase().equals("CNY")) {
+
+            //Log.i("Format", "USD, d is: " + d);
+            if (d < 1) {
+                fd = removeZeros(String.format("%.2f", (d * 100)));
+            } else {
+                fd = String.format("%.2f", (d));
+            }
+
+            //Log.i("Format", "USD, fd is: " + fd);
             return fd;
 
         } else {
             return "formatting error";
         }
 
+
     }
 
 
     public static String checkFormat(double d, String secondary) {
 
-        String fd = "0.0";
+        String fd;
 
         //If BTC
         if (secondary.toUpperCase().equals("BTC")) {
@@ -251,6 +336,32 @@ public class Format {
                 fd = "cents";
             } else {
                 fd = "USD";
+            }
+
+            return fd;
+
+        }
+
+        //If EUR
+        else if (secondary.toUpperCase().equals("EUR")) {
+
+            if (d < 1) {
+                fd = "cents";
+            } else {
+                fd = "EUR";
+            }
+
+            return fd;
+
+        }
+
+        //If CNY
+        else if (secondary.toUpperCase().equals("CNY")) {
+
+            if (d < 1) {
+                fd = "cents";
+            } else {
+                fd = "CNY";
             }
 
             return fd;

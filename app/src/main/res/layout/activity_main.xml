@@ -5,4 +5,4 @@
              android:layout_height="match_parent"
              tools:context="com.ericturnerdev.MySQLiteTesting.MainActivity"
              tools:ignore="MergeRootFrame"
-             android:background="#888888"/>
+             android:background="#555555"/>

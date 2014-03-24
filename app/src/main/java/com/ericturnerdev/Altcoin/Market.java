@@ -1,4 +1,4 @@
-package com.ericturnerdev.CryptsyTicker;
+package com.ericturnerdev.Altcoin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.List;
  * Market data type to match Cryptsy JSON Return
  */
 
-public class Market {
+public class Market implements Comparable<Market> {
 
     private int marketid = 0;
     private String label = "";
@@ -22,6 +22,11 @@ public class Market {
     private List<OrderItem> sellorders = new ArrayList<OrderItem>();
     private List<OrderItem> buyorders = new ArrayList<OrderItem>();
     private boolean visible;
+    //For cryptocoincharts API
+    private double price_before_24h;
+    private double volume_btc;
+    private double price;
+    private String id;
 
     public Market() {
 
@@ -35,6 +40,9 @@ public class Market {
         this.primarycode = primarycode;
         this.secondarycode = secondarycode;
         this.visible = false;
+        this.label = secondarycode + "/" + primarycode;
+        this.id = this.label;
+        //Log.i("fromMarket", "Label: " + this.label);
 
     }
 
@@ -53,6 +61,34 @@ public class Market {
         this.sellorders = sellorders;
         this.buyorders = buyorders;
         this.visible = visible;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setPrice_before_24h(double price_before_24h) {
+        this.price_before_24h = price_before_24h;
+    }
+
+    public void setVolume_btc(double volume_btc) {
+        this.volume_btc = volume_btc;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getPrice_before_24h() {
+        return price_before_24h;
+    }
+
+    public double getVolume_btc() {
+        return volume_btc;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public void setVisible(boolean visible) {
@@ -264,6 +300,18 @@ public class Market {
 
             return "      price:" + getPrice() + " quantity: " + getQuantity() + " total; " + getTotal() + "\n";
 
+        }
+
+    }
+
+    public int compareTo(Market m) {
+
+        if (this.getSecondarycode().compareTo(m.getSecondarycode()) > 0) {
+            return 1;
+        } else if (this.getSecondarycode().compareTo(m.getSecondarycode()) < 0) {
+            return -1;
+        } else {
+            return 0;
         }
 
     }

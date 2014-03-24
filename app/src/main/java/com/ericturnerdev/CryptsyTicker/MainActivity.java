@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,14 +27,14 @@ import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    String TAG = "MainActivity";
+    //String TAG = "MainActivity";
 
     BasicNameValuePair nvp;
 
     Context mContext;
 
     //Exchange API URLs:
-    public final String CRYPTSY_API = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=";
+    ///public final String CRYPTSY_API = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=";
     public final String CRYPTOCOIN_API = "http://www.cryptocoincharts.info/v2/api/tradingPairs";
 
     @Override
@@ -77,9 +76,8 @@ public class MainActivity extends Activity {
         //Check for SQLite Database
         DatabaseHandler db = new DatabaseHandler(this);
         //db.clearTable("visibility");
-        int marketsCount = db.getMarketsCount();
-        if (marketsCount == 0) Log.i(TAG, "Vis table is empty");
-        else Log.i(TAG, "Vis table has " + marketsCount + " rows");
+       // if (marketsCount == 0) //Log.i(TAG, "Vis table is empty");
+        //else //Log.i(TAG, "Vis table has " + marketsCount + " rows");
 
         Cursor cur;
 
@@ -126,12 +124,12 @@ public class MainActivity extends Activity {
         if (Pairs.getVisibleMarkets().size() > 0) {
             setContentView(R.layout.fragment_main2);
             populateListView();
-            Log.i(TAG, "getvisible is greater than 0!");
+            //Log.i(TAG, "getvisible is greater than 0!");
             new CryptoCoin(marketLabel).execute();
 
         } else {
             setContentView(R.layout.init_splash);
-            Log.i(TAG, "getvisible is not greater than 0!");
+            //Log.i(TAG, "getvisible is not greater than 0!");
         }
 
 
@@ -173,13 +171,6 @@ public class MainActivity extends Activity {
         inflater.inflate(R.menu.refresh, menu);
 
         return super.onCreateOptionsMenu(menu);
-
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-
-        super.onSaveInstanceState(savedInstanceState);
 
     }
 
@@ -228,7 +219,7 @@ public class MainActivity extends Activity {
 
     public class CryptoCoin extends AsyncTask<String, Void, Double> {
 
-        public String TAG = "CryptoCoin";
+        //public String TAG = "CryptoCoin";
         BasicNameValuePair nvp;
         String pairsS;
         String API_URL = CRYPTOCOIN_API;
@@ -243,7 +234,7 @@ public class MainActivity extends Activity {
         public void getData() {
 
             String rawData = null;
-            String fullURL;
+            //String fullURL;
             int i = 0;
             boolean apiSuccess = false;
             Market currentMarket;
@@ -251,53 +242,59 @@ public class MainActivity extends Activity {
 
             //Get the data from the API
             while (!apiSuccess && i < 20) {
-                apiSuccess = true;
+
                 try {
 
-                    rawData = new URLFetch().postURL(API_URL, nvp);
-                    //Log.i(TAG, "POST rawData: " + rawData);
+                    apiSuccess = true;
+                    try {
 
-                } catch (IOException e) {
-                    //Log.e(TAG, "aaa Couldn't load data from api.  i is: " + i);
+                        rawData = new URLFetch().postURL(API_URL, nvp);
+                        //Log.i(TAG, "POST rawData: " + rawData);
+
+                    } catch (IOException e) {
+                        //Log.e(TAG, "aaa Couldn't load data from api.  i is: " + i);
+                        i++;
+                        apiSuccess = false;
+                    }
+
+
+                    if (apiSuccess){
+
+                        Gson gson = new GsonBuilder().serializeNulls().create();
+                        JSONArray resultsJ = new JSONArray(rawData);
+                        //Log.i(TAG, "resultsJ is: " + resultsJ);
+                        //Log.i(TAG, "CRYPTSY IS " + Cryptsy);
+
+                        for (i = 0; i < resultsJ.length(); i++) {
+
+                            JSONObject marketJ = resultsJ.getJSONObject(i);
+                            //Log.i(TAG, "  marketJ is: " + marketJ);
+                            currentMarket = gson.fromJson(marketJ.toString(), Market.class);
+                            currentMarket.setSecondarycode(currentMarket.getId().substring(0, currentMarket.getId().indexOf("/")));
+                            currentMarket.setPrimarycode(currentMarket.getId().substring(currentMarket.getId().indexOf("/") + 1, currentMarket.getId().length()));
+                            //Log.i(TAG, "  currentMarket price: " + currentMarket.getPrice());
+                            //Log.i(TAG, "  currentMarket label: " + currentMarket.getId());
+                            //Log.i(TAG, "  currentMarket 24hr : " + currentMarket.getPrice_before_24h());
+                            //Log.i(TAG, " currentMarket volume: " + currentMarket.getVolume_btc());
+                            //Log.i(TAG, " primaryCode: " + currentMarket.getPrimarycode() + " secondaryCode: " + currentMarket.getSecondarycode());
+
+                            Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setPrice(currentMarket.getPrice());
+                            Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setVolume_btc(currentMarket.getVolume_btc());
+                            Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setPrice_before_24h(currentMarket.getPrice_before_24h());
+
+                        }
+
+                    }
+
+                } catch (JSONException e) {
+                    //Log.e(TAG, "JSON Exception! i is: " + i);
+                    e.printStackTrace();
+                    //Log.i(TAG, "Primarycode: " + Pairs.getMarket(_marketId).getPrimarycode());
                     i++;
                     apiSuccess = false;
                 }
-                }
 
-            try {
-
-                Gson gson = new GsonBuilder().serializeNulls().create();
-                JSONArray resultsJ = new JSONArray(rawData);
-                //Log.i(TAG, "resultsJ is: " + resultsJ);
-                //Log.i(TAG, "CRYPTSY IS " + Cryptsy);
-
-                for (i = 0; i < resultsJ.length(); i++) {
-
-                    JSONObject marketJ = resultsJ.getJSONObject(i);
-                    //Log.i(TAG, "  marketJ is: " + marketJ);
-                    currentMarket = gson.fromJson(marketJ.toString(), Market.class);
-                    currentMarket.setSecondarycode(currentMarket.getId().substring(0, currentMarket.getId().indexOf("/")));
-                    currentMarket.setPrimarycode(currentMarket.getId().substring(currentMarket.getId().indexOf("/") + 1, currentMarket.getId().length()));
-                    //Log.i(TAG, "  currentMarket price: " + currentMarket.getPrice());
-                    //Log.i(TAG, "  currentMarket label: " + currentMarket.getId());
-                    //Log.i(TAG, "  currentMarket 24hr : " + currentMarket.getPrice_before_24h());
-                    //Log.i(TAG, " currentMarket volume: " + currentMarket.getVolume_btc());
-                    //Log.i(TAG, " primaryCode: " + currentMarket.getPrimarycode() + " secondaryCode: " + currentMarket.getSecondarycode());
-
-                    Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setPrice(currentMarket.getPrice());
-                    Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setVolume_btc(currentMarket.getVolume_btc());
-                    Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setPrice_before_24h(currentMarket.getPrice_before_24h());
-
-                }
-
-            } catch (JSONException e) {
-                Log.e(TAG, "JSON Exception! i is: " + i);
-                e.printStackTrace();
-                //Log.i(TAG, "Primarycode: " + Pairs.getMarket(_marketId).getPrimarycode());
-                i++;
-                apiSuccess = false;
             }
-
         } //end getData method
 
         protected Double doInBackground(String... params) {

@@ -40,7 +40,7 @@ public class IndivFragmentChart extends Fragment {
     private XYSeries mCurrentSeries;
     private XYSeriesRenderer mCurrentRenderer;
     public int marketId;
-    public final String TAG = "IndivFragChart";
+   // public final String TAG = "IndivFragChart";
     public ArrayList<IndivTradeItem> resultAL;
 
     public IndivFragmentChart() {
@@ -108,8 +108,11 @@ public class IndivFragmentChart extends Fragment {
         //View v = inflater.inflate(R.layout.fragment_indiv_chart, container, false);
 
         LinearLayout ll = (LinearLayout) inflater.inflate(R.layout.fragment_indiv_chart, container, false);
-        FrameLayout fl = (FrameLayout) ll.findViewById(R.id.fragment_indiv_chart_FF);
-        TextView tv = (TextView) ll.findViewById(R.id.fragment_indiv_chart_TV);
+        FrameLayout fl = null;
+        try{
+        fl = (FrameLayout) ll.findViewById(R.id.fragment_indiv_chart_FF);
+        }catch (NullPointerException e){ }
+            TextView tv = (TextView) ll.findViewById(R.id.fragment_indiv_chart_TV);
 
         marketId = IndivActivity.marketId;
         // marketId = getArguments().getInt("marketId");
@@ -158,7 +161,7 @@ public class IndivFragmentChart extends Fragment {
 
         protected ArrayList<IndivTradeItem> getData() {
 
-            String rawData = ""; //String representation of raw JSON Data
+            String rawData; //String representation of raw JSON Data
 
             //Log.i(TAG, "marketId is: " + marketId);
 

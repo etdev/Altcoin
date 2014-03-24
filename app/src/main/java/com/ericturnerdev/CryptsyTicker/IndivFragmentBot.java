@@ -7,15 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-
 /**
  * Code for Bottom fragment of Individual Trade Pair activity
  */
 public class IndivFragmentBot extends Fragment {
 
     private int marketId;
-    private double volume;
 
     public IndivFragmentBot() {
 
@@ -26,13 +23,15 @@ public class IndivFragmentBot extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         marketId = IndivActivity.marketId;
-        volume = IndivActivity.volume;
 
         View v = inflater.inflate(R.layout.fragment_indiv_bot, container, false);
-        if (marketId < 500) {
+        if (marketId < 500 && Pairs.getMarket(marketId).getPrice() != 0.0) {
 
+            TextView priceTV = null;
             //Set price
-            TextView priceTV = (TextView) v.findViewById(R.id.priceTV);
+            try{
+            priceTV = (TextView) v.findViewById(R.id.priceTV);
+            }catch (NullPointerException e){ }
             priceTV.setText("Price: " + Format.formatLong(Pairs.getMarket(marketId).getPrice(), Pairs.getMarket(marketId).getPrimarycode()));
 
             //Set volume
@@ -51,7 +50,6 @@ public class IndivFragmentBot extends Fragment {
             label1B.setText("Sell price:");
             label2B.setText("" + Pairs.getMarket(marketId).getPrimarycode());
 
-            DecimalFormat df = new DecimalFormat("#.00");
 
             //TextViews buy table
             TextView btblr1c0 = (TextView) v.findViewById(R.id.btblr1c0);
@@ -142,17 +140,15 @@ public class IndivFragmentBot extends Fragment {
             stblr10c1.setText("" + Format.formatShort(Pairs.getMarket(marketId).getSellorders().get(9).getTotal(), Pairs.getMarket(marketId).getPrimarycode()));
 
 
-            //Set order data
-            for (int i = 0; i < 10; i++) {
-                //Get the buy order and sell data, and put it in the corresponding tables
-            }
-
         }
 
         //For Bitcoin/USD etc. (COIN PAIRS NOT ON CRYPTSY)
         else {
             //Set price
-            TextView priceTV = (TextView) v.findViewById(R.id.priceTV);
+            TextView priceTV = null;
+            try{
+            priceTV = (TextView) v.findViewById(R.id.priceTV);
+            }catch (NullPointerException e){ }
             priceTV.setText("Price: " + Format.formatLong(Pairs.getMarket(marketId).getPrice(), Pairs.getMarket(marketId).getPrimarycode()));
 
             //Set volume

@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,13 +24,15 @@ public class IndivActivity extends Activity {
     public static int marketId;
     public static double volume;
 
-    public String TAG = "IndivActivity";
+    //public String TAG = "IndivActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        try{
         marketId = getIntent().getExtras().getInt("marketId");
+        }catch (NullPointerException e){ }
         volume = getIntent().getExtras().getDouble("volume");
 
         new Cryptsy(marketId).execute();
@@ -86,37 +87,39 @@ public class IndivActivity extends Activity {
                     //Log.i(TAG, "GET rawData: " + rawData);
 
                 } catch (IOException e) {
-                    Log.e(TAG, "Couldn't load data from api.  i is: " + i);
+                    //Log.e(TAG, "Couldn't load data from api.  i is: " + i);
                     i++;
                     apiSuccess = false;
                 }
             }
 
-            try {
+            if (apiSuccess){
 
-                //Log.i(TAG, "rawData: " + rawData);
-                Gson gson = new GsonBuilder().serializeNulls().create();
-                JSONObject returnJ = new JSONObject(rawData).getJSONObject("return");
-                //Log.i(TAG, "returnJaaa: " + returnJ);
-                JSONObject marketsJ = returnJ.getJSONObject("markets");
-                //Log.i(TAG, "marketsJ: " + marketsJ);
-                JSONObject singleMarketJ = marketsJ.getJSONObject(Pairs.getMarket(marketId).getSecondarycode().toUpperCase());
-                //Log.i(TAG, "singleMarketJaaa : " + singleMarketJ);
+                try {
 
-                Market currentMarket = gson.fromJson(singleMarketJ.toString(), Market.class);
+                    //Log.i(TAG, "rawData: " + rawData);
+                    Gson gson = new GsonBuilder().serializeNulls().create();
+                    JSONObject returnJ = new JSONObject(rawData).getJSONObject("return");
+                    //Log.i(TAG, "returnJaaa: " + returnJ);
+                    JSONObject marketsJ = returnJ.getJSONObject("markets");
+                    //Log.i(TAG, "marketsJ: " + marketsJ);
+                    JSONObject singleMarketJ = marketsJ.getJSONObject(Pairs.getMarket(marketId).getSecondarycode().toUpperCase());
+                    //Log.i(TAG, "singleMarketJaaa : " + singleMarketJ);
 
-                //Log.i(TAG, "currentMarket lastTradePrice: " + currentMarket.getLasttradeprice());
-                // Log.i(TAG, "currentMarket primarycode: " + currentMarket.getPrimarycode());
-                //Log.i(TAG, "currentMarket secondarycode: " + currentMarket.getSecondarycode());
-                Pairs.getMarket(currentMarket.getSecondarycode(), currentMarket.getPrimarycode()).setBuyorders(currentMarket.getBuyorders());
-                Pairs.getMarket(currentMarket.getSecondarycode(), currentMarket.getPrimarycode()).setSellorders(currentMarket.getSellorders());
+                    Market currentMarket = gson.fromJson(singleMarketJ.toString(), Market.class);
 
-            } catch (JSONException e) {
-                Log.e(TAG, "JSON Exception! i is: " + i);
-                e.printStackTrace();
-                //Log.i(TAG, "Primarycode: " + Pairs.getMarket(_marketId).getPrimarycode());
-                i++;
-                apiSuccess = false;
+                    //Log.i(TAG, "currentMarket lastTradePrice: " + currentMarket.getLasttradeprice());
+                    // Log.i(TAG, "currentMarket primarycode: " + currentMarket.getPrimarycode());
+                    //Log.i(TAG, "currentMarket secondarycode: " + currentMarket.getSecondarycode());
+                    Pairs.getMarket(currentMarket.getSecondarycode(), currentMarket.getPrimarycode()).setBuyorders(currentMarket.getBuyorders());
+                    Pairs.getMarket(currentMarket.getSecondarycode(), currentMarket.getPrimarycode()).setSellorders(currentMarket.getSellorders());
+
+                } catch (JSONException e) {
+                    //Log.e(TAG, "JSON Exception! i is: " + i);
+                    e.printStackTrace();
+                    //Log.i(TAG, "Primarycode: " + Pairs.getMarket(_marketId).getPrimarycode());
+                }
+
             }
 
 

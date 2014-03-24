@@ -4,19 +4,20 @@ import android.app.Application;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
- * Created by ericturner on 2/26/14.
+ * Created by Eric Turner (ericturnerdev) on 2/26/14.  This is a list of coins that
+ * can be accessed from any activity
  */
 
 public class Pairs extends Application {
 
-    public static Hashtable<Integer, Market> pairs;
+    public static HashMap<Integer, Market> pairs;
 
     public Pairs() {
 
-        pairs = new Hashtable<Integer, Market>();
+        pairs = new HashMap<Integer, Market>();
 
         pairs.put(500, new Market(500, "BTC", "USD", "Bitcoin"));
 
@@ -24,21 +25,15 @@ public class Pairs extends Application {
 
         pairs.put(502, new Market(502, "BTC", "CNY", "Bitcoin"));
 
-        pairs.put(112, new Market(112, "ASC", "XPM", "AsicCoin"));
+        //Added via PHP script (ericturner
 
-        pairs.put(110, new Market(110, "COL", "XPM", "ColossusCoin"));
-
-        pairs.put(122, new Market(122, "DVC", "XPM", "DevCoin"));
-
-        pairs.put(105, new Market(105, "IFC", "XPM", "InfiniteCoin"));
-
-        pairs.put(104, new Market(104, "NET", "XPM", "Netcoin"));
-
-        pairs.put(103, new Market(103, "TIX", "XPM", "Tickets"));
+        pairs.put(94, new Market(94, "ADT", "LTC", "AndroidsTokensV2"));
 
         pairs.put(121, new Market(121, "ANC", "LTC", "AnonCoin"));
 
         pairs.put(111, new Market(111, "ASC", "LTC", "AsicCoin"));
+
+        pairs.put(161, new Market(161, "AUR", "LTC", "AuroraCoin"));
 
         pairs.put(123, new Market(123, "CGB", "LTC", "CryptogenicBullion"));
 
@@ -47,6 +42,8 @@ public class Pairs extends Application {
         pairs.put(109, new Market(109, "COL", "LTC", "ColossusCoin"));
 
         pairs.put(91, new Market(91, "CPR", "LTC", "CopperBars"));
+
+        pairs.put(175, new Market(175, "CTM", "LTC", "Continuumcoin"));
 
         pairs.put(46, new Market(46, "DBL", "LTC", "Doubloons"));
 
@@ -61,6 +58,8 @@ public class Pairs extends Application {
         pairs.put(55, new Market(55, "EZC", "LTC", "EZCoin"));
 
         pairs.put(61, new Market(61, "FLO", "LTC", "FlorinCoin"));
+
+        pairs.put(171, new Market(171, "FRK", "LTC", "Franko"));
 
         pairs.put(124, new Market(124, "FST", "LTC", "FastCoin"));
 
@@ -81,6 +80,8 @@ public class Pairs extends Application {
         pairs.put(62, new Market(62, "MST", "LTC", "MasterCoin (Hydro)"));
 
         pairs.put(108, new Market(108, "NET", "LTC", "Netcoin"));
+
+        pairs.put(162, new Market(162, "NXT", "LTC", "Nxt"));
 
         pairs.put(125, new Market(125, "PPC", "LTC", "Peercoin"));
 
@@ -108,6 +109,8 @@ public class Pairs extends Application {
 
         pairs.put(22, new Market(22, "YAC", "LTC", "YaCoin"));
 
+        pairs.put(176, new Market(176, "ZEIT", "LTC", "ZeitCoin"));
+
         pairs.put(127, new Market(127, "ZET", "LTC", "ZetaCoin"));
 
         pairs.put(141, new Market(141, "42", "BTC", "42Coin"));
@@ -119,6 +122,8 @@ public class Pairs extends Application {
         pairs.put(66, new Market(66, "ANC", "BTC", "AnonCoin"));
 
         pairs.put(48, new Market(48, "ARG", "BTC", "Argentum"));
+
+        pairs.put(160, new Market(160, "AUR", "BTC", "AuroraCoin"));
 
         pairs.put(142, new Market(142, "BCX", "BTC", "BattleCoin"));
 
@@ -158,6 +163,8 @@ public class Pairs extends Application {
 
         pairs.put(131, new Market(131, "DEM", "BTC", "eMark"));
 
+        pairs.put(167, new Market(167, "DGB", "BTC", "Digibyte"));
+
         pairs.put(26, new Market(26, "DGC", "BTC", "DigitalCoin"));
 
         pairs.put(72, new Market(72, "DMD", "BTC", "Diamond"));
@@ -177,6 +184,8 @@ public class Pairs extends Application {
         pairs.put(47, new Market(47, "EZC", "BTC", "EZCoin"));
 
         pairs.put(138, new Market(138, "FFC", "BTC", "FireflyCoin"));
+
+        pairs.put(165, new Market(165, "FLAP", "BTC", "FlappyCoin"));
 
         pairs.put(39, new Market(39, "FRC", "BTC", "FreiCoin"));
 
@@ -202,6 +211,8 @@ public class Pairs extends Application {
 
         pairs.put(25, new Market(25, "JKC", "BTC", "JunkCoin"));
 
+        pairs.put(178, new Market(178, "KDC", "BTC", "KlondikeCoin"));
+
         pairs.put(65, new Market(65, "KGC", "BTC", "KrugerCoin"));
 
         pairs.put(148, new Market(148, "LEAF", "BTC", "LeafCoin"));
@@ -214,6 +225,8 @@ public class Pairs extends Application {
 
         pairs.put(3, new Market(3, "LTC", "BTC", "LiteCoin"));
 
+        pairs.put(177, new Market(177, "LYC", "BTC", "LycanCoin"));
+
         pairs.put(152, new Market(152, "MAX", "BTC", "MaxCoin"));
 
         pairs.put(45, new Market(45, "MEC", "BTC", "MegaCoin"));
@@ -224,7 +237,7 @@ public class Pairs extends Application {
 
         pairs.put(7, new Market(7, "MNC", "BTC", "MinCoin"));
 
-        pairs.put(146, new Market(146, "MOON", "BTC", "MoonCoin"));
+        pairs.put(164, new Market(164, "MZC", "BTC", "MazaCoin"));
 
         pairs.put(64, new Market(64, "NAN", "BTC", "NanoToken"));
 
@@ -240,6 +253,8 @@ public class Pairs extends Application {
 
         pairs.put(13, new Market(13, "NVC", "BTC", "NovaCoin"));
 
+        pairs.put(159, new Market(159, "NXT", "BTC", "Nxt"));
+
         pairs.put(75, new Market(75, "ORB", "BTC", "Orbitcoin"));
 
         pairs.put(144, new Market(144, "OSC", "BTC", "OpenSourceCoin"));
@@ -248,9 +263,11 @@ public class Pairs extends Application {
 
         pairs.put(120, new Market(120, "Points", "BTC", "CryptsyPoints"));
 
+        pairs.put(173, new Market(173, "POT", "BTC", "PotCoin"));
+
         pairs.put(28, new Market(28, "PPC", "BTC", "Peercoin"));
 
-        pairs.put(119, new Market(119, "PTS", "BTC", "BitShares"));
+        pairs.put(119, new Market(119, "PTS", "BTC", "ProtoShares"));
 
         pairs.put(31, new Market(31, "PXC", "BTC", "PhoenixCoin"));
 
@@ -258,7 +275,13 @@ public class Pairs extends Application {
 
         pairs.put(71, new Market(71, "QRK", "BTC", "Quark"));
 
+        pairs.put(169, new Market(169, "RDD", "BTC", "ReddCoin"));
+
         pairs.put(143, new Market(143, "RPC", "BTC", "RonPaulCoin"));
+
+        pairs.put(9, new Market(9, "RYC", "BTC", "RoyalCoin"));
+
+        pairs.put(168, new Market(168, "SAT", "BTC", "SaturnCoin"));
 
         pairs.put(51, new Market(51, "SBC", "BTC", "StableCoin"));
 
@@ -274,6 +297,8 @@ public class Pairs extends Application {
 
         pairs.put(117, new Market(117, "TAG", "BTC", "TagCoin"));
 
+        pairs.put(166, new Market(166, "TAK", "BTC", "TakCoin"));
+
         pairs.put(114, new Market(114, "TEK", "BTC", "TekCoin"));
 
         pairs.put(130, new Market(130, "TGC", "BTC", "TigerCoin"));
@@ -281,6 +306,8 @@ public class Pairs extends Application {
         pairs.put(27, new Market(27, "TRC", "BTC", "TerraCoin"));
 
         pairs.put(133, new Market(133, "UNO", "BTC", "Unobtanium"));
+
+        pairs.put(163, new Market(163, "UTC", "BTC", "UltraCoin"));
 
         pairs.put(151, new Market(151, "VTC", "BTC", "VertCoin"));
 
@@ -295,6 +322,8 @@ public class Pairs extends Application {
         pairs.put(73, new Market(73, "YBC", "BTC", "YBCoin"));
 
         pairs.put(140, new Market(140, "ZCC", "BTC", "ZcCoin"));
+
+        pairs.put(170, new Market(170, "ZED", "BTC", "ZedCoin"));
 
         pairs.put(85, new Market(85, "ZET", "BTC", "ZetaCoin"));
 

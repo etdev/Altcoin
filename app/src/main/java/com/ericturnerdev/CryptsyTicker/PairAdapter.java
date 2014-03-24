@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class PairAdapter extends ArrayAdapter<Market> {
 
-    String TAG = "PairAdapter";
+    //String TAG = "PairAdapter";
 
     public Context context;
     public int layoutResourceId;
@@ -39,7 +39,7 @@ public class PairAdapter extends ArrayAdapter<Market> {
         //convertView is the view that will be recycled to create the new View
         //parent is the ListView holding the rows (I THINK)
         View v = convertView; //The current view
-        TextView topTV1, topTV2, topTV3, botTV1, botTV2, moreTopTV, moreTopTV2;
+        TextView topTV1, topTV2, botTV1, botTV2, moreTopTV, moreTopTV2;
         final int currentPosition = position;
         //If there's no view to recycle
         if (convertView == null) {
@@ -71,7 +71,7 @@ public class PairAdapter extends ArrayAdapter<Market> {
 
         }
 
-        averagePrice = averagePrice / pairs.get(position).getRecenttrades().size();
+        //averagePrice = averagePrice / pairs.get(position).getRecenttrades().size();
         //Log.i(TAG, "averagePrice: " + averagePrice);
 
         absoluteChange = pairs.get(position).getPrice() - pairs.get(position).getPrice_before_24h();

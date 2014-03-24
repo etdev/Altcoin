@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    String TAG = "DatabaseHandler";
+    //tring TAG = "DatabaseHandler";
 
     //All Static variables
     private static final int DATABASE_VERSION = 1;
@@ -64,8 +64,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(VIS_MARKETID, m.getMarketid());
         values.put(VIS_VISIBLE, vis);
+        Cursor cur = null;
 
-        Cursor cur = db.rawQuery("select * from " + TABLE_VISIBILITY + " where " + VIS_MARKETID + "  = '" + m.getMarketid() + "'", null);
+        try{
+        cur = db.rawQuery("select * from " + TABLE_VISIBILITY + " where " + VIS_MARKETID + "  = '" + m.getMarketid() + "'", null);
 
         //If select doesn't return anything
         if (cur.getCount() == 0) {
@@ -79,10 +81,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.execSQL("UPDATE " + TABLE_VISIBILITY + " SET " + VIS_VISIBLE + "='" + vis + "' WHERE " + VIS_MARKETID + "='" + m.getMarketid() + "'");
 
         }
+        }catch (NullPointerException e){ }
 
     }
 
     //getMarketsCount
+    /*
     public int getMarketsCount() {
 
         int temp;
@@ -96,13 +100,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return temp;
 
     }
+    */
 
     //NOTE: STILL NEED TO ADD UPDATING AND DELETING
 
     public Cursor printMarkets() {
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_VISIBILITY, null);
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_VISIBILITY, null);
+
+        }catch (NullPointerException e){ }
 
         return cursor;
 
@@ -112,14 +121,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void clearTable(String tblName) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(tblName, null, null);
+        try{
+            db.delete(tblName, null, null);
+        }catch (NullPointerException e){ }
 
     }
 
     public void dropTable(String tblName) {
 
         SQLiteDatabase db = this.getWritableDatabase();
+        try{
         db.execSQL("drop table " + tblName);
+        }catch (NullPointerException e){ }
 
     }
 

@@ -10,7 +10,7 @@ public class Format {
 
     public static String formatLong(double d, String secondary) {
 
-        String fd = "0.0";
+        String fd;
 
         //If BTC
         if (secondary.toUpperCase().equals("BTC")) {
@@ -99,7 +99,7 @@ public class Format {
 
     public static String formatShort(double d, String secondary) {
 
-        String fd = "0.0";
+        String fd;
 
         //If BTC
         if (secondary.toUpperCase().equals("BTC")) {
@@ -188,7 +188,7 @@ public class Format {
 
     public static String formatNum(double d, String secondary) {
 
-        String fd = "0.0";
+        String fd;
 
         //If BTC
         if (secondary.toUpperCase().equals("BTC")) {
@@ -285,7 +285,7 @@ public class Format {
 
     public static String checkFormat(double d, String secondary) {
 
-        String fd = "0.0";
+        String fd;
 
         //If BTC
         if (secondary.toUpperCase().equals("BTC")) {

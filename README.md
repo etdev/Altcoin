@@ -1,52 +1,24 @@
-Altcoin Ticker
+Altcoin
 =============
 
-Altcoin Ticker Android Application using data from online cryptocurrency exchange Cryptsy.com
+Altcoin is a cryptocoin ticker app that tells you the price and other information for almost any cryptocurrency in existence (Bitcoin, Litecoin, Dogecoin...)
 
 Features:
+-View information including price, volume, and 24hr percent change for any cryptocurrency pair available on Cryptsy. 
+-Real-time charts showing price data for the past week
+-View latest orderbook data (open buy/sell trades) for any altcoin
+-Automatically formats price for readability
+-Includes Bitcoin (BTC) prices in USD, EUR, and CNY
+-Includes Litecoin (LTC), Dogecoin (DOGE), Peercoin (PPC), Vertcoin (VTC) and many, many others!
+-Quickly add or remove many coins at once
 
--Fetches current price data for various cryptocurrencies and displays it
+If you like the app, please show your appreciation by donating Bitcoin: 16xJavtLkjz16ddQNhpGnMSbmEgpVGPToL
 
--Price graphs with data from the last week
+For any other feedback or inquiries, feel free to email me!
 
--Quickly add multiple coins at once via checkboxes
-
--Price fetched via JSON, automatically persisted in SQLite Database on device
-
-
-Files:
-
-MainActivity, MainFragment
-
--Ticker Activity showing current prices for selected coins
-
-SettingsActivity, SettingsFragment
-
--Activity where users can choose which coins to view on the main page
-
-IndivActivity, IndivFragmentBot, IndivFragmentChart (In Progress)
-
--Activity showing detailed info on a given coin, including a 1-week price graph, volume, and current buy/sell orders
-
-DatabaseHandler
-
--SQLite Helper class for storing info in case of restart, etc.
-
-Pairs
-
--List of coins and their corresponding info on Cryptsy (for accessing from other activities)
-
-URLFetch
-
--Simple code to retrieve the contents of a URL in String format
-
-Market
-
--Data type matching the JSON data returned from Cryptsy's API
-
-SingleFragmentActivity
-
--Generic 1-fragment Activity code
+*This app does not include a notification system or trading capabilities at this time.  It is designed for viewing price information/trends only.
+*This app uses data from cryptocoincharts.info and cryptsy.com API's, and therefore requires internet access.
+*This app is licensed via the MIT license.
 
 
 

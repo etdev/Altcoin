@@ -1,4 +1,4 @@
-package com.ericturnerdev.CryptsyTicker;
+package com.ericturnerdev.Altcoin;
 
 /**
  * Class for handling database operations

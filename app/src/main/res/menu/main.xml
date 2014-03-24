@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.ericturnerdev.CryptsyTicker.MainActivity">
+      tools:context="com.ericturnerdev.Altcoin.MainActivity">
 
     <item
         android:id="@+id/action_settings"

@@ -1,4 +1,4 @@
-package com.ericturnerdev.CryptsyTicker;
+package com.ericturnerdev.Altcoin;
 
 import org.apache.http.message.BasicNameValuePair;
 

@@ -15,13 +15,14 @@ import java.util.ArrayList;
 
 
 /**
- * Created by Eric Turner (ericturnerdev) on 2/21/14.
+ * Created by Eric Turner (ericturnerdev) on 2/21/14.  Code for the settings page where users can filter their coins.
  */
 public class SettingsFragment extends Fragment {
 
     GridView mGridView;
     TextView mTextView;
     String TAG = "SettingsFragment";
+    ArrayList<Market> markets = Pairs.getAllMarkets();
 
     //Code for checkmarks and whatnot here
     @Override
@@ -41,11 +42,18 @@ public class SettingsFragment extends Fragment {
 
         mGridView.setAdapter(new SettingsGridAdapter());
 
-        Log.i(TAG, "Dogecoin price: " + Pairs.getMarket(132).getPrice());
+        //Log.i(TAG, "Dogecoin price: " + Pairs.getMarket(132).getPrice());
 
         return v;
     }
 
+    static class ViewHolder{
+        TextView tv;
+        TextView tv2;
+        TextView tv3;
+        CheckBox ch;
+
+    }
 
     public class SettingsGridAdapter extends BaseAdapter {
 
@@ -56,6 +64,8 @@ public class SettingsFragment extends Fragment {
             TextView tv;
             TextView tv2;
             CheckBox ch;
+            TextView tv3;
+            final int p = position;
             //Log.i(TAG, "Populating Settings Grid.  pairs: " + Pairs.getAllMarkets());
 
             if (convertView == null) {
@@ -66,29 +76,36 @@ public class SettingsFragment extends Fragment {
                 v = convertView;
             }
 
-            //v = LayoutInflater.from(getActivity()).inflate(R.layout.settings_item, null);
-            tv = (TextView) v.findViewById(R.id.settingsItemTV);
-            tv2 = (TextView) v.findViewById(R.id.settingsItemTV2);
-            ch = (CheckBox) v.findViewById(R.id.settingsItemCheckBox);
-            if (Pairs.getAllMarkets().get(position).isVisible()) {
-                ch.setChecked(true);
+            ViewHolder h = new ViewHolder();
+            h.ch = (CheckBox) v.findViewById(R.id.settingsItemCheckBox);
+            h.tv = (TextView) v.findViewById(R.id.settingsItemTV);
+            h.tv2 = (TextView) v.findViewById(R.id.settingsItemTV2);
+            h.tv3 = (TextView)v.findViewById(R.id.settingsCoinName);
+            v.setTag(h);
+
+            v.setOnClickListener(new itemClickListener(position, h.ch));
+
+            if (markets.get(position).isVisible()) {
+                h.ch.setChecked(true);
             } else {
-                ch.setChecked(false);
+                h.ch.setChecked(false);
             }
 
-            tv.setText("" + Pairs.getAllMarkets().get(position).getSecondarycode().toUpperCase() + "/");
-            tv2.setText(Pairs.getAllMarkets().get(position).getPrimarycode().toUpperCase());
+            h.tv.setText("" + markets.get(position).getSecondarycode().toUpperCase() + "/");
+            h.tv2.setText(markets.get(position).getPrimarycode().toUpperCase());
+            h.tv3.setText(markets.get(position).getPrimaryname().length() <= 12 ? Pairs.getAllMarkets().get(position).getPrimaryname() : Pairs.getAllMarkets().get(position).getPrimaryname().substring(0, 12));
 
             //Log.i(TAG, "" + Pairs.getAllMarkets().get(position).getPrimarycode().toUpperCase() + "/" + Pairs.getAllMarkets().get(position).getSecondarycode().toUpperCase() + " added to gridview");
 
 
             //Attach your custom CheckBoxClickListener to the checkbox
-            ch.setOnClickListener(new CheckBoxClickListener(position, Pairs.getAllMarkets()));
+            //h.ch.setOnClickListener(new itemClickListener(position, h.ch));
+
             return v;
         }
 
         public final int getCount() {
-            return Pairs.getAllMarkets().size();
+            return markets.size();
 
         }
 
@@ -97,19 +114,21 @@ public class SettingsFragment extends Fragment {
         }
 
         public final String getItem(int position) {
-            return "" + Pairs.getAllMarkets().get(position).getSecondarycode().toUpperCase() + "/" + Pairs.getAllMarkets().get(position).getPrimarycode().toUpperCase();
+            return "" + markets.get(position).getSecondarycode().toUpperCase() + "/" + markets.get(position).getPrimarycode().toUpperCase();
 
         }
     }
 
     //Custom OnClickListener for the checkboxes in settings
-    public class CheckBoxClickListener implements View.OnClickListener {
+    public class itemClickListener implements View.OnClickListener {
 
         int position;
+        CheckBox ch;
 
-        public CheckBoxClickListener(int _position, ArrayList<Market> _pairs) {
+        public itemClickListener(int _position, CheckBox ch) {
 
             this.position = _position;
+            this.ch = ch;
 
 
         }
@@ -117,29 +136,30 @@ public class SettingsFragment extends Fragment {
         @Override
         public void onClick(View v) {
 
-            if (((CheckBox) v).isChecked()) {
+            if (!ch.isChecked()) {
 
                 //Run this when the CheckBox goes from unchecked to checked:
-                //Log.i("aaa", "CheckBox " + Pairs.getAllMarkets().get(position).getSecondarycode().toUpperCase() + "/" + Pairs.getAllMarkets().get(position).getPrimarycode().toUpperCase() + " is checked");
+                Log.i("aaa", "CheckBox " + markets.get(position).getSecondarycode().toUpperCase() + "/" + markets.get(position).getPrimarycode().toUpperCase() + " is checked");
                 //Set the Pairs entry to true
-                Pairs.getAllMarkets().get(position).setVisible(true);
+                markets.get(position).setVisible(true);
                 DatabaseHandler db = new DatabaseHandler(getActivity());
                 db.setVis(Pairs.getAllMarkets().get(position), 1);
+                ch.setChecked(true);
                 db.close();
             }
 
             //Run this when the CheckBox goes from checked to unchecked:
             else {
-                //Log.i("aaa", "CheckBox " + Pairs.getAllMarkets().get(position).getSecondarycode().toUpperCase() + "/" + Pairs.getAllMarkets().get(position).getPrimarycode().toUpperCase() + " is UNchecked");
-                Pairs.getAllMarkets().get(position).setVisible(false);
+                Log.i("aaa", "CheckBox " + Pairs.getAllMarkets().get(position).getSecondarycode().toUpperCase() + "/" + Pairs.getAllMarkets().get(position).getPrimarycode().toUpperCase() + " is UNchecked");
+                markets.get(position).setVisible(false);
                 DatabaseHandler db = new DatabaseHandler(getActivity());
                 db.setVis(Pairs.getAllMarkets().get(position), 0);
+                ch.setChecked(false);
                 db.close();
 
             }
 
         }
-
     }
 
 }

@@ -30,7 +30,7 @@
         android:layout_weight="8"
         android:numColumns="3"
         android:columnWidth="120dp"
-        android:paddingTop="8dp"
+        android:paddingTop="2dp"
         android:verticalSpacing="8dp"
         android:horizontalSpacing="8dp"
         android:background="#555555"

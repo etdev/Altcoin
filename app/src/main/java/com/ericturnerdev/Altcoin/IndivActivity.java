@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,7 +26,7 @@ public class IndivActivity extends Activity {
     public static double volume;
 
 
-    //public String TAG = "IndivActivity";
+    public String TAG = "IndivActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +89,7 @@ public class IndivActivity extends Activity {
                     //Log.i(TAG, "GET rawData: " + rawData);
 
                 } catch (IOException e) {
-                    //Log.e(TAG, "Couldn't load data from api.  i is: " + i);
+                    Log.e(TAG, "Couldn't load data from api.  i is: " + i);
                     i++;
                     apiSuccess = false;
                 }
@@ -116,7 +117,7 @@ public class IndivActivity extends Activity {
                     Pairs.getMarket(currentMarket.getSecondarycode(), currentMarket.getPrimarycode()).setSellorders(currentMarket.getSellorders());
 
                 } catch (JSONException e) {
-                    //Log.e(TAG, "JSON Exception! i is: " + i);
+                    Log.e(TAG, "JSON Exception! i is: " + i);
                     e.printStackTrace();
                     //Log.i(TAG, "Primarycode: " + Pairs.getMarket(_marketId).getPrimarycode());
                 }

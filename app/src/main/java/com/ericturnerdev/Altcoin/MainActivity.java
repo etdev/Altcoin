@@ -27,7 +27,7 @@ import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    //String TAG = "MainActivity";
+    String TAG = "MainActivity";
 
     BasicNameValuePair nvp;
 
@@ -46,18 +46,16 @@ public class MainActivity extends Activity {
         new Pairs();
         //Log.i(TAG, "aaa onCreate CALLED");
 
-
         /*
-        ArrayList<NameValuePair> testList = new ArrayList<NameValuePair>();
-        testList.add(new BasicNameValuePair("pairs", "doge_btc"));
-        */
-
-        /*Testing
-        new APIData(this, "http://www.cryptocoincharts.info/v2/api/tradingPairs", true, testList).execute();
-        ArrayList<NameValuePair> testList2 = new ArrayList<NameValuePair>();
-        testList2.add(new BasicNameValuePair("method", "singleorderdata"));
-        testList2.add(new BasicNameValuePair("marketid", "132"));
-        new APIData(this, "http://pubapi.cryptsy.com/api.php", false, testList).execute();
+        //DEBUGGING FORMATTING ERROR THAT WAS CAUSING CRASHES:
+       // String debugTest = "0.014";
+        double debugTestD = 110.0014;
+        String debugTest = String.format("%.3f", debugTestD);
+        //Lines: 213, 198, 200, 202
+        BigDecimal bd = new BigDecimal(debugTest);
+        DecimalFormat df = new DecimalFormat("0.0##");
+        debugTest = df.format(bd.stripTrailingZeros());
+        Log.i(TAG, "debugTest is: " + debugTest);
         */
 
 

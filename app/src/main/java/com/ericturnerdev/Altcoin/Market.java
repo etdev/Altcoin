@@ -22,6 +22,7 @@ public class Market implements Comparable<Market> {
     private List<OrderItem> sellorders = new ArrayList<OrderItem>();
     private List<OrderItem> buyorders = new ArrayList<OrderItem>();
     private boolean visible;
+
     //For cryptocoincharts API
     private double price_before_24h;
     private double volume_btc;

@@ -1,5 +1,7 @@
 package com.ericturnerdev.Altcoin;
 
+import android.util.Log;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
@@ -31,7 +33,9 @@ public class Format {
         //If LTC
         else if (secondary.toUpperCase().equals("LTC")) {
 
-            if (d < 0.01) {
+            if (d < 0.000001) {
+                fd = removeZeros(String.format("%.3f", (d * 1000000000))) + " " + "nLTC";
+            } else if (d < 0.01) {
                 fd = removeZeros(String.format("%.3f", (d * 1000))) + " " + "mLTC";
             } else {
                 fd = removeZeros(String.format("%.3f", (d))) + " " + "LTC";
@@ -120,7 +124,9 @@ public class Format {
         //If LTC
         else if (secondary.toUpperCase().equals("LTC")) {
 
-            if (d < 0.01) {
+            if (d < 0.000001) {
+                fd = removeZeros(String.format("%.3f", (d * 1000000000))) + "n";
+            } else if (d < 0.01) {
                 fd = removeZeros(String.format("%.3f", (d * 1000))) + "m";
             } else {
                 fd = String.format("%.3f", (d));
@@ -198,10 +204,12 @@ public class Format {
                 fd = removeZeros(String.format("%.3f", (d * 100000000)));
             } else if (d < 0.01) {
                 fd = removeZeros(String.format("%.3f", (d * 1000)));
+                Log.i("Format", "removeZeros: " + fd);
             } else {
                 fd = removeZeros(String.format("%.3f", (d)));
             }
 
+            //Log.i("Format", "fd:" + fd);
             return fd;
 
         }
@@ -209,12 +217,15 @@ public class Format {
         //If LTC
         else if (secondary.toUpperCase().equals("LTC")) {
 
-            if (d < 0.01) {
+            if (d < 0.000001) {
+                fd = removeZeros(String.format("%.3f", (d * 1000000000)));
+            } else if (d < 0.01) {
                 fd = removeZeros(String.format("%.3f", (d * 1000)));
             } else {
                 fd = String.format("%.3f", (d));
             }
 
+            //Log.i("Format", "fd:" + fd);
             return fd;
 
         }
@@ -228,6 +239,7 @@ public class Format {
                 fd = String.format("%.3f", (d));
             }
 
+            // Log.i("Format", "fd:" + fd);
             return fd;
 
         }
@@ -242,7 +254,7 @@ public class Format {
                 fd = String.format("%.2f", (d));
             }
 
-            //Log.i("Format", "USD, fd is: " + fd);
+            //Log.i("Format", "fd:" + fd);
             return fd;
 
         }
@@ -257,7 +269,7 @@ public class Format {
                 fd = String.format("%.2f", (d));
             }
 
-            //Log.i("Format", "USD, fd is: " + fd);
+            // Log.i("Format", "fd:" + fd);
             return fd;
 
         }
@@ -272,7 +284,7 @@ public class Format {
                 fd = String.format("%.2f", (d));
             }
 
-            //Log.i("Format", "USD, fd is: " + fd);
+            //Log.i("Format", "fd:" + fd);
             return fd;
 
         } else {
@@ -306,8 +318,10 @@ public class Format {
         //If LTC
         else if (secondary.toUpperCase().equals("LTC")) {
 
-            if (d < 0.01) {
-                fd = "mLTC";
+            if (d < 0.000001) {
+                fd = "nLTC";
+            } else if (d < 0.000001) {
+                fd = "nLTC";
             } else {
                 fd = "LTC";
             }
@@ -374,9 +388,16 @@ public class Format {
 
 
     private static String removeZeros(String s) {
-        BigDecimal bd = new BigDecimal("" + s);
-        DecimalFormat df = new DecimalFormat("0.0##");
-        String formatted = df.format(bd.stripTrailingZeros());
+
+        String formatted = "no data";
+        try {
+            BigDecimal bd = new BigDecimal(s);
+            DecimalFormat df = new DecimalFormat("0.0##");
+            formatted = df.format(bd.stripTrailingZeros());
+        } catch (java.lang.NumberFormatException e) {
+            Log.e("Format", "formatting error");
+        }
+
         return formatted;
     }
 

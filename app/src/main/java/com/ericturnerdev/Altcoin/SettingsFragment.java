@@ -47,7 +47,7 @@ public class SettingsFragment extends Fragment {
         return v;
     }
 
-    static class ViewHolder{
+    static class ViewHolder {
         TextView tv;
         TextView tv2;
         TextView tv3;
@@ -61,11 +61,6 @@ public class SettingsFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
 
             View v;
-            TextView tv;
-            TextView tv2;
-            CheckBox ch;
-            TextView tv3;
-            final int p = position;
             //Log.i(TAG, "Populating Settings Grid.  pairs: " + Pairs.getAllMarkets());
 
             if (convertView == null) {
@@ -80,7 +75,7 @@ public class SettingsFragment extends Fragment {
             h.ch = (CheckBox) v.findViewById(R.id.settingsItemCheckBox);
             h.tv = (TextView) v.findViewById(R.id.settingsItemTV);
             h.tv2 = (TextView) v.findViewById(R.id.settingsItemTV2);
-            h.tv3 = (TextView)v.findViewById(R.id.settingsCoinName);
+            h.tv3 = (TextView) v.findViewById(R.id.settingsCoinName);
             v.setTag(h);
 
             v.setOnClickListener(new itemClickListener(position, h.ch));

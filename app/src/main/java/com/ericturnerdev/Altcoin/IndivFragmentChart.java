@@ -33,7 +33,7 @@ import java.util.Collections;
 
 public class IndivFragmentChart extends Fragment {
 
-    public final String JSON_API = "http://ericturnerdev.com/getJson.php";
+    public final String JSON_API = "http://ericturnerdev.nfshost.com/getJson.php";
     private GraphicalView mChart;
     private XYMultipleSeriesDataset mDataset = new XYMultipleSeriesDataset();
     private XYMultipleSeriesRenderer mRenderer = new XYMultipleSeriesRenderer();

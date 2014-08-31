@@ -62,7 +62,7 @@ public class Format {
         else if (secondary.toUpperCase().equals("USD")) {
 
             if (d < 1) {
-                fd = removeZeros(String.format("%.3f", (d * 1000))) + " " + "cents";
+                fd = removeZeros(String.format("%.3f", (d * 100))) + " " + "cents";
             } else {
                 fd = removeZeros(String.format("%.2f", (d))) + " " + "USD";
             }
@@ -153,9 +153,9 @@ public class Format {
         else if (secondary.toUpperCase().equals("USD")) {
 
             if (d < 1) {
-                fd = removeZeros(String.format("%.2f", (d * 100))) + "" + "¢";
+                fd = removeZeros(String.format("%.3f", (d * 100))) + "" + "¢";
             } else {
-                fd = "$" + String.format("%.2f", (d));
+                fd = String.format("%.2f", (d));
             }
 
             return fd;

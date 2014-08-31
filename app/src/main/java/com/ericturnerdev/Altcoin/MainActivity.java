@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -85,9 +86,18 @@ public class MainActivity extends Activity {
             while (cur.moveToNext()) {
 
                 if (cur.getInt(1) == 1) {
-                    Pairs.getMarket(cur.getInt(0)).setVisible(true);
+                    try {
+                        Pairs.getMarket(cur.getInt(0)).setVisible(true);
+                    } catch (NullPointerException e) {
+                        Log.v(TAG, "The 1.2 crash bug has occurred.  Stack trace:\n" + e.getMessage() + "\n" + e.getStackTrace());
+                    }
+
                 } else {
-                    Pairs.getMarket(cur.getInt(0)).setVisible(false);
+                    try {
+                        Pairs.getMarket(cur.getInt(0)).setVisible(false);
+                    } catch (NullPointerException e) {
+                        Log.v(TAG, "The 1.2 crash bug has occurred.  Stack trace:\n" + e.getMessage() + "\n" + e.getStackTrace());
+                    }
                 }
 
             }

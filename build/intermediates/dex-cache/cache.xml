@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/Users/ericturner/AndroidStudio/Altcoin/app/build/intermediates/pre-dexed/debug/libGoogleAnalyticsServices-f8355d1250a71b681fa059dee569a5bea3306b15.jar"
+        jar="/Users/ericturner/AndroidStudio/Altcoin/app/libs/libGoogleAnalyticsServices.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="db1e65d9e3ee616f871cb23120fbea8f18ad3e4c"/>
+    <item
+        dex="/Users/ericturner/AndroidStudio/Altcoin/app/build/intermediates/pre-dexed/debug/classes-e1d3d73a6eecca819c4f51133a205fe717801392.jar"
+        jar="/Users/ericturner/AndroidStudio/Altcoin/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/5.2.08/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="1ed7a7a05185651f9af41ad93711cb96b66f331c"/>
+    <item
+        dex="/Users/ericturner/AndroidStudio/Altcoin/app/build/intermediates/pre-dexed/debug/gson-2.2.4-fdaa855b42b6ac8bda549dfe4080149f34e35445.jar"
+        jar="/Users/ericturner/AndroidStudio/Altcoin/app/libs/gson-2.2.4.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8"/>
+    <item
+        dex="/Users/ericturner/AndroidStudio/Altcoin/app/build/intermediates/pre-dexed/debug/achartengine-1.1.0-c8b2b47f8ad8a0fc54ee1e53c658f2fdbdaf8aad.jar"
+        jar="/Users/ericturner/AndroidStudio/Altcoin/app/libs/achartengine-1.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="9932e3fb9fbe54e80873e77f72a99f79e33b3250"/>
+    <item
+        dex="/Users/ericturner/AndroidStudio/Altcoin/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
+        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+
+</pre-dex-items>

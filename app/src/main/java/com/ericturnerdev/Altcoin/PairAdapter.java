@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  */
 public class PairAdapter extends ArrayAdapter<Market> {
 
-    //String TAG = "PairAdapter";
+    String TAG = "PairAdapter";
 
     public Context context;
     public int layoutResourceId;
@@ -30,7 +31,7 @@ public class PairAdapter extends ArrayAdapter<Market> {
         this.context = context;
         this.layoutResourceId = layoutResourceId;
         this.pairs = pairs;
-        //Log.i(TAG, "Pairs: " + pairs);
+        Log.i(TAG, "Pairs: " + pairs);
     }
 
     @Override

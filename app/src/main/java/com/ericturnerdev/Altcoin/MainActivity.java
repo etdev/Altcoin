@@ -36,8 +36,8 @@ public class MainActivity extends Activity {
     Context mContext;
 
     //Exchange API URLs:
-    //public final String CRYPTSY_API = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=";
-    public final String CRYPTSY_API = "http://www.cryptocoincharts.info/v2/api/tradingPairs";
+    public final String CRYPTSY_API = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=";
+    //public final String CRYPTSY_API = "http://www.cryptocoincharts.info/v2/api/tradingPairs";
     public final String CRYPTOCOIN_API = "http://www.cryptocoincharts.info/v2/api/tradingPairs";
 
     @Override
@@ -353,41 +353,50 @@ public class MainActivity extends Activity {
             Log.i(TAG, "marketIds: " + Arrays.toString(marketIds));
             String rawData = null;
 
+            int i=0;
             //String fullURL;
-            int i = 0;
             boolean apiSuccess = false;
             Market currentMarket;
 
             //Get the data from the API
             while (!apiSuccess && i < 20) {
 
-                try {
+                for (int j=0; j<marketIds.length; j++){
 
-                    apiSuccess = true;
                     try {
 
-                        //Want to do get request for
-                        //rawData = new URLFetch().postURL(API_URL, nvp);
+                        apiSuccess = true;
+                        try {
 
-                        //YOU WILL ACTUALLY NEED A FOR LOOP HERE:
-                        rawData = new URLFetch().getURL( "" + API_URL + marketIds[0]);
-                        Log.i(TAG, "POST rawData: " + rawData);
+                            //Want to do get request for
+                            //rawData = new URLFetch().postURL(API_URL, nvp);
 
-                    } catch (IOException e) {
-                        //Log.e(TAG, "aaa Couldn't load data from api.  i is: " + i);
-                        i++;
-                        apiSuccess = false;
-                    }
+                            //YOU WILL ACTUALLY NEED A FOR LOOP HERE:
+                            rawData = new URLFetch().getURL( "" + API_URL + marketIds[j]);
+                            Log.i(TAG, "GET rawData: " + rawData);
 
+                        } catch (IOException e) {
+                            //Log.e(TAG, "aaa Couldn't load data from api.  i is: " + i);
+                            i++;
+                            apiSuccess = false;
+                        }
 
-                    /*
-                    if (apiSuccess){
+                        if (apiSuccess){
 
-                        Gson gson = new GsonBuilder().serializeNulls().create();
-                        JSONArray resultsJ = new JSONArray(rawData);
-                        //Log.i(TAG, "resultsJ is: " + resultsJ);
-                        //Log.i(TAG, "CRYPTSY IS " + Cryptsy);
+                            Gson gson = new GsonBuilder().serializeNulls().create();
+                            JSONObject resultsJ = new JSONObject(rawData);
+                            resultsJ = resultsJ.getJSONObject("return").getJSONObject("markets");
+                            //JSONArray sellOrdersJ = resultsJ.getJSONObject();
+                            //JSONArray resultsJ = new JSONArray(rawData);
+                            Log.i(TAG, "resultsJ is: " + resultsJ);
+                            //Log.i(TAG, "CRYPTSY IS " + Cryptsy);
+                            currentMarket = gson.fromJson(resultsJ.getJSONObject(Pairs.getMarket(marketIds[j]).getSecondarycode()).toString(), Market.class);
+                            Log.i(TAG, "GSON currentMarket: " + currentMarket.getLasttradeprice());
 
+                            Pairs.getMarket(marketIds[j]).setPrice(currentMarket.getPrice());
+                            Pairs.getMarket(marketIds[j]).setVolume_btc(currentMarket.getVolume_btc());
+                            Pairs.getMarket(marketIds[j]).setPrice_before_24h(currentMarket.getPrice_before_24h());
+                        /*
                         for (i = 0; i < resultsJ.length(); i++) {
 
                             JSONObject marketJ = resultsJ.getJSONObject(i);
@@ -395,7 +404,7 @@ public class MainActivity extends Activity {
                             currentMarket = gson.fromJson(marketJ.toString(), Market.class);
                             currentMarket.setSecondarycode(currentMarket.getId().substring(0, currentMarket.getId().indexOf("/")));
                             currentMarket.setPrimarycode(currentMarket.getId().substring(currentMarket.getId().indexOf("/") + 1, currentMarket.getId().length()));
-                            //Log.i(TAG, "  currentMarket price: " + currentMarket.getPrice());
+                            Log.i(TAG, "  currentMarket price: " + currentMarket.getPrice());
                             //Log.i(TAG, "  currentMarket label: " + currentMarket.getId());
                             //Log.i(TAG, "  currentMarket 24hr : " + currentMarket.getPrice_before_24h());
                             //Log.i(TAG, " currentMarket volume: " + currentMarket.getVolume_btc());
@@ -406,16 +415,18 @@ public class MainActivity extends Activity {
                             Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setPrice_before_24h(currentMarket.getPrice_before_24h());
 
                         }
+                        */
 
+                        }
+
+
+                    } catch (Exception e) {
+                        //Log.e(TAG, "JSON Exception! i is: " + i);
+                        e.printStackTrace();
+                        //Log.i(TAG, "Primarycode: " + Pairs.getMarket(_marketId).getPrimarycode());
+                        i++;
+                        apiSuccess = false;
                     }
-                    */
-
-                } catch (Exception e) {
-                    //Log.e(TAG, "JSON Exception! i is: " + i);
-                    e.printStackTrace();
-                    //Log.i(TAG, "Primarycode: " + Pairs.getMarket(_marketId).getPrimarycode());
-                    i++;
-                    apiSuccess = false;
                 }
 
             }

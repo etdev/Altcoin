@@ -534,14 +534,19 @@ public class Pairs extends Application {
     public static Market getMarket(String primary, String secondary) {
 
         Market tempMarket = new Market();
+        int match = 0;
 
         for (Market m : getAllMarkets()) {
             if ((m.getPrimarycode().toUpperCase().equals(primary.toUpperCase())) && (m.getSecondarycode().toUpperCase().equals(secondary.toUpperCase()))) {
                 tempMarket = m;
+                match = 1;
             }
         }
 
-        return getMarket(tempMarket.getMarketid());
+        if (match == 1) {
+            return getMarket(tempMarket.getMarketid());
+        }
+        else{ return blankMarket(); }
 
     }
 
@@ -571,5 +576,15 @@ public class Pairs extends Application {
 
     }
 
+    public static void resetMarkets(){
+        for (Market m : pairs.values()) {
+            m.setVisible(false);
+        }
 
+    }
+
+    public static Market blankMarket(){
+        Market m = new Market();
+        return m;
+    }
 }

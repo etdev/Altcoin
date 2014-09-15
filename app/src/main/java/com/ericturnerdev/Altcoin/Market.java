@@ -21,13 +21,13 @@ public class Market implements Comparable<Market> {
     private List<TradeItem> recenttrades = new ArrayList<TradeItem>();
     private List<OrderItem> sellorders = new ArrayList<OrderItem>();
     private List<OrderItem> buyorders = new ArrayList<OrderItem>();
-    private boolean visible;
+    private boolean visible = false;
 
     //For cryptocoincharts API
-    private double price_before_24h;
-    private double volume_btc;
-    private double price;
-    private String id;
+    private double price_before_24h = 0.0;
+    private double volume_btc = 0.0;
+    private double price = 0.0;
+    private String id = "";
 
     public Market() {
 

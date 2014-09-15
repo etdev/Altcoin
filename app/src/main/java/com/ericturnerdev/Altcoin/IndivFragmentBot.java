@@ -14,6 +14,7 @@ import android.widget.TextView;
 public class IndivFragmentBot extends Fragment {
 
     private int marketId;
+    private final String TAG = "IndivBot";
 
     public IndivFragmentBot() {
 
@@ -28,32 +29,30 @@ public class IndivFragmentBot extends Fragment {
         View v = inflater.inflate(R.layout.fragment_indiv_bot, container, false);
         if (marketId < 500 && Pairs.getMarket(marketId).getPrice() != 0.0) {
 
-            TextView priceTV = null;
             //Set price
             try{
-            priceTV = (TextView) v.findViewById(R.id.priceTV);
-            } catch (NullPointerException e) {
+            TextView priceTV = (TextView) v.findViewById(R.id.priceTV);
                 Log.i("IndivFragmentBot", "priceTV error");
+                priceTV.setText("Price: " + Format.formatLong(Pairs.getMarket(marketId).getPrice(), Pairs.getMarket(marketId).getPrimarycode()));
+                //Log.i("IndivFragmentBot", "Price: " + Format.formatLong(Pairs.getMarket(marketId).getPrice(), Pairs.getMarket(marketId).getPrimarycode()));
+
+                //Set volume
+                TextView volTV = (TextView) v.findViewById(R.id.volumeTV);
+                volTV.setText("Volume: " + Format.formatLong(Pairs.getMarket(marketId).getVolume_btc(), Pairs.getMarket(marketId).getPrimarycode()));
+
+                //Write Table labels
+                TextView label1A = (TextView) v.findViewById(R.id.btblr0c0);
+                TextView label2A = (TextView) v.findViewById(R.id.btblr0c1);
+                label1A.setText("Buy price:");
+                label2A.setText("" + Pairs.getMarket(marketId).getPrimarycode());
+
+                //Write Table labels
+                TextView label1B = (TextView) v.findViewById(R.id.stblr0c0);
+                TextView label2B = (TextView) v.findViewById(R.id.stblr0c1);
+                label1B.setText("Sell price:");
+                label2B.setText("" + Pairs.getMarket(marketId).getPrimarycode());
             }
-            priceTV.setText("Price: " + Format.formatLong(Pairs.getMarket(marketId).getPrice(), Pairs.getMarket(marketId).getPrimarycode()));
-            //Log.i("IndivFragmentBot", "Price: " + Format.formatLong(Pairs.getMarket(marketId).getPrice(), Pairs.getMarket(marketId).getPrimarycode()));
-
-            //Set volume
-            TextView volTV = (TextView) v.findViewById(R.id.volumeTV);
-            volTV.setText("Volume: " + Format.formatLong(Pairs.getMarket(marketId).getVolume_btc(), Pairs.getMarket(marketId).getPrimarycode()));
-
-            //Write Table labels
-            TextView label1A = (TextView) v.findViewById(R.id.btblr0c0);
-            TextView label2A = (TextView) v.findViewById(R.id.btblr0c1);
-            label1A.setText("Buy price:");
-            label2A.setText("" + Pairs.getMarket(marketId).getPrimarycode());
-
-            //Write Table labels
-            TextView label1B = (TextView) v.findViewById(R.id.stblr0c0);
-            TextView label2B = (TextView) v.findViewById(R.id.stblr0c1);
-            label1B.setText("Sell price:");
-            label2B.setText("" + Pairs.getMarket(marketId).getPrimarycode());
-
+         catch (NullPointerException e) { Log.i(TAG, "view creation error"); e.printStackTrace(); }
 
             if (Pairs.getMarket(marketId).getBuyorders() != null) {
 
@@ -165,30 +164,6 @@ public class IndivFragmentBot extends Fragment {
             }
 
 
-        }
-
-        //For Bitcoin/USD etc. (COIN PAIRS NOT ON CRYPTSY)
-        else {
-            //Set price
-            TextView priceTV = null;
-            priceTV = (TextView) v.findViewById(R.id.priceTV);
-            priceTV.setText("Price: " + Format.formatLong(Pairs.getMarket(marketId).getPrice(), Pairs.getMarket(marketId).getSecondarycode()));
-
-            //Set volume
-            TextView volTV = (TextView) v.findViewById(R.id.volumeTV);
-            volTV.setText("Volume: " + Format.formatLong(Pairs.getMarket(marketId).getVolume_btc(), Pairs.getMarket(marketId).getSecondarycode()));
-
-            //Write Table labels
-            TextView label1A = (TextView) v.findViewById(R.id.btblr0c0);
-            TextView label2A = (TextView) v.findViewById(R.id.btblr0c1);
-            label1A.setText("Buy price:");
-            label2A.setText("" + Pairs.getMarket(marketId).getPrimarycode());
-
-            //Write Table labels
-            TextView label1B = (TextView) v.findViewById(R.id.stblr0c0);
-            TextView label2B = (TextView) v.findViewById(R.id.stblr0c1);
-            label1B.setText("Sell price:");
-            label2B.setText("" + Pairs.getMarket(marketId).getPrimarycode());
         }
 
         return v;

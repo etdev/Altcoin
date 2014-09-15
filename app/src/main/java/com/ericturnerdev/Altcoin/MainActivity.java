@@ -142,19 +142,18 @@ public class MainActivity extends Activity {
             //Log.i(TAG, "getvisible is not greater than 0!");
         }
 
-
     }
 
     @Override
     protected void onStop() {
 
         super.onStop();
-        DatabaseHandler db = new DatabaseHandler(this);
+        //DatabaseHandler db = new DatabaseHandler(this);
         //db.clearTable("visibility");
         //db.addVis(Pairs.getMarket(132), 1);
         //db.dropTable("visibility");
         //Log.i(TAG, "aaa onStop CALLED");
-        db.close();
+        //db.close();
 
     }
 
@@ -245,7 +244,7 @@ public class MainActivity extends Activity {
 
         public void getData() {
 
-            String rawData = null;
+            String rawData = "";
             //String fullURL;
             int i = 0;
             boolean apiSuccess = false;
@@ -313,7 +312,7 @@ public class MainActivity extends Activity {
         protected Double doInBackground(String... params) {
 
             getData();
-            return null;
+            return 0.0;
         }
 
         protected void onPostExecute(Double d) {
@@ -348,11 +347,10 @@ public class MainActivity extends Activity {
 
         }
 
-
         public void getData() {
 
             Log.i(TAG, "marketIds: " + Arrays.toString(marketIds));
-            String rawData = null;
+            String rawData = "";
 
             int i=0;
             //String fullURL;
@@ -437,7 +435,7 @@ public class MainActivity extends Activity {
         protected Double doInBackground(String... params) {
 
             getData();
-            return null;
+            return 0.0;
         }
 
         protected void onPostExecute(Double d) {

@@ -19,14 +19,7 @@ public class Pairs extends Application {
 
         pairs = new HashMap<Integer, Market>();
 
-        //pairs.put(500, new Market(500, "BTC", "USD", "Bitcoin"));
-
-        //pairs.put(501, new Market(501, "BTC", "EUR", "Bitcoin"));
-
-        //pairs.put(502, new Market(502, "BTC", "CNY", "Bitcoin"));
-
         //Added via PHP script (ericturner)
-
 
         pairs.put(2, new Market(2, "BTC", "USD", "BitCoin"));
 

@@ -31,7 +31,7 @@ public class PairAdapter extends ArrayAdapter<Market> {
         this.context = context;
         this.layoutResourceId = layoutResourceId;
         this.pairs = pairs;
-        Log.i(TAG, "Pairs: " + pairs);
+        //Log.i(TAG, "Pairs: " + pairs);
     }
 
     @Override
@@ -39,6 +39,9 @@ public class PairAdapter extends ArrayAdapter<Market> {
 
         //convertView is the view that will be recycled to create the new View
         //parent is the ListView holding the rows (I THINK)
+        Log.i(TAG, "We are in the getView method");
+        Log.i(TAG, "Pairs: " + pairs);
+        Log.i(TAG, "Position: " + position);
         View v = convertView; //The current view
         TextView topTV1, topTV2, botTV1, botTV2, moreTopTV, moreTopTV2;
         final int currentPosition = position;

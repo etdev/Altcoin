@@ -294,6 +294,7 @@ public class MainActivity extends Activity {
                             Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setVolume_btc(currentMarket.getVolume_btc());
                             Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setPrice_before_24h(currentMarket.getPrice_before_24h());
 
+
                         }
 
                     }
@@ -388,35 +389,36 @@ public class MainActivity extends Activity {
                             resultsJ = resultsJ.getJSONObject("return").getJSONObject("markets");
                             //JSONArray sellOrdersJ = resultsJ.getJSONObject();
                             //JSONArray resultsJ = new JSONArray(rawData);
-                            Log.i(TAG, "resultsJ is: " + resultsJ);
+                            //Log.i(TAG, "resultsJ is: " + resultsJ);
                             //Log.i(TAG, "CRYPTSY IS " + Cryptsy);
-                            currentMarket = gson.fromJson(resultsJ.getJSONObject(Pairs.getMarket(marketIds[j]).getSecondarycode()).toString(), Market.class);
-                            Log.i(TAG, "GSON currentMarket: " + currentMarket.getLasttradeprice());
+                            //currentMarket = gson.fromJson(resultsJ.getJSONObject(Pairs.getMarket(marketIds[j]).getSecondarycode()).toString(), Market.class);
+                            currentMarket = gson.fromJson(resultsJ.toString(), Market.class);
+                            //Log.i(TAG, "GSON currentMarket: " + currentMarket.getLasttradeprice());
 
-                            Pairs.getMarket(marketIds[j]).setPrice(currentMarket.getPrice());
-                            Pairs.getMarket(marketIds[j]).setVolume_btc(currentMarket.getVolume_btc());
-                            Pairs.getMarket(marketIds[j]).setPrice_before_24h(currentMarket.getPrice_before_24h());
-                        /*
-                        for (i = 0; i < resultsJ.length(); i++) {
+                            //Figuring out what we have in the resultsJ variable:
+                            Log.i(TAG, "RESULTSJ ANALYSIS - raw: " + resultsJ.toString());
+                            Log.i(TAG, "RESULTSJ ANALYSIS - oneStepDown: " + gson.fromJson(resultsJ.getJSONObject(Pairs.getMarket(marketIds[j]).getSecondarycode()).toString(), Market.class));
+                            JSONObject marketJ = resultsJ.getJSONObject(Pairs.getMarket(marketIds[j]).getSecondarycode());
+                            Log.i(TAG, "RESULTSJ ANALYSIS - price: " + marketJ.getString("lasttradeprice"));
 
-                            JSONObject marketJ = resultsJ.getJSONObject(i);
-                            //Log.i(TAG, "  marketJ is: " + marketJ);
-                            currentMarket = gson.fromJson(marketJ.toString(), Market.class);
-                            currentMarket.setSecondarycode(currentMarket.getId().substring(0, currentMarket.getId().indexOf("/")));
-                            currentMarket.setPrimarycode(currentMarket.getId().substring(currentMarket.getId().indexOf("/") + 1, currentMarket.getId().length()));
-                            Log.i(TAG, "  currentMarket price: " + currentMarket.getPrice());
-                            //Log.i(TAG, "  currentMarket label: " + currentMarket.getId());
-                            //Log.i(TAG, "  currentMarket 24hr : " + currentMarket.getPrice_before_24h());
-                            //Log.i(TAG, " currentMarket volume: " + currentMarket.getVolume_btc());
-                            //Log.i(TAG, " primaryCode: " + currentMarket.getPrimarycode() + " secondaryCode: " + currentMarket.getSecondarycode());
 
-                            Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setPrice(currentMarket.getPrice());
-                            Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setVolume_btc(currentMarket.getVolume_btc());
-                            Pairs.getMarket(currentMarket.getPrimarycode(), currentMarket.getSecondarycode()).setPrice_before_24h(currentMarket.getPrice_before_24h());
+                            //Get price from 24 hours ago:
+                            JSONArray recentTradesJ = marketJ.getJSONArray("recenttrades");
+                            Log.i(TAG, "RESULTSJ ANALYSIS - recentTradesJ length: " + recentTradesJ.length());
+                            double accumulator = 0.0;
+                            if(recentTradesJ.length() > 0){
+                                for (int k=0; k<recentTradesJ.length(); k++){
+                                    accumulator+= recentTradesJ.getJSONObject(k).getDouble("price");
+                                }
+                            }
 
-                        }
-                        */
+                            accumulator = accumulator/(double)recentTradesJ.length();
 
+                            Pairs.getMarket(marketIds[j]).setPrice(Double.parseDouble(marketJ.getString("lasttradeprice")));
+                            Pairs.getMarket(marketIds[j]).setVolume_btc(Double.parseDouble(marketJ.getString("volume")));
+                            Pairs.getMarket(marketIds[j]).setPrice_before_24h(accumulator);
+
+                            Log.i(TAG, "AAA The info we're gonna insert: price=" + currentMarket.getPrice() + " volume=" + currentMarket.getVolume_btc() + " oldPrice=" + currentMarket.getPrice_before_24h());
                         }
 
 

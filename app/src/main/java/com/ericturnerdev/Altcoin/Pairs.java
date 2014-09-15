@@ -519,7 +519,6 @@ public class Pairs extends Application {
     public static Market getMarket(Integer id) {
 
         return pairs.get(id);
-        ////
 
     }
 

@@ -341,6 +341,7 @@ public class MainActivity extends Activity {
             int i = 0;
             boolean apiSuccess = false;
             Market currentMarket;
+            ////////////////
 
 
             //Get the data from the API

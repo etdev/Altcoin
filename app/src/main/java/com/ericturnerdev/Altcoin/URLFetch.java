@@ -1,5 +1,7 @@
 package com.ericturnerdev.Altcoin;
 
+import android.util.Log;
+
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.BufferedInputStream;
@@ -23,7 +25,7 @@ public class URLFetch {
 
         //Log.i(TAG, "urlIn: " + urlIn);
         URL url = new URL(urlIn);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
         BufferedReader r = new BufferedReader(new InputStreamReader(in));
         StringBuilder total = new StringBuilder();
@@ -59,9 +61,9 @@ public class URLFetch {
 
         int responseCode = con.getResponseCode();
 
-        //Log.i(TAG, "POST request to URL: " + urlIn);
-        //Log.i(TAG, "Post parameters: " + stringParam);
-        //Log.i(TAG, "Response Code: " + responseCode);
+        Log.i(TAG, "POST request to URL: " + urlIn);
+        Log.i(TAG, "Post parameters: " + stringParam);
+        Log.i(TAG, "Response Code: " + responseCode);
 
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream())

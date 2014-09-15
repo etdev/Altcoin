@@ -1,6 +1,7 @@
 package com.ericturnerdev.Altcoin;
 
 import android.app.Application;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -520,6 +521,14 @@ public class Pairs extends Application {
 
         return pairs.get(id);
 
+    }
+
+    public static int getMarketId(String label){
+
+        String primary = label.substring(0, label.indexOf("_"));
+        String secondary = label.substring(label.indexOf("_")+1, label.length());
+        Log.i("Pairs", "primary: " + primary + " secondary: " + secondary);
+        return Pairs.getMarket(secondary, primary).getMarketid();
     }
 
     public static Market getMarket(String primary, String secondary) {

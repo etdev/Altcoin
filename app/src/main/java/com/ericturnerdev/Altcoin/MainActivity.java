@@ -24,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 
 public class MainActivity extends Activity {
@@ -35,7 +36,8 @@ public class MainActivity extends Activity {
     Context mContext;
 
     //Exchange API URLs:
-    public final String CRYPTSY_API = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=";
+    //public final String CRYPTSY_API = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=";
+    public final String CRYPTSY_API = "http://www.cryptocoincharts.info/v2/api/tradingPairs";
     public final String CRYPTOCOIN_API = "http://www.cryptocoincharts.info/v2/api/tradingPairs";
 
     @Override
@@ -99,7 +101,6 @@ public class MainActivity extends Activity {
                         Log.v(TAG, "The 1.2 crash bug has occurred.  Stack trace:\n" + e.getMessage() + "\n" + e.getStackTrace());
                     }
                 }
-
             }
         }
 
@@ -133,7 +134,8 @@ public class MainActivity extends Activity {
             setContentView(R.layout.fragment_main2);
             populateListView();
             //Log.i(TAG, "getvisible is greater than 0!");
-            new CryptoCoin(marketLabel).execute();
+           // new CryptoCoin(marketLabel).execute();
+            new Cryptsy(marketLabel).execute();
 
         } else {
             setContentView(R.layout.init_splash);
@@ -208,20 +210,22 @@ public class MainActivity extends Activity {
     public void populateListView() {
 
 
-        ListView list = (ListView) findViewById(R.id.fragment_list_view);
-        list.setAdapter(new PairAdapter(mContext, R.layout.pair_item_view, Pairs.getVisibleMarkets()));
-        list.setOnItemClickListener(new OnItemClickListener() {
+        try {
+            ListView list = (ListView) findViewById(R.id.fragment_list_view);
+            list.setAdapter(new PairAdapter(mContext, R.layout.pair_item_view, Pairs.getVisibleMarkets()));
+            list.setOnItemClickListener(new OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                //Log.i(TAG, "List item clicked");
+                    //Log.i(TAG, "List item clicked");
 
 
-            }
+                }
 
-        });
+            });
 
+        }catch(Exception e){ System.out.println("populateListView failed!" + e.getStackTrace()); }
 
     }
 
@@ -326,23 +330,33 @@ public class MainActivity extends Activity {
         BasicNameValuePair nvp;
         String pairsS;
         String API_URL = CRYPTSY_API;
+        int[] marketIds;
 
         public Cryptsy(String label) {
 
+            Log.i(TAG, "CRYPTSY RUNNING");
             nvp = new BasicNameValuePair("pairs", label);
             pairsS = label;
+            String[] splitLabels = label.split(",");
+            marketIds = new int[splitLabels.length];
+
+            for ( int i=0; i<splitLabels.length; i++){
+                Log.i(TAG, "splitLabels: " + splitLabels[i]);
+                marketIds[i] = Pairs.getMarketId(splitLabels[i]);
+            }
 
         }
 
+
         public void getData() {
 
+            Log.i(TAG, "marketIds: " + Arrays.toString(marketIds));
             String rawData = null;
+
             //String fullURL;
             int i = 0;
             boolean apiSuccess = false;
             Market currentMarket;
-            ////////////////
-
 
             //Get the data from the API
             while (!apiSuccess && i < 20) {
@@ -352,8 +366,12 @@ public class MainActivity extends Activity {
                     apiSuccess = true;
                     try {
 
-                        rawData = new URLFetch().postURL(API_URL, nvp);
-                        //Log.i(TAG, "POST rawData: " + rawData);
+                        //Want to do get request for
+                        //rawData = new URLFetch().postURL(API_URL, nvp);
+
+                        //YOU WILL ACTUALLY NEED A FOR LOOP HERE:
+                        rawData = new URLFetch().getURL( "" + API_URL + marketIds[0]);
+                        Log.i(TAG, "POST rawData: " + rawData);
 
                     } catch (IOException e) {
                         //Log.e(TAG, "aaa Couldn't load data from api.  i is: " + i);
@@ -362,6 +380,7 @@ public class MainActivity extends Activity {
                     }
 
 
+                    /*
                     if (apiSuccess){
 
                         Gson gson = new GsonBuilder().serializeNulls().create();
@@ -389,8 +408,9 @@ public class MainActivity extends Activity {
                         }
 
                     }
+                    */
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     //Log.e(TAG, "JSON Exception! i is: " + i);
                     e.printStackTrace();
                     //Log.i(TAG, "Primarycode: " + Pairs.getMarket(_marketId).getPrimarycode());

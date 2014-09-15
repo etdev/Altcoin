@@ -19,8 +19,8 @@ public class Market implements Comparable<Market> {
     private String secondaryname = "";
     private String secondarycode = "";
     private List<TradeItem> recenttrades = new ArrayList<TradeItem>();
-    private List<OrderItem> sellorders = new ArrayList<OrderItem>();
-    private List<OrderItem> buyorders = new ArrayList<OrderItem>();
+    private List<BuySellItem> sellorders = new ArrayList<BuySellItem>();
+    private List<BuySellItem> buyorders = new ArrayList<BuySellItem>();
     private boolean visible = false;
 
     //For cryptocoincharts API
@@ -47,7 +47,7 @@ public class Market implements Comparable<Market> {
 
     }
 
-    public Market(int marketid, String label, double lasttradeprice, double volume, String lasttradetime, String primaryname, String primarycode, String secondaryname, String secondarycode, List<TradeItem> recenttrades, List<OrderItem> sellorders, List<OrderItem> buyorders, boolean visible) {
+    public Market(int marketid, String label, double lasttradeprice, double volume, String lasttradetime, String primaryname, String primarycode, String secondaryname, String secondarycode, List<TradeItem> recenttrades, List<BuySellItem> sellorders, List<BuySellItem> buyorders, boolean visible) {
 
         this.marketid = marketid;
         this.label = label;
@@ -180,19 +180,19 @@ public class Market implements Comparable<Market> {
         this.recenttrades = recenttrades;
     }
 
-    public List<OrderItem> getSellorders() {
+    public List<BuySellItem> getSellorders() {
         return sellorders;
     }
 
-    public void setSellorders(List<OrderItem> sellorders) {
+    public void setSellorders(List<BuySellItem> sellorders) {
         this.sellorders = sellorders;
     }
 
-    public List<OrderItem> getBuyorders() {
+    public List<BuySellItem> getBuyorders() {
         return buyorders;
     }
 
-    public void setBuyorders(List<OrderItem> buyorders) {
+    public void setBuyorders(List<BuySellItem> buyorders) {
         this.buyorders = buyorders;
     }
 
@@ -201,8 +201,8 @@ public class Market implements Comparable<Market> {
 
         String val = "";
         try {
-            val = " marketid: " + getMarketid() + " label: " + getLabel() + " volume: " + getVolume() + " time: " + getLasttradetime() + " primaryname: " + getPrimaryname() + " primarycode: " + getPrimarycode() + " secondaryname: " + getSecondaryname() + " secondarycode: " + getSecondarycode()
-                    + " visible: " + visible + "recenttrades:\n" + getRecenttrades().toString() + "\nsellorders:" + getSellorders().toString() + "\nbuyorders:" + getBuyorders().toString();
+            val = " marketid: " + getMarketid() + " label: " + getLabel() + " volume: " + getVolume() + " time: " + getLasttradetime() + " primaryname: " + getPrimaryname() + " primarycode: " + getPrimarycode() + " secondaryname: " + getSecondaryname() + " secondarycode: " + getSecondarycode() +
+                    " lasttradeprice: " + getLasttradeprice() + " visible: " + visible + "recenttrades:\n" + getRecenttrades().toString() + "\nsellorders:" + getSellorders().toString() + "\nbuyorders:" + getBuyorders().toString();
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
@@ -212,6 +212,13 @@ public class Market implements Comparable<Market> {
 
     //Used for recenttrades only
     public class TradeItem {
+
+        public TradeItem(double price, double quantity, double total){
+
+            this.price = price;
+            this.quantity = quantity;
+            this.total = total;
+        }
 
         private int id = 0;
         private String time = "";
@@ -266,6 +273,7 @@ public class Market implements Comparable<Market> {
         }
     }
 
+    /*
     //Used for sellorders and buyorders only
     public class OrderItem {
 
@@ -304,6 +312,7 @@ public class Market implements Comparable<Market> {
         }
 
     }
+    */
 
     public int compareTo(Market m) {
 

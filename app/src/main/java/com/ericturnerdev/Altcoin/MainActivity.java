@@ -24,7 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 
 public class MainActivity extends Activity {
@@ -334,14 +334,14 @@ public class MainActivity extends Activity {
 
         public Cryptsy(String label) {
 
-            Log.i(TAG, "CRYPTSY RUNNING");
+            //Log.i(TAG, "CRYPTSY RUNNING");
             nvp = new BasicNameValuePair("pairs", label);
             pairsS = label;
             String[] splitLabels = label.split(",");
             marketIds = new int[splitLabels.length];
 
             for ( int i=0; i<splitLabels.length; i++){
-                Log.i(TAG, "splitLabels: " + splitLabels[i]);
+                //Log.i(TAG, "splitLabels: " + splitLabels[i]);
                 marketIds[i] = Pairs.getMarketId(splitLabels[i]);
             }
 
@@ -349,7 +349,7 @@ public class MainActivity extends Activity {
 
         public void getData() {
 
-            Log.i(TAG, "marketIds: " + Arrays.toString(marketIds));
+           // Log.i(TAG, "marketIds: " + Arrays.toString(marketIds));
             String rawData = "";
 
             int i=0;
@@ -372,7 +372,7 @@ public class MainActivity extends Activity {
 
                             //YOU WILL ACTUALLY NEED A FOR LOOP HERE:
                             rawData = new URLFetch().getURL( "" + API_URL + marketIds[j]);
-                            Log.i(TAG, "GET rawData: " + rawData);
+                          //  Log.i(TAG, "GET rawData: " + rawData);
 
                         } catch (IOException e) {
                             //Log.e(TAG, "aaa Couldn't load data from api.  i is: " + i);
@@ -394,15 +394,15 @@ public class MainActivity extends Activity {
                             //Log.i(TAG, "GSON currentMarket: " + currentMarket.getLasttradeprice());
 
                             //Figuring out what we have in the resultsJ variable:
-                            Log.i(TAG, "RESULTSJ ANALYSIS - raw: " + resultsJ.toString());
-                            Log.i(TAG, "RESULTSJ ANALYSIS - oneStepDown: " + gson.fromJson(resultsJ.getJSONObject(Pairs.getMarket(marketIds[j]).getSecondarycode()).toString(), Market.class));
+                            //Log.i(TAG, "RESULTSJ ANALYSIS - raw: " + resultsJ.toString());
+                            //Log.i(TAG, "RESULTSJ ANALYSIS - oneStepDown: " + gson.fromJson(resultsJ.getJSONObject(Pairs.getMarket(marketIds[j]).getSecondarycode()).toString(), Market.class));
                             JSONObject marketJ = resultsJ.getJSONObject(Pairs.getMarket(marketIds[j]).getSecondarycode());
-                            Log.i(TAG, "RESULTSJ ANALYSIS - price: " + marketJ.getString("lasttradeprice"));
+                            //Log.i(TAG, "RESULTSJ ANALYSIS - price: " + marketJ.getString("lasttradeprice"));
 
 
                             //Get price from 24 hours ago:
                             JSONArray recentTradesJ = marketJ.getJSONArray("recenttrades");
-                            Log.i(TAG, "RESULTSJ ANALYSIS - recentTradesJ length: " + recentTradesJ.length());
+                            //Log.i(TAG, "RESULTSJ ANALYSIS - recentTradesJ length: " + recentTradesJ.length());
                             double accumulator = 0.0;
                             if(recentTradesJ.length() > 0){
                                 for (int k=0; k<recentTradesJ.length(); k++){
@@ -412,11 +412,80 @@ public class MainActivity extends Activity {
 
                             accumulator = accumulator/(double)recentTradesJ.length();
 
+                            //Get buyorders
+                            JSONArray buyOrdersJ = marketJ.getJSONArray("buyorders");
+                            //Log.i(TAG, "BUYORDERSJ: " + buyOrdersJ.toString());
+                            ArrayList<BuySellItem> buyOrdersT = new ArrayList<BuySellItem>();
+                            BuySellItem temp_bsi = new BuySellItem(0.0, 0.0, 0.0);
+
+                            if (buyOrdersJ.length() > 0){
+                                for (int l=0; l<buyOrdersJ.length(); l++) {
+
+
+                                    temp_bsi.setPrice(buyOrdersJ.getJSONObject(l).getDouble("price"));
+                                    temp_bsi.setQuantity(buyOrdersJ.getJSONObject(l).getDouble("quantity"));
+                                    temp_bsi.setTotal(buyOrdersJ.getJSONObject(l).getDouble("total"));
+
+                                    buyOrdersT.add(temp_bsi);
+                                }
+                            }
+
+                            else{ buyOrdersT.add(new BuySellItem(0.0, 0.0, 0.0)); }
+
+                            //Log.i(TAG, "BUYORDERST: " + buyOrdersT.toString());
+
+                            //Get sellorders
+                            JSONArray sellOrdersJ = marketJ.getJSONArray("sellorders");
+                            //Log.i(TAG, "SELLORDERSJ: " + sellOrdersJ.toString());
+                            ArrayList<BuySellItem> sellOrdersT = new ArrayList<BuySellItem>();
+                            BuySellItem temp_ssi = new BuySellItem(0.0, 0.0, 0.0);
+
+                            if (sellOrdersJ.length() > 0){
+                                for (int l=0; l<sellOrdersJ.length(); l++) {
+
+
+                                    temp_ssi.setPrice(sellOrdersJ.getJSONObject(l).getDouble("price"));
+                                    temp_ssi.setQuantity(sellOrdersJ.getJSONObject(l).getDouble("quantity"));
+                                    temp_ssi.setTotal(sellOrdersJ.getJSONObject(l).getDouble("total"));
+
+                                    sellOrdersT.add(temp_ssi);
+                                }
+                            }
+
+                            else{ sellOrdersT.add(new BuySellItem(0.0, 0.0, 0.0)); }
+                                 //end getting sellorders
+
+
+
+                            //First set the stuff we want in currentMarket:
+                            Pairs.getMarket(marketIds[j]).setPrice(Double.parseDouble(marketJ.getString("lasttradeprice")));
+                            Pairs.getMarket(marketIds[j]).setLabel(marketJ.getString("label"));
+                            Pairs.getMarket(marketIds[j]).setMarketid(marketJ.getInt("marketid"));
+                            Pairs.getMarket(marketIds[j]).setPrimarycode(marketJ.getString("secondarycode"));
+                            Pairs.getMarket(marketIds[j]).setSecondarycode(marketJ.getString("primarycode"));
+                            Pairs.getMarket(marketIds[j]).setPrimaryname(marketJ.getString("primaryname"));
+                            Pairs.getMarket(marketIds[j]).setSecondaryname(marketJ.getString("secondaryname"));
+                            Pairs.getMarket(marketIds[j]).setVolume_btc(Double.parseDouble(marketJ.getString("volume")));
+                            Pairs.getMarket(marketIds[j]).setVolume(Double.parseDouble(marketJ.getString("volume")));
+                            Pairs.getMarket(marketIds[j]).setPrice_before_24h(accumulator);
+                            Pairs.getMarket(marketIds[j]).setLasttradeprice(marketJ.getDouble("lasttradeprice"));
+
+                            //Store the values in currentMarket:
+                            Pairs.getMarket(marketIds[j]).setBuyorders(buyOrdersT);
+                            Pairs.getMarket(marketIds[j]).setSellorders(sellOrdersT);
+
+
+                            //Log.i(TAG, "SELLORDERST: " + buyOrdersT.toString());
+
                             Pairs.getMarket(marketIds[j]).setPrice(Double.parseDouble(marketJ.getString("lasttradeprice")));
                             Pairs.getMarket(marketIds[j]).setVolume_btc(Double.parseDouble(marketJ.getString("volume")));
                             Pairs.getMarket(marketIds[j]).setPrice_before_24h(accumulator);
 
-                            Log.i(TAG, "AAA The info we're gonna insert: price=" + currentMarket.getPrice() + " volume=" + currentMarket.getVolume_btc() + " oldPrice=" + currentMarket.getPrice_before_24h());
+                            //Pairs.getMarket(marketIds[j]).setRecenttrades()
+
+                            //Log.i(TAG, "YYYFFF CURRENTMARKET: " + currentMarket.toString());
+
+                            //Log.i(TAG, "BBBBBBBBBB\n Pairs version: " + Pairs.getMarket(marketIds[j]).toString());
                         }
 
 

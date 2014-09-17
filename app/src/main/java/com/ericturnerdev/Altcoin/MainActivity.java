@@ -418,7 +418,7 @@ public class MainActivity extends Activity {
                             ArrayList<BuySellItem> buyOrdersT = new ArrayList<BuySellItem>();
                             BuySellItem temp_bsi = new BuySellItem(0.0, 0.0, 0.0);
 
-                            if (buyOrdersJ.length() > 0){
+                            //if (buyOrdersJ.length() > 0){
                                 for (int l=0; l<buyOrdersJ.length(); l++) {
 
 
@@ -428,9 +428,9 @@ public class MainActivity extends Activity {
 
                                     buyOrdersT.add(temp_bsi);
                                 }
-                            }
+                            //}
 
-                            else{ buyOrdersT.add(new BuySellItem(0.0, 0.0, 0.0)); }
+                            //else{ buyOrdersT.add(new BuySellItem(0.0, 0.0, 0.0)); }
 
                             //Log.i(TAG, "BUYORDERST: " + buyOrdersT.toString());
 
@@ -440,7 +440,7 @@ public class MainActivity extends Activity {
                             ArrayList<BuySellItem> sellOrdersT = new ArrayList<BuySellItem>();
                             BuySellItem temp_ssi = new BuySellItem(0.0, 0.0, 0.0);
 
-                            if (sellOrdersJ.length() > 0){
+                            //if (sellOrdersJ.length() > 0){
                                 for (int l=0; l<sellOrdersJ.length(); l++) {
 
 
@@ -450,14 +450,14 @@ public class MainActivity extends Activity {
 
                                     sellOrdersT.add(temp_ssi);
                                 }
-                            }
+                            //}
 
-                            else{ sellOrdersT.add(new BuySellItem(0.0, 0.0, 0.0)); }
+                            //else{ sellOrdersT.add(new BuySellItem(0.0, 0.0, 0.0)); }
                                  //end getting sellorders
 
+                            double actualVolume = Double.parseDouble(marketJ.getString("volume"))*Double.parseDouble(marketJ.getString("lasttradeprice"));
 
-
-                            //First set the stuff we want in currentMarket:
+                            //Set the values
                             Pairs.getMarket(marketIds[j]).setPrice(Double.parseDouble(marketJ.getString("lasttradeprice")));
                             Pairs.getMarket(marketIds[j]).setLabel(marketJ.getString("label"));
                             Pairs.getMarket(marketIds[j]).setMarketid(marketJ.getInt("marketid"));
@@ -465,8 +465,8 @@ public class MainActivity extends Activity {
                             Pairs.getMarket(marketIds[j]).setSecondarycode(marketJ.getString("primarycode"));
                             Pairs.getMarket(marketIds[j]).setPrimaryname(marketJ.getString("primaryname"));
                             Pairs.getMarket(marketIds[j]).setSecondaryname(marketJ.getString("secondaryname"));
-                            Pairs.getMarket(marketIds[j]).setVolume_btc(Double.parseDouble(marketJ.getString("volume")));
-                            Pairs.getMarket(marketIds[j]).setVolume(Double.parseDouble(marketJ.getString("volume")));
+                            Pairs.getMarket(marketIds[j]).setVolume_btc(actualVolume);
+                            Pairs.getMarket(marketIds[j]).setVolume(actualVolume);
                             Pairs.getMarket(marketIds[j]).setPrice_before_24h(accumulator);
                             Pairs.getMarket(marketIds[j]).setLasttradeprice(marketJ.getDouble("lasttradeprice"));
 
@@ -478,7 +478,6 @@ public class MainActivity extends Activity {
                             //Log.i(TAG, "SELLORDERST: " + buyOrdersT.toString());
 
                             Pairs.getMarket(marketIds[j]).setPrice(Double.parseDouble(marketJ.getString("lasttradeprice")));
-                            Pairs.getMarket(marketIds[j]).setVolume_btc(Double.parseDouble(marketJ.getString("volume")));
                             Pairs.getMarket(marketIds[j]).setPrice_before_24h(accumulator);
 
                             //Pairs.getMarket(marketIds[j]).setRecenttrades()
